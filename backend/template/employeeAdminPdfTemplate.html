@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+
+<title>bs4 invoice - Bootdey.com</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script>
+    // Assuming 'data' is your data array
+    var roles = data.map(function(item) { return item.role; });
+    var uniqueRoles = Array.from(new Set(roles));
+    
+    var reportTitle = "Report";
+    if (uniqueRoles.length === 1) {
+      if (uniqueRoles[0] === "employee") {
+        reportTitle = "Employee Report";
+      } else if (uniqueRoles[0] === "admin") {
+        reportTitle = "Admin Report";
+      }
+    } else if (uniqueRoles.length > 1) {
+      reportTitle = "Admin and Employee Report";
+    }
+  
+    document.getElementById('reportTitle').textContent = reportTitle;
+  </script>
+
+
+
+<style type="text/css">
+  @media print {
+  @page {
+    margin: 0;
+   
+  }
+  html, body, #content, #header, #footer, .page {
+    
+    -webkit-print-color-adjust: exact !important;
+  }
+  /* Add this to apply background color to the table header */
+  .table th {
+    background-color: rgb(218 188 225) !important;
+  }
+  .table td{
+    color: black !important;
+  }
+  .tbody th{
+    color: black !important;
+  }
+
+}
+
+
+
+    	body {
+
+  color: black !important;
+  background: white !important;
+  
+}
+body {
+  -webkit-print-color-adjust: exact;
+}
+
+
+
+
+
+.invoice-company {
+    font-size: 20px
+}
+
+.invoice-header {
+    margin: 0 -20px;
+    background: #f4f0f3;
+    padding: 20px
+}
+
+.invoice-date,
+.invoice-from,
+.invoice-to {
+    display: table-cell;
+    width: 1%
+}
+
+
+
+.invoice-date {
+    text-align: right;
+    padding-left: 20px
+}
+
+
+
+
+.invoice-price .invoice-price-left .sub-price {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 20px
+}
+
+th {
+    text-align: middle;
+    vertical-align: center; /* Adjust this value to change the height */
+    }
+
+.invoice-price small {
+    font-size: 12px;
+    font-weight: 400;
+    display: block
+}
+
+.invoice-price .invoice-price-row {
+    display: table;
+    float: left
+}
+body {
+  color: black !important;
+  background: white !important;
+}
+@media print {
+  /* Your print styles go here */
+  body {
+    color: black;
+    background: white;
+  }
+  /* Add other styles as needed */
+}
+
+
+
+.invoice-footer {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    font-size: 10px
+}
+
+
+.invoice>div:not(.invoice-footer) {
+    margin-bottom: 20px
+}
+
+.btn.btn-white, .btn.btn-white.disabled, .btn.btn-white.disabled:focus, .btn.btn-white.disabled:hover, .btn.btn-white[disabled], .btn.btn-white[disabled]:focus, .btn.btn-white[disabled]:hover {
+    color: #2d353c;
+    background: #fff;
+    border-color: #d9dfe3;
+} 
+.table {
+            width: 150%; /* Make the table span the full width of the page */
+            table-layout: fixed; /* This makes the columns of equal width */
+        }
+        .table td, .table th {
+            padding: .29rem;
+            font-size: small;
+            font-size: 12px;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+            word-wrap: break-word;/* This will make the words go to the next line if they are too long */
+        }
+    </style>
+</head>
+<body>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+    <div class="col-md-44">
+        <div class="invoice">
+
+          <div class="invoice-company text-inverse f-w-600"style="color: rgb(117 40 136);margin-top:30px;">
+                 <span class="pull-right hidden-print">
+                  Generated Date: <span id="currentDate"></span>
+                </span>
+                <div style="align-items: center;">
+                  {{reportName}}
+                </div>
+              </div>
+              
+              <script>
+                document.getElementById('currentDate').textContent = new Date().toLocaleString();
+              </script>
+              
+
+              <div class="invoice-header" style="display: flex; justify-content: space-between; align-items: center; background-color: rgb(224 206 229); border-radius: .5rem; color: rgb(117 40 136);font-family: 'Public Sans', sans-serif;">
+                <div style="text-align: left; font-size: 28px;">SMARTCO</div>
+                <div style="text-align: right;">
+                
+                   
+                </div>
+            </div>
+            
+      
+
+            <div class="invoice-content">
+              <div class="table-responsive">
+                <table class="table table-invoice"style="color: rgb(117 40 136)">
+                      <thead style="color: rgb(3, 3, 3) ">
+                          <tr style="background-color: rgb(218 188 225); -webkit-print-color-adjust: exact; ">
+                              <th class="text-left">Name</th>
+                              <th class="text-left">Email</th>
+                              <th class="text-left">Address</th>
+                              <th class="text-left">Phone</th>
+                              <th class="text-left">Role</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {{#each data}}
+                          <tr>
+                              <td class="text-left">{{this.name}}</td>
+                              <td class="text-left">{{this.email}}</td>
+                              <td class="text-left">{{this.address}}</td>
+                              <td class="text-left">{{this.phone}}</td>
+                              <td class="text-left">{{this.role}}</td>
+                          </tr>
+                          {{/each}}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          
+
+
+
+
+
+
+<div class="invoice-footer">
+<p class="text-center m-b-5 f-w-600">
+THANK YOU FOR YOUR BUSINESS
+</p>
+<p class="text-center">
+<span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> SmartCo.com</span>
+<span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> T:016-18192302</span>
+<span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5624223f333b262516313b373f3a7835393b">[email&#160;protected]</a></span>
+</p>
+</div>
+
+</div>
+</div>
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	
+</script>
+</body>
+</html>
