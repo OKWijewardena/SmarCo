@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const usermodel = require("../models/usermodel");
+const usermodel = require("../models/userModel");
 const bcrypt=require("bcryptjs");
 const axios = require('axios');
 
