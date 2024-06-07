@@ -123,7 +123,7 @@ export default function EPayment() {
 
     try {
       await axios.post('https://hamza-application.onrender.com/payment/addPayment', NewPayment);
-      await axios.post('http://localhost:8000/selling/paymentHistory',UpdatePayment);
+      await axios.post('http://159.65.149.102/selling/paymentHistory',UpdatePayment);
       alert("New payment added successfully");
       fetchPayments();
     } catch (error) {

@@ -97,7 +97,7 @@ const DeviceList = () => {
     const [expiryDate, setExpiryDate] = useState(null);
    
     useEffect(() => {
-        fetch('http://localhost:8000/api/device/getDevice', {
+        fetch('http://159.65.149.102/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
@@ -116,7 +116,7 @@ const DeviceList = () => {
     }, []);
     
     const downloadPDF = () => {
-      fetch('http://localhost:8000/convertdevicePDF', {
+      fetch('http://159.65.149.102/convertdevicePDF', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ const DeviceList = () => {
 
     const resetTable = () => {
       
-        fetch('http://localhost:8000/api/device/getDevice', {
+        fetch('http://159.65.149.102/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {

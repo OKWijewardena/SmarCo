@@ -92,7 +92,7 @@ export default function Device(){
 
     const handleDelete = async (id) => {
         try {
-          await axios.delete(`http://localhost:8000/device/deleteDevice/${id}`);
+          await axios.delete(`http://159.65.149.102/device/deleteDevice/${id}`);
           alert("Dervice record deleted successfully");
           fetchDevices();// Refresh the selling list after deletion
         } catch (error) {
@@ -134,7 +134,7 @@ export default function Device(){
             formData.append(key, form[key]);
         });
         try {
-            await axios.post('http://localhost:8000/device/addDevice', formData, {
+            await axios.post('http://159.65.149.102/device/addDevice', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

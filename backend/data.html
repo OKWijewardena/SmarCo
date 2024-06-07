@@ -49,7 +49,7 @@
 <script>
 	getData();
 	function getData(){
-		fetch('http://localhost:8000/api/payment', {
+		fetch('http://159.65.149.102/api/payment', {
 			method: 'GET'
 		})
 		.then(response => {
@@ -81,6 +81,6 @@
 	}
 
     function downloadPDF() {
-  window.location.href = 'http://localhost:8000/convertPDF';
+  window.location.href = 'http://159.65.149.102/convertPDF';
 }
 </script>
