@@ -11,7 +11,7 @@ export default function CustomerDevice() {
 
     const fetchDevices = async () => {
         try {
-            const response = await axios.get('http://159.65.149.102/device/getDevice');
+            const response = await axios.get('http://http://podsaas.online/device/getDevice');
             setDevices(response.data);
         } catch (error) {
             console.error('Error fetching devices:', error);

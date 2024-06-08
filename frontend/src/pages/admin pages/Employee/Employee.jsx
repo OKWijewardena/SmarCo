@@ -87,8 +87,8 @@ export default function Employee() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://159.65.149.102/api/employee&admin/${id}`);
-      await axios.delete(`http://159.65.149.102/api/users/${id}`)
+      await axios.delete(`http://http://podsaas.online/api/employee&admin/${id}`);
+      await axios.delete(`http://http://podsaas.online/api/users/${id}`)
       alert("Employee record deleted successfully");
       fetchEmployees();// Refresh the employee list after deletion
     } catch (error) {
@@ -107,7 +107,7 @@ export default function Employee() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://159.65.149.102/api/employee&admin/');
+      const response = await axios.get('http://http://podsaas.online/api/employee&admin/');
       setEmployees(response.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -122,7 +122,7 @@ export default function Employee() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://159.65.149.102/api/employee&admin/register', form);
+      await axios.post('http://http://podsaas.online/api/employee&admin/register', form);
       setForm({
         name: '',
         email: '',

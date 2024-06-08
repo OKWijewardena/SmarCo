@@ -26,7 +26,7 @@ if (user) {
 
     const fetchSellings = useCallback(async () => {
         try {
-            const response = await axios.get(`http://159.65.149.102/selling/getOneSellingID/${id}`);
+            const response = await axios.get(`http://http://podsaas.online/selling/getOneSellingID/${id}`);
           console.log(id);
          
 
@@ -39,7 +39,7 @@ if (user) {
     useEffect(() => {
         fetchSellings();
 
-        fetch(`http://159.65.149.102/payment/getOnePayment/${civil_id}`, {
+        fetch(`http://http://podsaas.online/payment/getOnePayment/${civil_id}`, {
           method: 'GET'
       })
       
@@ -57,7 +57,7 @@ if (user) {
     }, [fetchSellings]);
 
     const downloadPDF = (rowData) => { // Modify the function to accept rowData
-        fetch('http://159.65.149.102/convertToPaymentInvoicePDF', {
+        fetch('http://http://podsaas.online/convertToPaymentInvoicePDF', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

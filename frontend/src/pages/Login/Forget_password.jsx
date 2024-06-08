@@ -62,7 +62,7 @@ export const Forget_password = () => {
    
     try {
       axios
-      .post('http://159.65.149.102/api/forgot-password', { email })
+      .post('http://http://podsaas.online/api/forgot-password', { email })
       .then((res) => {
         if (res.data.Status === 'Success') {
           navigate('/login');

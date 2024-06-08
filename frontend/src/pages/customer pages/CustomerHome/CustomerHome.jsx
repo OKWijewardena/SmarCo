@@ -30,7 +30,7 @@ if (user) {
 
     const fetchSellings = async () => {
         try {
-          const res = await axios.get(`http://159.65.149.102/api/customer/${user.email}`);
+          const res = await axios.get(`http://http://podsaas.online/api/customer/${user.email}`);
     
           // Log the response to check its structure
           console.log('Response data:', res.data);
@@ -42,7 +42,7 @@ if (user) {
       
           console.log('Civil ID:', CIVILID);
 
-            const response = await axios.get(`http://159.65.149.102/selling/getOneSelling/${CIVILID}`);
+            const response = await axios.get(`http://http://podsaas.online/selling/getOneSelling/${CIVILID}`);
             setSellings(response.data);
             const emiNumbers = response.data.map(selling => selling.emiNumber);
             setEminumbers(emiNumbers);
