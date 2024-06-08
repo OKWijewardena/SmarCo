@@ -100,7 +100,7 @@ export default function EDevice(){
 
     const fetchDevices = async () => {
         try {
-            const response = await axios.get('http://http://podsaas.online/device/getDevice');
+            const response = await axios.get('http://podsaas.online/device/getDevice');
             setDevices(response.data);
         } catch (error) {
             console.error('Error fetching devices:', error);
@@ -123,7 +123,7 @@ export default function EDevice(){
             formData.append(key, form[key]);
         });
         try {
-            await axios.post('http://http://podsaas.online/device/addDevice', formData, {
+            await axios.post('http://podsaas.online/device/addDevice', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
