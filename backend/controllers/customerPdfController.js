@@ -2,12 +2,13 @@ const puppeteer = require('puppeteer');
 const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
+
 exports.convertTocustomerPDF = async (req, res) => {
  
   let data = req.body;
 
-// Read the HTML template
-const source = fs.readFileSync(path.join(__dirname, '../template/customerpdfTemplate.html'), 'utf8');
+  // Read the HTML template
+  const source = fs.readFileSync(path.join(__dirname, '../template/customerpdfTemplate.html'), 'utf8');
   const template = handlebars.compile(source);
   const html = template({data}); 
 
@@ -18,7 +19,7 @@ const source = fs.readFileSync(path.join(__dirname, '../template/customerpdfTemp
 };
 
 async function convertHTMLToPDF(htmlContent, pdfFilePath, margins = {top: '10mm', right: '1mm', bottom: '10mm', left: '1mm'}){
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // Launch Puppeteer with --no-sandbox and --disable-setuid-sandbox flags
     const page = await browser.newPage();
     await page.setContent(htmlContent);
     const pdf = await page.pdf({ format : 'A3', margin : margins });
