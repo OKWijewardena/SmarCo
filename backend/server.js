@@ -33,7 +33,7 @@ app.use("/payment", require("./routes/paymentRoutes"));
 app.use("/api/invoice", require("./routes/invoiceRote"));
 app.use("/api", require("./routes/forgetPassword"));
 app.use("/", require("./routes/invoicePdfRouter"));
-app.use("/", require("./routes/devicePdfRoutes"));
+app.use("/api/devicepdf",require("./routes/devicePdfRoutes"));
 app.use("/", require("./routes/customerpdfRoutes"));
 app.use("/", require("./routes/employeeAndAdminPdfRoutes"));
 
