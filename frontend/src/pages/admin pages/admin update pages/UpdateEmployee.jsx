@@ -99,7 +99,7 @@ export default function UpdateEmployee() {
 
   function fetchEmployees() {
     let mounted = true;
-    fetch(`http://localhost:8000/api/employee&admin/${id}`)
+    fetch(`http://podsaas.online/api/employee&admin/${id}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -129,7 +129,7 @@ export default function UpdateEmployee() {
     };
 
     try {
-      await axios.put(`http://localhost:8000/api/employee&admin/${email}`, UpdatedEmployee);
+      await axios.put(`http://podsaas.online/api/employee&admin/${email}`, UpdatedEmployee);
       alert("Employee updated successfully");
       navigate('/employee');
     } catch (error) {

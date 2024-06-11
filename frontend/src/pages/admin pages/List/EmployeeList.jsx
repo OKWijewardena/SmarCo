@@ -80,7 +80,7 @@ const EmployeeList = () => {
   const [role, setrole] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/employee&admin/', {
+    fetch('http://podsaas.online/api/employee&admin/', {
         method: 'GET'
     })
     .then(response => {
@@ -99,7 +99,7 @@ const EmployeeList = () => {
 }, []);
 
 const downloadPDF = () => {
-  fetch('http://localhost:8000/employeeAndAdminPdf', {
+  fetch('http://podsaas.online/employeeAndAdminPdf', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -133,7 +133,7 @@ const downloadPDF = () => {
 
 const resetTable = () => {
   
-    fetch('http://localhost:8000/api/employee&admin/', {
+    fetch('http://podsaas.online/api/employee&admin/', {
         method: 'GET'
     })
     .then(response => {

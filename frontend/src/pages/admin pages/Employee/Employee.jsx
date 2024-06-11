@@ -86,8 +86,8 @@ export default function Employee() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/employee&admin/${id}`);
-      await axios.delete(`http://localhost:8000/api/users/${id}`)
+      await axios.delete(`http://podsaas.online/api/employee&admin/${id}`);
+      await axios.delete(`http://podsaas.online/api/users/${id}`)
       alert("Employee record deleted successfully");
       fetchEmployees();// Refresh the employee list after deletion
     } catch (error) {
@@ -106,7 +106,7 @@ export default function Employee() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/employee&admin/');
+      const response = await axios.get('http://podsaas.online/api/employee&admin/');
       setEmployees(response.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -133,8 +133,8 @@ export default function Employee() {
     }
 
     try {
-      await axios.post('http://localhost:8000/api/employee&admin/register', NewEmployee);
-      await axios.post('http://localhost:8000/api/users/register', NewUser);
+      await axios.post('http://podsaas.online/api/employee&admin/register', NewEmployee);
+      await axios.post('http://podsaas.online/api/users/register', NewUser);
       alert("New Employee added successfully");
     } catch (error) {
       console.error('Error adding employee:', error);

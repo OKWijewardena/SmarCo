@@ -104,7 +104,7 @@ export default function ESelling() {
 
   const fetchSellings = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/selling/getSelling');
+      const response = await axios.get('http://podsaas.online/selling/getSelling');
       setSellings(response.data);
     } catch (error) {
       console.error('Error fetching sellings:', error);
@@ -113,7 +113,7 @@ export default function ESelling() {
 
   const fetchDeviceImage = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/device/getOneDevice/${emiNumber}`);
+      const response = await axios.get(`http://podsaas.online/device/getOneDevice/${emiNumber}`);
       setDevices(response.data);
       if (response.data.length > 0) {
         setImageName(response.data[0].imageName); // Assuming you want to set the first device's imageName by default
@@ -125,7 +125,7 @@ export default function ESelling() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/selling/deleteSelling/${id}`);
+      await axios.delete(`http://podsaas.online/selling/deleteSelling/${id}`);
       alert("Selling record deleted successfully");
       fetchSellings(); // Refresh the selling list after deletion
     } catch (error) {
@@ -163,8 +163,8 @@ export default function ESelling() {
     };
 
     try {
-      await axios.post('http://localhost:8000/selling/addSelling', NewPurchase);
-      await axios.delete(`http://localhost:8000/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
+      await axios.post('http://podsaas.online/selling/addSelling', NewPurchase);
+      await axios.delete(`http://podsaas.online/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
       alert("New customer device purchased");
       fetchSellings(); // Refresh the selling list after submission
       handleDialogClose();

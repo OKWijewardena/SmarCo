@@ -102,7 +102,7 @@ export default function UpdateDevice(){
     function fetchDevices() {
 
         let mounted = true;
-    fetch(`http://localhost:8000/device/getOneDevice/${id}`)
+    fetch(`http://podsaas.online/device/getOneDevice/${id}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -147,7 +147,7 @@ export default function UpdateDevice(){
           };
 
           axios
-            .put(`http://localhost:8000/device/updateDevice/${deviceID}`, UpdatedDevice)
+            .put(`http://podsaas.online/device/updateDevice/${deviceID}`, UpdatedDevice)
             .then(() => {
                 alert('Device updated successfully!');
               navigate('/device');

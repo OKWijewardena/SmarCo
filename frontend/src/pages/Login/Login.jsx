@@ -61,7 +61,7 @@ export const Login = () => {
     console.log(`Email: ${email}`);
     console.log(`Password: ${password}`);
     try {
-      const res = await axios.post('http://localhost:8000/api/users/login', { email, password });
+      const res = await axios.post('http://podsaas.online/api/users/login', { email, password });
       sessionStorage.setItem('user', JSON.stringify(res.data.user)); // Store user details in session
       console.log(res.data.user);
   
