@@ -19,7 +19,8 @@ import { mainListItems } from '../listItems';
 
 import {
   TextField, Button, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper
+  TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -85,6 +86,7 @@ export default function ESelling() {
   const [advance, setAdvance] = useState('');
   const [imageName, setImageName] = useState('');
   const [devices, setDevices] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     fetchSellings();
@@ -102,7 +104,7 @@ export default function ESelling() {
 
   const fetchSellings = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/selling/getSelling');
+      const response = await axios.get('http://localhost:8000/selling/getSelling');
       setSellings(response.data);
     } catch (error) {
       console.error('Error fetching sellings:', error);
@@ -111,7 +113,7 @@ export default function ESelling() {
 
   const fetchDeviceImage = async () => {
     try {
-      const response = await axios.get(`http://podsaas.online/device/getOneDevice/${emiNumber}`);
+      const response = await axios.get(`http://localhost:8000/device/getOneDevice/${emiNumber}`);
       setDevices(response.data);
       if (response.data.length > 0) {
         setImageName(response.data[0].imageName); // Assuming you want to set the first device's imageName by default
@@ -121,9 +123,27 @@ export default function ESelling() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/selling/deleteSelling/${id}`);
+      alert("Selling record deleted successfully");
+      fetchSellings(); // Refresh the selling list after deletion
+    } catch (error) {
+      console.error('Error deleting selling:', error);
+      alert("An error occurred while deleting the selling record.");
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleConfirmSubmit = async () => {
     // Check if imageName is set
     if (!imageName) {
       alert("Image name is required. Please check the EMI Number.");
@@ -141,14 +161,17 @@ export default function ESelling() {
       advance,
       imageName
     };
-    
+
     try {
-      await axios.post('http://podsaas.online/selling/addSelling', NewPurchase);
+      await axios.post('http://localhost:8000/selling/addSelling', NewPurchase);
+      await axios.delete(`http://localhost:8000/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
       alert("New customer device purchased");
       fetchSellings(); // Refresh the selling list after submission
+      handleDialogClose();
     } catch (err) {
       console.error(err.response ? err.response.data : err);
       alert("An error occurred while adding the item to the stores.");
+      handleDialogClose();
     }
   };
 
@@ -326,7 +349,7 @@ export default function ESelling() {
                       setAdvance(e.target.value);
                     }}
                   />
-                  
+
                   <Button
                     type="submit"
                     fullWidth
@@ -354,6 +377,7 @@ export default function ESelling() {
                     <TableHead>
                       <TableRow>
                         <TableCell>Device Name</TableCell>
+                        <TableCell>Emi Number</TableCell>
                         <TableCell>Customer Name</TableCell>
                         <TableCell>Civil ID</TableCell>
                         <TableCell>Price</TableCell>
@@ -368,6 +392,7 @@ export default function ESelling() {
                       {sellings.map((selling) => (
                         <TableRow key={selling._id}>
                           <TableCell>{selling.deviceName}</TableCell>
+                          <TableCell>{selling.emiNumber}</TableCell>
                           <TableCell>{selling.customerName}</TableCell>
                           <TableCell>{selling.civilID}</TableCell>
                           <TableCell>{selling.price}</TableCell>
@@ -376,10 +401,7 @@ export default function ESelling() {
                           <TableCell>{selling.advance}</TableCell>
                           <TableCell>{selling.balance}</TableCell>
                           <TableCell>
-                            <IconButton color="primary">
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton color="secondary">
+                            <IconButton color="secondary" onClick={() => handleDelete(selling._id)}>
                               <DeleteIcon />
                             </IconButton>
                           </TableCell>
@@ -393,6 +415,80 @@ export default function ESelling() {
           </Box>
         </Box>
       </ThemeProvider>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Confirm Selling Details</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please confirm the following details before submitting:
+          </DialogContentText>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell>Device Name:</TableCell>
+                <TableCell>{deviceName}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>EMI Number:</TableCell>
+                <TableCell>{emiNumber}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Customer Name:</TableCell>
+                <TableCell>{customerName}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Civil ID:</TableCell>
+                <TableCell>{civilID}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Price:</TableCell>
+                <TableCell>{price}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Months:</TableCell>
+                <TableCell>{months}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Date:</TableCell>
+                <TableCell>{date}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Advance:</TableCell>
+                <TableCell>{advance}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary" sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: '#FF2727',
+                      '&:hover': {
+                        backgroundColor: '#FF4646',
+                      },
+                      fontFamily: 'Public Sans, sans-serif',
+                      fontWeight: 'bold',
+                      color: 'white',
+                    }}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmSubmit} color="primary" sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: '#752888',
+                      '&:hover': {
+                        backgroundColor: '#C63DE7',
+                      },
+                      fontFamily: 'Public Sans, sans-serif',
+                      fontWeight: 'bold',
+                      color: 'white',
+                    }}>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

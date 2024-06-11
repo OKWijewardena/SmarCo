@@ -97,7 +97,7 @@ const DeviceList = () => {
     const [expiryDate, setExpiryDate] = useState(null);
    
     useEffect(() => {
-        fetch('http://podsaas.online/api/device/getDevice', {
+        fetch('http://localhost:8000/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
@@ -116,7 +116,7 @@ const DeviceList = () => {
     }, []);
     
     const downloadPDF = () => {
-      fetch('http://podsaas.online/api/devicepdf/convertdevicePDF', {
+      fetch('http://localhost:8000/api/devicepdf/convertdevicePDF', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ const DeviceList = () => {
 
     const resetTable = () => {
       
-        fetch('http://podsaas.online/api/device/getDevice', {
+        fetch('http://localhost:8000/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {

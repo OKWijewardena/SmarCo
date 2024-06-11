@@ -12,19 +12,15 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../listItems';
-import { Link } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 
 import {
-  TextField, Button, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper
+  TextField, Button
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 const drawerWidth = 240;
 
@@ -75,7 +71,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
   
 
-export default function Customer(){
+export default function UpdateCustomer(){
+
+    const navigate = useNavigate();
+
+    const { id } = useParams();
 
     const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -94,35 +94,36 @@ export default function Customer(){
   const [paci_number, setPaci_number] = useState('');
   const [customers, setCustomer] = useState([]);
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8000/api/customer/${id}`);
-      await axios.delete(`http://localhost:8000/api/users/${id}`);
-      alert("Customer record deleted successfully");
-      fetchCustomers();// Refresh the customer list after deletion
-    } catch (error) {
-      console.error('Error deleting Customer:', error);
-      alert("An error occurred while deleting the selling record.");
-    }
-  };
-
   useEffect(() => {
     fetchCustomers();
   }, []);
 
-  const fetchCustomers = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/customer/');
-      setCustomer(response.data);
-    } catch (error) {
-      console.error('Error fetching payments:', error);
-    }
+  function fetchCustomers() {
+    let mounted = true;
+    fetch(`http://localhost:8000/api/customer/${id}`)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        if (mounted) {
+            setName(result.name);
+            setEmail(result.email);
+            setPassword(result.password);
+            setCivil_id(result.civil_id);
+            setNationality(result.nationality);
+            setMobile(result.mobile);
+            setWhatsapp_no(result.whatsapp_no);
+            setTelephone_no(result.telephone_no);
+            setAddress(result.address);
+            setPaci_number(result.paci_number);
+        }
+      });
+    return () => (mounted = false);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const NewCustomer = {
+    const UpdatedCustomer = {
       name,
       email,
       password,
@@ -135,19 +136,12 @@ export default function Customer(){
       paci_number
     };
 
-    const NewUser = {
-      name,
-      email,
-      password,
-      role: "customer" 
-    }
-
     try {
-      await axios.post('http://localhost:8000/api/customer/register', NewCustomer);
-      await axios.post('http://localhost:8000/api/users/register', NewUser);
-      alert("New Customer added successfully");
+      await axios.put(`http://localhost:8000/api/customer/${email}`, UpdatedCustomer);
+      alert("New Customer updated successfully");
+      navigate('/customer');
     } catch (error) {
-      console.error('Error adding customer:', error);
+      console.error('Error updating customer:', error);
       alert(`Error adding customer: ${error.response ? error.response.data.message : error.message}`);
     }
   };
@@ -246,37 +240,37 @@ export default function Customer(){
           mx: 'auto', // Center the box
         }}>
         <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color:"#637381" }}>
-          Customer Details
+          Update Customer Details
         </Typography>
         <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
-          <TextField margin="normal" required fullWidth label="User Name" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="User Name" value={name} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setName(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="E-mail" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="E-mail" value={email} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setEmail(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Mobile Number" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Mobile Number" value={mobile} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setMobile(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="WhatsApp Number" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="WhatsApp Number" value={whatsapp_no} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setWhatsapp_no(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Telephone Number" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Telephone Number" value={telephone_no} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setTelephone_no(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Address" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Address" value={address} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setAddress(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Nationality" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Nationality" value={nationality} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setNationality(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Civil ID" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Civil ID" value={civil_id} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setCivil_id(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Paci Number" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Paci Number" value={paci_number} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setPaci_number(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Password" type="password" onChange={(e) => {
+          <TextField margin="normal" required fullWidth label="Password" type="password" value={password} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setPassword(e.target.value);
                     }}/>
           <Button
@@ -294,56 +288,9 @@ export default function Customer(){
               fontWeight: 'bold',
             }}
           >
-            Register
+            Submit
           </Button>
         </Box>
-      </Box>
-
-      {/* Table Section */}
-      <Box sx={{ mt: 4 }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>User Name</TableCell>
-                <TableCell>E-mail</TableCell>
-                <TableCell>Mobile</TableCell>
-                <TableCell>Whatsapp Number</TableCell>
-                <TableCell>Telephone Number</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Nationality</TableCell>
-                <TableCell>Civil ID</TableCell>
-                <TableCell>Paci Number</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-            {customers.map((customer) => (
-                        <TableRow key={customer._id}>
-                          <TableCell>{customer.name}</TableCell>
-                          <TableCell>{customer.email}</TableCell>
-                          <TableCell>{customer.mobile}</TableCell>
-                          <TableCell>{customer.whatsapp_no}</TableCell>
-                          <TableCell>{customer.telephone_no}</TableCell>
-                          <TableCell>{customer.address}</TableCell>
-                          <TableCell>{customer.nationality}</TableCell>
-                          <TableCell>{customer.paci_number}</TableCell>
-                          <TableCell>{customer.civil_id}</TableCell>
-                          <TableCell>
-                          <Link to={`updatecustomer/${customer.email}`}>
-                                                        <IconButton color="primary">
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        </Link>
-                            <IconButton color="secondary" onClick={() => handleDelete(customer.email)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
       </Box>
           </Container>
         </Box>

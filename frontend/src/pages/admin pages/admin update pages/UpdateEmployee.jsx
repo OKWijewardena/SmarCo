@@ -16,10 +16,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../listItems';
+import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { useParams, useNavigate } from "react-router-dom";
 
 import {
   TextField, Button, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+  TableHead, TableRow, Paper
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -72,96 +74,69 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-export default function Payment() {
-  const [open, setOpen] = useState(true);
-  const [payments, setPayments] = useState([]);
-  const [customerName, setCustomerName] = useState('');
-  const [civilID, setCivilID] = useState('');
-  const [deviceName, setDeviceName] = useState('');
-  const [emiNumber, setEmiNumber] = useState('');
-  const [price, setPrice] = useState('');
-  const [date, setDate] = useState('');
-  const [dialogOpen, setDialogOpen] = useState(false);
+export default function UpdateEmployee() {
 
-  const [customer, setCustomer] = useState([]);
+    const navigate = useNavigate();
+
+    const { id } = useParams();
+
+  const [open, setOpen] = useState(true);
+  const [employees, setEmployees] = useState([]);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('');
 
   useEffect(() => {
-    fetchPayments();
-    fetchCustomers();
+    fetchEmployees();
   }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const handleOpenDialog = (event) => {
-    event.preventDefault();
-    setDialogOpen(true);
+  function fetchEmployees() {
+    let mounted = true;
+    fetch(`http://localhost:8000/api/employee&admin/${id}`)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        if (mounted) {
+            setName(result.name);
+            setEmail(result.email);
+            setPassword(result.password);
+            setAddress(result.address);
+            setPhone(result.phone);
+            setRole(result.role);
+        }
+      });
+    return () => (mounted = false);
   };
 
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
-  const fetchCustomers = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/customer/');
-      setCustomer(response.data);
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
-
-  const fetchPayments = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/payment/getPayment');
-      setPayments(response.data);
-    } catch (error) {
-      console.error('Error fetching payments:', error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8000/payment/deletePayment/${id}`);
-      alert("Selling record deleted successfully");
-      fetchPayments(); // Refresh the selling list after deletion
-    } catch (error) {
-      console.error('Error deleting selling:', error);
-      alert("An error occurred while deleting the selling record.");
-    }
-  };
 
   const handleSubmit = async (event) => {
-
     event.preventDefault();
 
-    const NewPayment = {
-      customerName,
-      civilID,
-      deviceName,
-      emiNumber,
-      price,
-      date
+    const UpdatedEmployee = {
+      name,
+      email,
+      password,
+      address,
+      phone,
+      role
     };
 
-    const UpdatePayment = {
-      civilID,
-      emiNumber,
-      date,
-      payment: price 
-    }
-
     try {
-      await axios.post('http://localhost:8000/selling/paymentHistory', UpdatePayment);
-      await axios.post('http://localhost:8000/payment/addPayment', NewPayment);
-      handleCloseDialog();
-      alert("New payment added successfully");
-      fetchPayments();
+      await axios.put(`http://localhost:8000/api/employee&admin/${email}`, UpdatedEmployee);
+      alert("Employee updated successfully");
+      navigate('/employee');
     } catch (error) {
-      alert("CivilID and Emi Number not match");
-      console.error('Error adding payment:', error);
+      console.error('Error updating customer:', error);
+      alert(`Error adding customer: ${error.response ? error.response.data.message : error.message}`);
     }
+    
   };
 
   return (
@@ -253,70 +228,79 @@ export default function Payment() {
                 }}
               >
                 <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color: "#637381" }}>
-                  Payment Details
+                  Employee Details
                 </Typography>
-                <Box component="form" sx={{ mt: 1 }} onSubmit={handleOpenDialog}>
+                <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    label="Customer Name"
-                    name="customerName"
+                    label="User Name"
+                    name="name"
+                    value={name}
                     onChange={(e) => {
-                      setCustomerName(e.target.value);
+                      setName(e.target.value);
                     }}
                   />
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    label="Civil ID"
-                    name="civilID"
+                    label="E-mail"
+                    name="email"
+                    value={email}
                     onChange={(e) => {
-                      setCivilID(e.target.value);
+                      setEmail(e.target.value);
                     }}
                   />
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    label="Device Name"
-                    name="deviceName"
+                    label="Mobile Number"
+                    name="phone"
+                    value={phone}
                     onChange={(e) => {
-                      setDeviceName(e.target.value);
+                      setPhone(e.target.value);
                     }}
                   />
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    label="EMI Number"
-                    name="emiNumber"
+                    label="Address"
+                    name="address"
+                    value={address}
                     onChange={(e) => {
-                      setEmiNumber(e.target.value);
+                      setAddress(e.target.value);
                     }}
                   />
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel id="role-label">Role</InputLabel>
+                    <Select
+                      labelId="role-label"
+                      label="Role"
+                      name="role"
+                      value={role}
+                      onChange={(e) => {
+                        setRole(e.target.value);
+                      }}
+                    >
+                      <MenuItem value="admin">Admin</MenuItem>
+                      <MenuItem value="employee">Employee</MenuItem>
+                    </Select>
+                  </FormControl>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    label="Price"
-                    name="price"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    value={password}
                     onChange={(e) => {
-                      setPrice(e.target.value);
+                      setPassword(e.target.value);
                     }}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    label="Date"
-                    type="date"
-                    name="date"
-                    onChange={(e) => {
-                      setDate(e.target.value);
-                    }}
-                    InputLabelProps={{ shrink: true }}
                   />
                   <Button
                     type="submit"
@@ -336,85 +320,6 @@ export default function Payment() {
                     Submit
                   </Button>
                 </Box>
-              </Box>
-
-              <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-                <DialogTitle>Confirm Payment</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Please confirm the payment details below:
-                  </DialogContentText>
-                  <Typography variant="body1"><strong>Customer Name:</strong> {customerName}</Typography>
-                  <Typography variant="body1"><strong>Civil ID:</strong> {civilID}</Typography>
-                  <Typography variant="body1"><strong>Device Name:</strong> {deviceName}</Typography>
-                  <Typography variant="body1"><strong>EMI Number:</strong> {emiNumber}</Typography>
-                  <Typography variant="body1"><strong>Price:</strong> {price}</Typography>
-                  <Typography variant="body1"><strong>Date:</strong> {date}</Typography>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseDialog} color="primary" sx={{
-                      mt: 3,
-                      mb: 2,
-                      backgroundColor: '#FF2727',
-                      '&:hover': {
-                        backgroundColor: '#FF4646',
-                      },
-                      fontFamily: 'Public Sans, sans-serif',
-                      fontWeight: 'bold',
-                      color: 'white',
-                    }}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleSubmit} color="primary" variant="contained" sx={{
-                      mt: 3,
-                      mb: 2,
-                      backgroundColor: '#752888',
-                      '&:hover': {
-                        backgroundColor: '#C63DE7',
-                      },
-                      fontFamily: 'Public Sans, sans-serif',
-                      fontWeight: 'bold',
-                    }}>
-                    Confirm
-                  </Button>
-                </DialogActions>
-              </Dialog>
-
-              {/* Table Section */}
-              <Box sx={{ mt: 4 }}>
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Customer Name</TableCell>
-                        <TableCell>Civil ID</TableCell>
-                        <TableCell>Device Name</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Action</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {payments.map((payment) => (
-                        <TableRow key={payment._id}>
-                          <TableCell>{payment.customerName}</TableCell>
-                          <TableCell>{payment.civilID}</TableCell>
-                          <TableCell>{payment.deviceName}</TableCell>
-                          <TableCell>{payment.price}</TableCell>
-                          <TableCell>{payment.date}</TableCell>
-                          <TableCell>
-                            {/* <IconButton color="primary">
-                              <EditIcon />
-                            </IconButton> */}
-                            <IconButton color="secondary" onClick={() => handleDelete(payment._id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
               </Box>
             </Container>
           </Box>

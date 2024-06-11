@@ -21,7 +21,7 @@ import { mainListItems } from '../listItems';
 
 import {
   TextField, Button, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper
+  TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -83,26 +83,59 @@ export default function EPayment() {
   const [emiNumber, setEmiNumber] = useState('');
   const [price, setPrice] = useState('');
   const [date, setDate] = useState('');
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [customer, setCustomer] = useState([]);
 
   useEffect(() => {
     fetchPayments();
+    fetchCustomers();
   }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+  const handleOpenDialog = (event) => {
+    event.preventDefault();
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/customer/');
+      setCustomer(response.data);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    }
+  };
+
   const fetchPayments = async () => {
     try {
-      const response = await axios.get('https://hamza-application.onrender.com/payment/getPayment');
+      const response = await axios.get('http://localhost:8000/payment/getPayment');
       setPayments(response.data);
     } catch (error) {
       console.error('Error fetching payments:', error);
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/payment/deletePayment/${id}`);
+      alert("Selling record deleted successfully");
+      fetchPayments(); // Refresh the selling list after deletion
+    } catch (error) {
+      console.error('Error deleting selling:', error);
+      alert("An error occurred while deleting the selling record.");
+    }
+  };
 
   const handleSubmit = async (event) => {
+
     event.preventDefault();
 
     const NewPayment = {
@@ -122,11 +155,13 @@ export default function EPayment() {
     }
 
     try {
-      await axios.post('https://hamza-application.onrender.com/payment/addPayment', NewPayment);
-      await axios.post('http://podsaas.online/selling/paymentHistory',UpdatePayment);
+      await axios.post('http://localhost:8000/selling/paymentHistory', UpdatePayment);
+      await axios.post('http://localhost:8000/payment/addPayment', NewPayment);
+      handleCloseDialog();
       alert("New payment added successfully");
       fetchPayments();
     } catch (error) {
+      alert("CivilID and Emi Number not match");
       console.error('Error adding payment:', error);
     }
   };
@@ -221,7 +256,7 @@ export default function EPayment() {
                 <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color: "#637381" }}>
                   Payment Details
                 </Typography>
-                <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
+                <Box component="form" sx={{ mt: 1 }} onSubmit={handleOpenDialog}>
                   <TextField
                     margin="normal"
                     required
@@ -304,6 +339,38 @@ export default function EPayment() {
                 </Box>
               </Box>
 
+              <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                <DialogTitle>Confirm Payment</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please confirm the payment details below:
+                  </DialogContentText>
+                  <Typography variant="body1"><strong>Customer Name:</strong> {customerName}</Typography>
+                  <Typography variant="body1"><strong>Civil ID:</strong> {civilID}</Typography>
+                  <Typography variant="body1"><strong>Device Name:</strong> {deviceName}</Typography>
+                  <Typography variant="body1"><strong>EMI Number:</strong> {emiNumber}</Typography>
+                  <Typography variant="body1"><strong>Price:</strong> {price}</Typography>
+                  <Typography variant="body1"><strong>Date:</strong> {date}</Typography>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDialog} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSubmit} color="primary" variant="contained" sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: '#752888',
+                      '&:hover': {
+                        backgroundColor: '#C63DE7',
+                      },
+                      fontFamily: 'Public Sans, sans-serif',
+                      fontWeight: 'bold',
+                    }}>
+                    Confirm
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
               {/* Table Section */}
               <Box sx={{ mt: 4 }}>
                 <TableContainer component={Paper}>
@@ -327,10 +394,10 @@ export default function EPayment() {
                           <TableCell>{payment.price}</TableCell>
                           <TableCell>{payment.date}</TableCell>
                           <TableCell>
-                            <IconButton color="primary">
+                            {/* <IconButton color="primary">
                               <EditIcon />
-                            </IconButton>
-                            <IconButton color="secondary">
+                            </IconButton> */}
+                            <IconButton color="secondary" onClick={() => handleDelete(payment._id)}>
                               <DeleteIcon />
                             </IconButton>
                           </TableCell>

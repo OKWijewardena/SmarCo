@@ -96,7 +96,7 @@ const PaymentList = () => {
     const [paymentDateTo, setPaymentDateTo] = useState(null);
  
     useEffect(() => {
-        fetch('http://podsaas.online/payment/getPayment/', {
+        fetch('http://localhost:8000/payment/getPayment/', {
             method: 'GET'
         })
         .then(response => {
@@ -115,7 +115,7 @@ const PaymentList = () => {
     }, []);
     
     const downloadPDF = () => {
-      fetch('http://podsaas.online/convertPDF', {
+      fetch('http://localhost:8000/convertPDF', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ const PaymentList = () => {
 
     const resetTable = () => {
       
-        fetch('http://podsaas.online/payment/getPayment/', {
+        fetch('http://localhost:8000/payment/getPayment/', {
             method: 'GET'
         })
         .then(response => {

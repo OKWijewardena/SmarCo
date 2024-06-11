@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 import { Container, Grid, Typography, Box, Button, Card, CardContent, CardMedia } from '@mui/material';
 import FindIcon from '@mui/icons-material/Search'; // Adjust based on your icon choice
 
 export default function CustomerHome() {
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
+  if (user) {
+    const role = user.role;
+    console.log('Role:', role);
+    
+  } else {
+    console.log('No user data found in session storage');
+  }
+
+  // Check if the user's role is "customer"
+  if (!user || user.role !== "customer") {
+    navigate('/not-authorized');
+  }
+
     const [sellings, setSellings] = useState([]);
     const [civilID, setCivilID] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [devices,setDevices] = useState([]);
     const [eminumbers,setEminumbers] = useState();
-
-    const user = JSON.parse(sessionStorage.getItem('user'));
 
 // Check if the user object exists and then access the email property
 if (user) {
@@ -30,7 +46,7 @@ if (user) {
 
     const fetchSellings = async () => {
         try {
-          const res = await axios.get(`http://podsaas.online/api/customer/${user.email}`);
+          const res = await axios.get(`http://localhost:8000/api/customer/${user.email}`);
     
           // Log the response to check its structure
           console.log('Response data:', res.data);
@@ -42,7 +58,7 @@ if (user) {
       
           console.log('Civil ID:', CIVILID);
 
-            const response = await axios.get(`http://podsaas.online/selling/getOneSelling/${CIVILID}`);
+            const response = await axios.get(`http://localhost:8000/selling/getOneSelling/${CIVILID}`);
             setSellings(response.data);
             const emiNumbers = response.data.map(selling => selling.emiNumber);
             setEminumbers(emiNumbers);

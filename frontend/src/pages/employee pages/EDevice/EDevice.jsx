@@ -16,6 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems } from '../listItems';
+import { Link } from 'react-router-dom';
 
 import {
   TextField, Button, Table, TableBody, TableCell, TableContainer,
@@ -90,6 +91,17 @@ export default function EDevice(){
         imageName: ''
     });
 
+    const handleDelete = async (id) => {
+        try {
+          await axios.delete(`http://localhost:8000/device/deleteDevice/${id}`);
+          alert("Dervice record deleted successfully");
+          fetchDevices();// Refresh the selling list after deletion
+        } catch (error) {
+          console.error('Error deleting selling:', error);
+          alert("An error occurred while deleting the selling record.");
+        }
+      };
+
     useEffect(() => {
         fetchDevices();
     }, []);
@@ -100,7 +112,7 @@ export default function EDevice(){
 
     const fetchDevices = async () => {
         try {
-            const response = await axios.get('http://podsaas.online/device/getDevice');
+            const response = await axios.get('http://localhost:8000/device/getDevice');
             setDevices(response.data);
         } catch (error) {
             console.error('Error fetching devices:', error);
@@ -123,7 +135,7 @@ export default function EDevice(){
             formData.append(key, form[key]);
         });
         try {
-            await axios.post('http://podsaas.online/device/addDevice', formData, {
+            await axios.post('http://localhost:8000/device/addDevice', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -375,10 +387,12 @@ export default function EDevice(){
         )}
       </TableCell>
                                                     <TableCell>
+                                                        <Link to={`updatedevice/${device.emiNumber}`}>
                                                         <IconButton color="primary">
                                                             <EditIcon />
                                                         </IconButton>
-                                                        <IconButton color="secondary">
+                                                        </Link>
+                                                        <IconButton color="secondary" onClick={() => handleDelete(device._id)}>
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </TableCell>

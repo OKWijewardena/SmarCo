@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -12,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -24,6 +24,7 @@ import image3 from '../../../images/3.png';
 import image4 from '../../../images/4.png';
 import image5 from '../../../images/5.png';
 import image from '../../../images/image.png';
+import { Link , useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -74,7 +75,113 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
+  if (user) {
+    const role = user.role;
+    console.log('Role:', role);
+    
+  } else {
+    console.log('No user data found in session storage');
+  }
+
+  // Check if the user's role is "admin or employee"
+  if (!user || user.role !== "admin" && user.role !== "employee") {
+    navigate('/not-authorized');
+  }
+
   const [open, setOpen] = React.useState(true);
+  const [payments, setPayments] = useState([]);
+  const [soldDevicesCount, setSoldDevicesCount] = useState(0);
+  const [unsoldDevicesCount, setUnSoldDevicesCount] = useState(0);
+  const [monthlyInstallments, setMonthlyInstallments] = useState(0)
+
+  useEffect(() => {
+    fetchPayments();
+    fetchSelinngDetails();
+    fetchDeviceDetails();
+    fetchMonthlySellingDetails();
+  }, []);
+
+  const fetchPayments = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/payment/getPayment');
+      setPayments(response.data);
+    } catch (error) {
+      console.error('Error fetching payments:', error);
+    }
+  };
+
+  const fetchSelinngDetails = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/selling/getSelling');
+      setSoldDevicesCount(response.data.length); // Assuming each device represents a sold device
+    } catch (error) {
+      console.error('Error fetching device details:', error);
+    }
+  };
+
+  const fetchDeviceDetails = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/device/getDevice');
+      setUnSoldDevicesCount(response.data.length); // Assuming each device represents a sold device
+    } catch (error) {
+      console.error('Error fetching device details:', error);
+    }
+  };
+
+  const fetchMonthlySellingDetails = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/selling/getSelling');
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      
+      const currentMonthSellings = response.data.filter(selling => {
+        const sellingDate = new Date(selling.date);
+        return sellingDate.getMonth() === currentMonth && sellingDate.getFullYear() === currentYear;
+      });
+
+      setMonthlyInstallments(currentMonthSellings.length);
+    } catch (error) {
+      console.error('Error fetching selling details:', error);
+    }
+  };
+
+
+  const calculateDailyIncome = () => {
+    const today = new Date().toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+    const totalDailyIncome = payments.reduce((total, payment) => {
+      const paymentDate = new Date(payment.date).toISOString().split('T')[0];
+      if (paymentDate === today) {
+        return total + parseFloat(payment.price);
+      }
+      return total;
+    }, 0);
+    return totalDailyIncome;
+  };
+  
+  const calculateMonthlyIncome = () => {
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1; // Months are 0-based, so add 1
+    const currentYear = today.getFullYear();
+    const totalMonthlyIncome = payments.reduce((total, payment) => {
+      const paymentDate = new Date(payment.date);
+      const paymentMonth = paymentDate.getMonth() + 1;
+      const paymentYear = paymentDate.getFullYear();
+      if (paymentMonth === currentMonth && paymentYear === currentYear) {
+        return total + parseFloat(payment.price);
+      }
+      return total;
+    }, 0);
+    return totalMonthlyIncome;
+  };
+  
+  const dailyIncome = calculateDailyIncome();
+  const monthlyIncome = calculateMonthlyIncome();
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -157,7 +264,7 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="" sx={{ mt: 4, mb: 4 }}>
           <Box sx={{ flexGrow: 1, p: 2 }}>
-      <Grid container spacing={3}>
+          <Grid container spacing={3}>
         {/* Welcome Card */}
         <Grid item xs={12}>
           <Paper
@@ -181,11 +288,8 @@ function DashboardContent() {
                 Admin or Employee
               </Typography>
               <Typography variant="body1" component="p" gutterBottom sx={{ color: '#752888', fontFamily: 'Public Sans, sans-serif' }}>
-                If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything.
+              As a Admin or Employee, you can manage customers, employees, devices, sales, payments.
               </Typography>
-              <Button variant="contained" sx={{ backgroundColor: '#752888', mt: 2 }}>
-                Reports
-              </Button>
             </Box>
             <Box
               component="img"
@@ -203,7 +307,7 @@ function DashboardContent() {
               Daily Income
               </Typography>
               <Typography variant="h4" component="p">
-                18,765
+              {dailyIncome}
               </Typography>
             </Box>
             <Box>
@@ -219,7 +323,7 @@ function DashboardContent() {
                 Monthly Income
               </Typography>
               <Typography variant="h4" component="p">
-                18,765
+              {monthlyIncome}
               </Typography>
             </Box>
             <Box>
@@ -235,7 +339,7 @@ function DashboardContent() {
               Sold Devices
               </Typography>
               <Typography variant="h4" component="p">
-                18,765
+              {soldDevicesCount}
               </Typography>
             </Box>
             <Box>
@@ -251,7 +355,7 @@ function DashboardContent() {
               Unsold Devices
               </Typography>
               <Typography variant="h4" component="p">
-                18,765
+              {unsoldDevicesCount}
               </Typography>
             </Box>
             <Box>
@@ -267,7 +371,7 @@ function DashboardContent() {
               Monthly Installments
               </Typography>
               <Typography variant="h4" component="p">
-                18,765
+                {monthlyInstallments}
               </Typography>
             </Box>
             <Box>
@@ -284,6 +388,6 @@ function DashboardContent() {
   );
 }
 
-export default function EHome() {
+export default function Home() {
   return <DashboardContent />;
 }
