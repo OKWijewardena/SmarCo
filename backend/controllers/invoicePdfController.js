@@ -87,7 +87,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
 
     // Retrieve customer data
     for (let item of data) {
-        const response = await axios.get(`http://localhost:8000/api/customer/civil/${item.civilID}`);
+        const response = await axios.get(`http://podsaas.online/api/customer/civil/${item.civilID}`);
         const customerData = response.data;
         item.customerData = customerData;
     }

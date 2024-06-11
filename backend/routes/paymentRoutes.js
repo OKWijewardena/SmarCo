@@ -12,7 +12,7 @@ router.get("/getPayment", paymentController.getAllPayments);
 router.put("/updatePayment/:civilID", paymentController.updatePayment);
 
 // Route for deleting a payment
-router.delete("/deletePayment/:civilID", paymentController.deletePayment);
+router.delete("/deletePayment/:id", paymentController.deletePayment);
 
 // Route for getting a single payment by ID
 router.get("/getOnePayment/:civilID", paymentController.getOnePayment);

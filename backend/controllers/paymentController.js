@@ -59,7 +59,7 @@ exports.updatePayment = async (req, res) => {
 
 // Controller to delete a payment
 exports.deletePayment = (req, res) => {
-  Payment.findOneAndDelete({ civilID : req.params.civilID })
+  Payment.findOneAndDelete({ _id : req.params.id })
     .then(() => {
       res.status(200).send({ status: "Payment Deleted" });
     })
