@@ -15,16 +15,14 @@ import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from '../listItems';
-import { Link, useNavigate } from 'react-router-dom';
+import { mainListItems } from '../listItems';
+import { useParams, useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import {
   TextField, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 const drawerWidth = 240;
 
@@ -74,99 +72,99 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-export default function Device(){
+export default function EUpdateDevices(){
 
     const navigate = useNavigate();
 
-    const [open, setOpen] = React.useState(true);
-    const [devices, setDevices] = useState([]);
-    const [form, setForm] = useState({
-        deviceName: '',
-        price: '',
-        color: '',
-        shopName: '',
-        modelNumber: '',
-        storage: '',
-        warrenty: '',
-        emiNumber: '',
-        purchaseDate: '',
-        expireDate:'',
-        imageName: ''
-    });
+    const { id } = useParams();
 
-    const handleDelete = async (id) => {
-        try {
-          await axios.delete(`http://podsaas.online/device/deleteDevice/${id}`);
-          alert("Dervice record deleted successfully");
-          fetchDevices();// Refresh the selling list after deletion
-        } catch (error) {
-          console.error('Error deleting selling:', error);
-          alert("An error occurred while deleting the selling record.");
-        }
-      };
+    const [open, setOpen] = React.useState(true);
+    const [deviceID, setDeviceID] = useState('');
+    const [deviceName, setDeviceName] = useState('');
+    const [price, setPrice] = useState('');
+    const [color, setColor] = useState('');
+    const [shopName, setShopName] = useState('');
+    const [modelNumber, setModelNumber] = useState('');
+    const [storage, setStorage] = useState('');
+    const [warrenty, setWarrenty] = useState('');
+    const [emiNumber, setEmiNumber] = useState('');
+    const [purchaseDate, setPurchaseDate] = useState('');
+    const [expireDate, setExpireDate] = useState('');
+    const [imageName, setImageName] = useState('');
+
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
 
     useEffect(() => {
         fetchDevices();
-    }, []);
+      }, []);
 
-    const handleLogout = () => {
+      const handleLogout = () => {
         // Remove user details from session storage
         sessionStorage.removeItem('user');
         console.log('User details cleared from session storage');
         navigate('/');
       };
 
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
+    function fetchDevices() {
 
-    const fetchDevices = async () => {
-        try {
-            const response = await axios.get('http://podsaas.online/device/getDevice');
-            setDevices(response.data);
-        } catch (error) {
-            console.error('Error fetching devices:', error);
+        let mounted = true;
+    fetch(`http://podsaas.online/device/getOneDevice/${id}`)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        if (mounted) {
+            setDeviceID(result[0]._id);
+            setDeviceName(result[0].deviceName);
+            setPrice(result[0].price);
+            setColor(result[0].color);
+            setShopName(result[0].shopName);
+            setModelNumber(result[0].modelNumber);
+            setStorage(result[0].storage);
+            setWarrenty(result[0].warrenty);
+            setEmiNumber(result[0].emiNumber);
+            setPurchaseDate(result[0].purchaseDate);
+            setExpireDate(result[0].expireDate);
+            setImageName(result[0].imageName);
         }
-    };
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setForm({ ...form, [name]: value });
+      });
+    return () => (mounted = false);
     };
 
     const handleFileChange = (event) => {
-        setForm({ ...form, imageName: event.target.files[0] });
+        setImageName(event.target.files[0]);
     };
 
     const handleSubmit = async (event) => {
+
         event.preventDefault();
-        const formData = new FormData();
-        Object.keys(form).forEach(key => {
-            formData.append(key, form[key]);
-        });
-        try {
-            await axios.post('http://podsaas.online/device/addDevice', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+
+        const UpdatedDevice = {
+            deviceName: deviceName,
+            price: price,
+            color: color,
+            shopName: shopName,
+            modelNumber: modelNumber,
+            storage: storage,
+            warrenty: warrenty,
+            emiNumber: emiNumber,
+            purchaseDate: purchaseDate,
+            expireDate: expireDate,
+            imageName: imageName
+          };
+
+          axios
+            .put(`http://podsaas.online/device/updateDevice/${deviceID}`, UpdatedDevice)
+            .then(() => {
+                alert('Device updated successfully!');
+              navigate('/device');
+            })
+            .catch((err) => {
+              alert(err);
+              console.log(err);
             });
-            setForm({
-                deviceName: '',
-                price: '',
-                color: '',
-                shopName: '',
-                modelNumber: '',
-                storage: '',
-                warrenty: '',
-                emiNumber: '',
-                purchaseDate: '',
-                expireDate:'',
-                imageName: ''
-            });
-            fetchDevices();
-        } catch (error) {
-            console.error('Error adding devices:', error);
-        }
+        
     };
 
     return(
@@ -220,7 +218,6 @@ export default function Device(){
                         <List component="nav">
                             {mainListItems}
                             <Divider sx={{ my: 1 }} />
-                            {secondaryListItems}
                         </List>
                     </Drawer>
                     <Box
@@ -253,7 +250,7 @@ export default function Device(){
                                 }}
                             >
                                 <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color:"#637381" }}>
-                                    Device Details
+                                    Update Device Details
                                 </Typography>
                                 <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
                                     <TextField margin="normal"
@@ -261,81 +258,101 @@ export default function Device(){
                                         fullWidth
                                         label="Device Name"
                                         name="deviceName"
-                                        value={form.deviceName}
-                                        onChange={handleInputChange} />
+                                        value={deviceName}
+                                        onChange={(e) => {
+                                            setDeviceName(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Price"
                                         name="price"
-                                        value={form.price}
-                                        onChange={handleInputChange} />
+                                        value={price}
+                                        onChange={(e) => {
+                                            setPrice(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Colour"
                                         name="color"
-                                        value={form.color}
-                                        onChange={handleInputChange} />
+                                        value={color}
+                                        onChange={(e) => {
+                                            setColor(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Shop Name"
                                         name="shopName"
-                                        value={form.shopName}
-                                        onChange={handleInputChange} />
+                                        value={shopName}
+                                        onChange={(e) => {
+                                            setShopName(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Model Number"
                                         name="modelNumber"
-                                        value={form.modelNumber}
-                                        onChange={handleInputChange} />
+                                        value={modelNumber}
+                                        onChange={(e) => {
+                                            setModelNumber(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Storage"
                                         name="storage"
-                                        value={form.storage}
-                                        onChange={handleInputChange} />
+                                        value={storage}
+                                        onChange={(e) => {
+                                            setStorage(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Warrenty"
                                         name="warrenty"
-                                        value={form.warrenty}
-                                        onChange={handleInputChange} />
+                                        value={warrenty}
+                                        onChange={(e) => {
+                                            setWarrenty(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="EMI Number"
                                         name="emiNumber"
-                                        value={form.emiNumber}
-                                        onChange={handleInputChange} />
+                                        value={emiNumber}
+                                        onChange={(e) => {
+                                            setEmiNumber(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Purchase Date"
                                         type="date"
                                         name="purchaseDate"
-                                        value={form.purchaseDate}
-                                        onChange={handleInputChange} />
+                                        value={purchaseDate}
+                                        onChange={(e) => {
+                                            setPurchaseDate(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
                                         label="Expire Date"
                                         type="date"
                                         name="expireDate"
-                                        value={form.expireDate}
-                                        onChange={handleInputChange} />
-                                    <TextField
+                                        value={expireDate}
+                                        onChange={(e) => {
+                                            setExpireDate(e.target.value);
+                                          }} />
+                                    {/* <TextField
                                         margin="normal"
                                         required
                                         fullWidth
                                         type="file"
                                         name="imageName"
                                         onChange={handleFileChange}
-                                    />
+                                    /> */}
                                     <Button
                                         type="submit"
                                         fullWidth
@@ -354,64 +371,6 @@ export default function Device(){
                                         Submit
                                     </Button>
                                 </Box>
-                            </Box>
-                            {/* Table Section */}
-                            <Box sx={{ mt: 4 }}>
-                                <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 650 }}>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Device Name</TableCell>
-                                                <TableCell>Price</TableCell>
-                                                <TableCell>Colour</TableCell>
-                                                <TableCell>Shop Name</TableCell>
-                                                <TableCell>Model Number</TableCell>
-                                                <TableCell>Storage</TableCell>
-                                                <TableCell>Warrenty</TableCell>
-                                                <TableCell>Emi Number</TableCell>
-                                                <TableCell>Purchase Date</TableCell>
-                                                <TableCell>Expire Date</TableCell>
-                                                <TableCell>Image Name</TableCell>
-                                                <TableCell>Action</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {devices.map((device) => (
-                                                <TableRow key={device._id}>
-                                                    <TableCell>{device.deviceName}</TableCell>
-                                                    <TableCell>{device.price}</TableCell>
-                                                    <TableCell>{device.color}</TableCell>
-                                                    <TableCell>{device.shopName}</TableCell>
-                                                    <TableCell>{device.modelNumber}</TableCell>
-                                                    <TableCell>{device.storage}</TableCell>
-                                                    <TableCell>{device.warrenty}</TableCell>
-                                                    <TableCell>{device.emiNumber}</TableCell>
-                                                    <TableCell>{device.purchaseDate}</TableCell>
-                                                    <TableCell>{device.expireDate}</TableCell>
-                                                    <TableCell>
-        {device.imageName && (
-          <img
-            src={`/images/deviceImages/${device.imageName}`}
-            alt={device.deviceName}
-            style={{ width: '100px', height: '100px' }}
-          />
-        )}
-      </TableCell>
-                                                    <TableCell>
-                                                        <Link to={`updatedevice/${device.emiNumber}`}>
-                                                        <IconButton color="primary">
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        </Link>
-                                                        <IconButton color="secondary" onClick={() => handleDelete(device._id)}>
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
                             </Box>
                         </Container>
                     </Box>

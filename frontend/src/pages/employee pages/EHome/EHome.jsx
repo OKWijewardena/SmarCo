@@ -25,6 +25,7 @@ import image4 from '../../../images/4.png';
 import image5 from '../../../images/5.png';
 import image from '../../../images/image.png';
 import { Link , useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
 
@@ -105,6 +106,12 @@ function DashboardContent() {
     fetchDeviceDetails();
     fetchMonthlySellingDetails();
   }, []);
+  const handleLogout = () => {
+    // Remove user details from session storage
+    sessionStorage.removeItem('user');
+    console.log('User details cleared from session storage');
+    navigate('/');
+  };
 
   const fetchPayments = async () => {
     try {
@@ -223,9 +230,9 @@ function DashboardContent() {
           >
             SMARTCO
           </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
+            <IconButton color="inherit" onClick={handleLogout}>
+              <Badge color="secondary">
+                <LogoutIcon />
               </Badge>
             </IconButton>
           </Toolbar>
