@@ -86,10 +86,10 @@ export default function UpdateDevice(){
     const [shopName, setShopName] = useState('');
     const [modelNumber, setModelNumber] = useState('');
     const [storage, setStorage] = useState('');
+    const [ram, setRam] = useState('');
     const [warrenty, setWarrenty] = useState('');
     const [emiNumber, setEmiNumber] = useState('');
     const [purchaseDate, setPurchaseDate] = useState('');
-    const [expireDate, setExpireDate] = useState('');
     const [imageName, setImageName] = useState('');
 
     const toggleDrawer = () => {
@@ -122,10 +122,10 @@ export default function UpdateDevice(){
             setShopName(result[0].shopName);
             setModelNumber(result[0].modelNumber);
             setStorage(result[0].storage);
+            setRam(result[0].ram);
             setWarrenty(result[0].warrenty);
             setEmiNumber(result[0].emiNumber);
             setPurchaseDate(result[0].purchaseDate);
-            setExpireDate(result[0].expireDate);
             setImageName(result[0].imageName);
         }
       });
@@ -147,10 +147,10 @@ export default function UpdateDevice(){
             shopName: shopName,
             modelNumber: modelNumber,
             storage: storage,
+            ram: ram,
             warrenty: warrenty,
             emiNumber: emiNumber,
             purchaseDate: purchaseDate,
-            expireDate: expireDate,
             imageName: imageName
           };
 
@@ -308,6 +308,15 @@ export default function UpdateDevice(){
                                         onChange={(e) => {
                                             setStorage(e.target.value);
                                           }} />
+                                          <TextField margin="normal"
+                                        required
+                                        fullWidth
+                                        label="Ram"
+                                        name="ram"
+                                        value={ram}
+                                        onChange={(e) => {
+                                            setRam(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
@@ -335,16 +344,6 @@ export default function UpdateDevice(){
                                         value={purchaseDate}
                                         onChange={(e) => {
                                             setPurchaseDate(e.target.value);
-                                          }} />
-                                    <TextField margin="normal"
-                                        required
-                                        fullWidth
-                                        label="Expire Date"
-                                        type="date"
-                                        name="expireDate"
-                                        value={expireDate}
-                                        onChange={(e) => {
-                                            setExpireDate(e.target.value);
                                           }} />
                                     {/* <TextField
                                         margin="normal"

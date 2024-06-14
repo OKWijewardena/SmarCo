@@ -26,6 +26,10 @@ const device = new mongoose.Schema({
         type : String,
         required : true
     },
+    ram : {
+        type : String,
+        required : true
+    },
     warrenty : {
         type : String,
         required : true
@@ -35,10 +39,6 @@ const device = new mongoose.Schema({
         required : true
     },
     purchaseDate : {
-        type : String,
-        required : true
-    }, 
-    expireDate : {
         type : String,
         required : true
     },

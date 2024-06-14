@@ -87,10 +87,10 @@ export default function EDevice(){
         shopName: '',
         modelNumber: '',
         storage: '',
+        ram:'',
         warrenty: '',
         emiNumber: '',
         purchaseDate: '',
-        expireDate:'',
         imageName: ''
     });
 
@@ -157,10 +157,10 @@ export default function EDevice(){
                 shopName: '',
                 modelNumber: '',
                 storage: '',
+                ram:'',
                 warrenty: '',
                 emiNumber: '',
                 purchaseDate: '',
-                expireDate:'',
                 imageName: ''
             });
             fetchDevices();
@@ -300,6 +300,13 @@ export default function EDevice(){
                                     <TextField margin="normal"
                                         required
                                         fullWidth
+                                        label="Ram"
+                                        name="ram"
+                                        value={form.ram}
+                                        onChange={handleInputChange} />
+                                    <TextField margin="normal"
+                                        required
+                                        fullWidth
                                         label="Warrenty"
                                         name="warrenty"
                                         value={form.warrenty}
@@ -318,14 +325,6 @@ export default function EDevice(){
                                         type="date"
                                         name="purchaseDate"
                                         value={form.purchaseDate}
-                                        onChange={handleInputChange} />
-                                    <TextField margin="normal"
-                                        required
-                                        fullWidth
-                                        label="Expire Date"
-                                        type="date"
-                                        name="expireDate"
-                                        value={form.expireDate}
                                         onChange={handleInputChange} />
                                     <TextField
                                         margin="normal"
@@ -366,10 +365,10 @@ export default function EDevice(){
                                                 <TableCell>Shop Name</TableCell>
                                                 <TableCell>Model Number</TableCell>
                                                 <TableCell>Storage</TableCell>
+                                                <TableCell>Ram</TableCell>
                                                 <TableCell>Warrenty</TableCell>
                                                 <TableCell>Emi Number</TableCell>
                                                 <TableCell>Purchase Date</TableCell>
-                                                <TableCell>Expire Date</TableCell>
                                                 <TableCell>Image Name</TableCell>
                                                 <TableCell>Action</TableCell>
                                             </TableRow>
@@ -383,10 +382,10 @@ export default function EDevice(){
                                                     <TableCell>{device.shopName}</TableCell>
                                                     <TableCell>{device.modelNumber}</TableCell>
                                                     <TableCell>{device.storage}</TableCell>
+                                                    <TableCell>{device.ram}</TableCell>
                                                     <TableCell>{device.warrenty}</TableCell>
                                                     <TableCell>{device.emiNumber}</TableCell>
                                                     <TableCell>{device.purchaseDate}</TableCell>
-                                                    <TableCell>{device.expireDate}</TableCell>
                                                     <TableCell>
         {device.imageName && (
           <img
@@ -397,7 +396,7 @@ export default function EDevice(){
         )}
       </TableCell>
                                                     <TableCell>
-                                                        <Link to={`eupdatedevice/${device.emiNumber}`}>
+                                                        <Link to={`updatedevice/${device.emiNumber}`}>
                                                         <IconButton color="primary">
                                                             <EditIcon />
                                                         </IconButton>

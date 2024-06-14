@@ -38,10 +38,10 @@ exports.addDevice = async (req, res) => {
         shopName,
         modelNumber,
         storage,
+        ram,
         warrenty,
         emiNumber,
-        purchaseDate,
-        expireDate
+        purchaseDate
       } = req.body;
 
       const newDevice = new Device({
@@ -51,10 +51,10 @@ exports.addDevice = async (req, res) => {
         shopName,
         modelNumber,
         storage,
+        ram,
         warrenty,
         emiNumber,
         purchaseDate,
-        expireDate,
         imageName: req.file ? req.file.filename : ''
       });
 
@@ -91,10 +91,10 @@ exports.updateDevice = async (req, res) => {
         shopName,
         modelNumber,
         storage,
+        ram,
         warrenty,
         emiNumber,
-        purchaseDate,
-        expireDate
+        purchaseDate
       } = req.body;
 
       const updatedDevice = {
@@ -104,10 +104,10 @@ exports.updateDevice = async (req, res) => {
         shopName,
         modelNumber,
         storage,
+        ram,
         warrenty,
         emiNumber,
         purchaseDate,
-        expireDate,
         imageName: req.file ? req.file.filename : req.body.imageName
       };
 

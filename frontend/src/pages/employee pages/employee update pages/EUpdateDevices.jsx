@@ -74,98 +74,98 @@ const mdTheme = createTheme();
 
 export default function EUpdateDevices(){
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const { id } = useParams();
+  const { id } = useParams();
 
-    const [open, setOpen] = React.useState(true);
-    const [deviceID, setDeviceID] = useState('');
-    const [deviceName, setDeviceName] = useState('');
-    const [price, setPrice] = useState('');
-    const [color, setColor] = useState('');
-    const [shopName, setShopName] = useState('');
-    const [modelNumber, setModelNumber] = useState('');
-    const [storage, setStorage] = useState('');
-    const [warrenty, setWarrenty] = useState('');
-    const [emiNumber, setEmiNumber] = useState('');
-    const [purchaseDate, setPurchaseDate] = useState('');
-    const [expireDate, setExpireDate] = useState('');
-    const [imageName, setImageName] = useState('');
+  const [open, setOpen] = React.useState(true);
+  const [deviceID, setDeviceID] = useState('');
+  const [deviceName, setDeviceName] = useState('');
+  const [price, setPrice] = useState('');
+  const [color, setColor] = useState('');
+  const [shopName, setShopName] = useState('');
+  const [modelNumber, setModelNumber] = useState('');
+  const [storage, setStorage] = useState('');
+  const [ram, setRam] = useState('');
+  const [warrenty, setWarrenty] = useState('');
+  const [emiNumber, setEmiNumber] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState('');
+  const [imageName, setImageName] = useState('');
 
-    const toggleDrawer = () => {
-        setOpen(!open);
+  const toggleDrawer = () => {
+      setOpen(!open);
+  };
+
+  useEffect(() => {
+      fetchDevices();
+    }, []);
+
+    const handleLogout = () => {
+      // Remove user details from session storage
+      sessionStorage.removeItem('user');
+      console.log('User details cleared from session storage');
+      navigate('/');
     };
 
-    useEffect(() => {
-        fetchDevices();
-      }, []);
+  function fetchDevices() {
 
-      const handleLogout = () => {
-        // Remove user details from session storage
-        sessionStorage.removeItem('user');
-        console.log('User details cleared from session storage');
-        navigate('/');
-      };
+      let mounted = true;
+  fetch(`http://podsaas.online/device/getOneDevice/${id}`)
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      if (mounted) {
+          setDeviceID(result[0]._id);
+          setDeviceName(result[0].deviceName);
+          setPrice(result[0].price);
+          setColor(result[0].color);
+          setShopName(result[0].shopName);
+          setModelNumber(result[0].modelNumber);
+          setStorage(result[0].storage);
+          setRam(result[0].ram);
+          setWarrenty(result[0].warrenty);
+          setEmiNumber(result[0].emiNumber);
+          setPurchaseDate(result[0].purchaseDate);
+          setImageName(result[0].imageName);
+      }
+    });
+  return () => (mounted = false);
+  };
 
-    function fetchDevices() {
+  const handleFileChange = (event) => {
+      setImageName(event.target.files[0]);
+  };
 
-        let mounted = true;
-    fetch(`http://podsaas.online/device/getOneDevice/${id}`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        if (mounted) {
-            setDeviceID(result[0]._id);
-            setDeviceName(result[0].deviceName);
-            setPrice(result[0].price);
-            setColor(result[0].color);
-            setShopName(result[0].shopName);
-            setModelNumber(result[0].modelNumber);
-            setStorage(result[0].storage);
-            setWarrenty(result[0].warrenty);
-            setEmiNumber(result[0].emiNumber);
-            setPurchaseDate(result[0].purchaseDate);
-            setExpireDate(result[0].expireDate);
-            setImageName(result[0].imageName);
-        }
-      });
-    return () => (mounted = false);
-    };
+  const handleSubmit = async (event) => {
 
-    const handleFileChange = (event) => {
-        setImageName(event.target.files[0]);
-    };
+      event.preventDefault();
 
-    const handleSubmit = async (event) => {
+      const UpdatedDevice = {
+          deviceName: deviceName,
+          price: price,
+          color: color,
+          shopName: shopName,
+          modelNumber: modelNumber,
+          storage: storage,
+          ram: ram,
+          warrenty: warrenty,
+          emiNumber: emiNumber,
+          purchaseDate: purchaseDate,
+          imageName: imageName
+        };
 
-        event.preventDefault();
-
-        const UpdatedDevice = {
-            deviceName: deviceName,
-            price: price,
-            color: color,
-            shopName: shopName,
-            modelNumber: modelNumber,
-            storage: storage,
-            warrenty: warrenty,
-            emiNumber: emiNumber,
-            purchaseDate: purchaseDate,
-            expireDate: expireDate,
-            imageName: imageName
-          };
-
-          axios
-            .put(`http://podsaas.online/device/updateDevice/${deviceID}`, UpdatedDevice)
-            .then(() => {
-                alert('Device updated successfully!');
-              navigate('/device');
-            })
-            .catch((err) => {
-              alert(err);
-              console.log(err);
-            });
-        
-    };
+        axios
+          .put(`http://podsaas.online/device/updateDevice/${deviceID}`, UpdatedDevice)
+          .then(() => {
+              alert('Device updated successfully!');
+            navigate('/device');
+          })
+          .catch((err) => {
+            alert(err);
+            console.log(err);
+          });
+      
+  };
 
     return(
         <div>
@@ -307,6 +307,15 @@ export default function EUpdateDevices(){
                                         onChange={(e) => {
                                             setStorage(e.target.value);
                                           }} />
+                                          <TextField margin="normal"
+                                        required
+                                        fullWidth
+                                        label="Ram"
+                                        name="ram"
+                                        value={ram}
+                                        onChange={(e) => {
+                                            setRam(e.target.value);
+                                          }} />
                                     <TextField margin="normal"
                                         required
                                         fullWidth
@@ -334,16 +343,6 @@ export default function EUpdateDevices(){
                                         value={purchaseDate}
                                         onChange={(e) => {
                                             setPurchaseDate(e.target.value);
-                                          }} />
-                                    <TextField margin="normal"
-                                        required
-                                        fullWidth
-                                        label="Expire Date"
-                                        type="date"
-                                        name="expireDate"
-                                        value={expireDate}
-                                        onChange={(e) => {
-                                            setExpireDate(e.target.value);
                                           }} />
                                     {/* <TextField
                                         margin="normal"
