@@ -388,13 +388,11 @@ export default function Device(){
                                                     <TableCell>{device.emiNumber}</TableCell>
                                                     <TableCell>{device.purchaseDate}</TableCell>
                                                     <TableCell>
-        {device.imageName && (
           <img
             src={`/images/deviceImages/${device.imageName}`}
             alt={device.deviceName}
             style={{ width: '100px', height: '100px' }}
           />
-        )}
       </TableCell>
                                                     <TableCell>
                                                         <Link to={`updatedevice/${device.emiNumber}`}>
