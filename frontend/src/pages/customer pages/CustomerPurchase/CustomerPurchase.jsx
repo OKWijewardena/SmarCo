@@ -160,7 +160,7 @@ if (user) {
                                 {data.length > 0 && data.map((item, index) => (
                                     <TableRow key={index}>
                                        
-                                        <TableCell>{item._id}</TableCell>
+                                        <TableCell>{item.deviceName}</TableCell>
                                         <TableCell>{item.price}/=</TableCell>
                                         <TableCell>{item.date}</TableCell>
                                         <TableCell>
