@@ -78,7 +78,7 @@ const mdTheme = createTheme();
 export default function EPayment() {
 
   const navigate = useNavigate();
-  
+
   const [open, setOpen] = useState(true);
   const [payments, setPayments] = useState([]);
   const [customerName, setCustomerName] = useState('');
@@ -99,6 +99,7 @@ export default function EPayment() {
   const handleLogout = () => {
     // Remove user details from session storage
     sessionStorage.removeItem('user');
+sessionStorage.removeItem('token');
     console.log('User details cleared from session storage');
     navigate('/');
   };

@@ -1,10 +1,5 @@
-
-//import logo from "./logo.svg";
-import "./App.css";
-
-import './App.css';
-import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
-
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/admin pages/Home/Home";
 import Customer from "./pages/admin pages/Customer/Customer";
 import Device from "./pages/admin pages/Device/Device";
@@ -18,49 +13,46 @@ import EHome from "./pages/employee pages/EHome/EHome";
 import EDevice from "./pages/employee pages/EDevice/EDevice";
 import EPayment from "./pages/employee pages/EPayment/EPayment";
 import ESelling from "./pages/employee pages/ESelling/ESelling";
-import { Login } from "./pages/Login/Login";
-import {Forget_password}  from "./pages/Login/Forget_password";
+import Login from "./pages/Login/Login";
+import { Forget_password } from "./pages/Login/Forget_password";
 import CustomerList from "./pages/admin pages/List/customerList";
 import DeviceList from "./pages/admin pages/List/DeviceList"
-import EmployeeList from"./pages/admin pages/List/EmployeeList"
+import EmployeeList from "./pages/admin pages/List/EmployeeList"
 import PaymentList from "./pages/admin pages/List/PaymentList"
 import UpdateCustomer from "./pages/admin pages/admin update pages/UpdateCustomer";
 import UpdateDevice from "./pages/admin pages/admin update pages/UpdateDevice";
 import UpdateEmployee from "./pages/admin pages/admin update pages/UpdateEmployee";
+import EUpdateDevices from "./pages/employee pages/employee update pages/EUpdateDevices";
 import Report from "./pages/admin pages/List/Report";
+import ProtectedRoute from "./pages/Login/ProtectedRoute";
 
 function App() {
   return (
     <div>
-      {/* <UpdateItems/> */}
-
       <Routes>
-     
-      <Route exact path="/" element={<Login/>}/>
-        <Route exact path="/home" element={<Home/>} />
-        <Route exact path="/customer" element={<Customer/>} />
-        <Route exact path="/CustomerList" element={<CustomerList/>} />
-        <Route exact path="/DeviceList" element={<DeviceList/>} />
-        <Route exact path="/EmployeeList" element={<EmployeeList/>} />
-        <Route exact path="/PaymentList" element={<PaymentList/>} />
-        <Route exact path="/device" element={<Device/>} />
-        <Route exact path="/employee" element={<Employee/>} />
-        <Route exact path="/payment" element={<Payment/>} />
-        <Route exact path="/selling" element={<Selling/>} />
-
-        <Route exact path="/ehome" element={<EHome/>} />
-        <Route exact path="/edevice" element={<EDevice/>} />
-        <Route exact path="/epayment" element={<EPayment/>} />
-        <Route exact path="/eselling" element={<ESelling/>} />
-        <Route exact path="/customerhome" element={<CustomerHome/>} />
-        <Route exact path="/customerpurchase/:id" element={<CustomerPurchase/>} />
-        <Route exact path="/customerdevice" element={<CustomerDevice/>} />
-
-        <Route exact path="customer/updatecustomer/:id" element={<UpdateCustomer/>} />
-        <Route exact path="device/updatedevice/:id" element={<UpdateDevice/>} />
-        <Route exact path="employee/updateemployee/:id" element={<UpdateEmployee/>} />
-
-        <Route exact path="/report" element={<Report/>} />
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route exact path="/customer" element={<ProtectedRoute><Customer /></ProtectedRoute>} />
+        <Route exact path="/CustomerList" element={<ProtectedRoute><CustomerList /></ProtectedRoute>} />
+        <Route exact path="/DeviceList" element={<ProtectedRoute><DeviceList /></ProtectedRoute>} />
+        <Route exact path="/EmployeeList" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
+        <Route exact path="/PaymentList" element={<ProtectedRoute><PaymentList /></ProtectedRoute>} />
+        <Route exact path="/device" element={<ProtectedRoute><Device /></ProtectedRoute>} />
+        <Route exact path="/employee" element={<ProtectedRoute><Employee /></ProtectedRoute>} />
+        <Route exact path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+        <Route exact path="/selling" element={<ProtectedRoute><Selling /></ProtectedRoute>} />
+        <Route exact path="/ehome" element={<ProtectedRoute><EHome /></ProtectedRoute>} />
+        <Route exact path="/edevice" element={<ProtectedRoute><EDevice /></ProtectedRoute>} />
+        <Route exact path="/epayment" element={<ProtectedRoute><EPayment /></ProtectedRoute>} />
+        <Route exact path="/eselling" element={<ProtectedRoute><ESelling /></ProtectedRoute>} />
+        <Route exact path="/customerhome" element={<ProtectedRoute><CustomerHome /></ProtectedRoute>} />
+        <Route exact path="/customerpurchase/:id" element={<ProtectedRoute><CustomerPurchase /></ProtectedRoute>} />
+        <Route exact path="/customerdevice" element={<ProtectedRoute><CustomerDevice /></ProtectedRoute>} />
+        <Route exact path="customer/updatecustomer/:id" element={<ProtectedRoute><UpdateCustomer /></ProtectedRoute>} />
+        <Route exact path="device/updatedevice/:id" element={<ProtectedRoute><UpdateDevice /></ProtectedRoute>} />
+        <Route exact path="employee/updateemployee/:id" element={<ProtectedRoute><UpdateEmployee /></ProtectedRoute>} />
+        <Route exact path="edevice/eupdatedevice/:id" element={<ProtectedRoute><EUpdateDevices /></ProtectedRoute>} />
+        <Route exact path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
       </Routes>
     </div>
   );

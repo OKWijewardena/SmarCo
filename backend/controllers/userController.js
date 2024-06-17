@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const usermodel = require("../models/userModel");
 const bcrypt=require("bcryptjs");
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 
 //@desc register a user
 //@route post /api/ users / register
@@ -83,7 +84,11 @@ const loginUser = asyncHandler(async (req, res) => {
               
           }
           userInfo.data.role = role;
-          res.status(200).json({message: message, user: userInfo.data})
+          //   const jwtToken = jwt.sign({ email: userlogin.email, id: userlogin._id }, process.env.JWT_SECRET);
+          const token = jwt.sign({ role: role, userInfo: userInfo.data }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Send the response once
+        res.status(200).json({ message: message, user: userInfo.data, token: token });
         
 
     } else {

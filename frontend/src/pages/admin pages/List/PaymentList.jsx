@@ -123,6 +123,7 @@ const PaymentList = () => {
     const handleLogout = () => {
       // Remove user details from session storage
       sessionStorage.removeItem('user');
+sessionStorage.removeItem('token');
       console.log('User details cleared from session storage');
       navigate('/');
     };

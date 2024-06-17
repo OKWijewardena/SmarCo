@@ -78,7 +78,7 @@ const mdTheme = createTheme();
 export default function ESelling() {
 
   const navigate = useNavigate();
-  
+
   const [open, setOpen] = useState(true);
   const [sellings, setSellings] = useState([]);
   const [deviceName, setDeviceName] = useState('');
@@ -100,6 +100,7 @@ export default function ESelling() {
   const handleLogout = () => {
     // Remove user details from session storage
     sessionStorage.removeItem('user');
+sessionStorage.removeItem('token');
     console.log('User details cleared from session storage');
     navigate('/');
   };
