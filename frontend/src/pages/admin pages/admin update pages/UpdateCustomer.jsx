@@ -279,7 +279,7 @@ sessionStorage.removeItem('token');
           <TextField margin="normal" required fullWidth label="Paci Number" value={paci_number} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setPaci_number(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Password" type="password" value={password} InputLabelProps={{ shrink: true }}  onChange={(e) => {
+          <TextField sx={{ display: 'none' }} margin="normal" required fullWidth label="Password" type="password" value={password} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setPassword(e.target.value);
                     }}/>
           <Button

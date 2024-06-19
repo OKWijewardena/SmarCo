@@ -9,6 +9,9 @@ import Selling from "./pages/admin pages/Selling/Selling";
 import CustomerHome from "./pages/customer pages/CustomerHome/CustomerHome";
 import CustomerPurchase from "./pages/customer pages/CustomerPurchase/CustomerPurchase";
 import CustomerDevice from "./pages/customer pages/CustomerDevice/CustomerDevice";
+import CustomerProfile from './pages/customer pages/CustomerProfile/CustomerProfile';
+import CustomerUpdate from './pages/customer pages/CustomerProfile/CustomerUpdate';
+import CustomerPassword from './pages/customer pages/CustomerProfile/CustomerPassword';
 import EHome from "./pages/employee pages/EHome/EHome";
 import EDevice from "./pages/employee pages/EDevice/EDevice";
 import EPayment from "./pages/employee pages/EPayment/EPayment";
@@ -48,6 +51,9 @@ function App() {
         <Route exact path="/customerhome" element={<ProtectedRoute><CustomerHome /></ProtectedRoute>} />
         <Route exact path="/customerpurchase/:id" element={<ProtectedRoute><CustomerPurchase /></ProtectedRoute>} />
         <Route exact path="/customerdevice" element={<ProtectedRoute><CustomerDevice /></ProtectedRoute>} />
+        <Route exact path="/customerprofile" element={<ProtectedRoute><CustomerProfile /></ProtectedRoute>} />
+        <Route exact path="/customerupdate" element={<ProtectedRoute><CustomerUpdate /></ProtectedRoute>} />
+        <Route exact path="/customerpassword" element={<ProtectedRoute><CustomerPassword /></ProtectedRoute>} />
         <Route exact path="customer/updatecustomer/:id" element={<ProtectedRoute><UpdateCustomer /></ProtectedRoute>} />
         <Route exact path="device/updatedevice/:id" element={<ProtectedRoute><UpdateDevice /></ProtectedRoute>} />
         <Route exact path="employee/updateemployee/:id" element={<ProtectedRoute><UpdateEmployee /></ProtectedRoute>} />

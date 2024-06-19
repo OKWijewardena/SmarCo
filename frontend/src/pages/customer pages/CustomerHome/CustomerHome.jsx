@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link , useNavigate } from 'react-router-dom';
-import { Container, Grid, Typography, Box, Button, Card, CardContent, CardMedia } from '@mui/material';
-import FindIcon from '@mui/icons-material/Search'; // Adjust based on your icon choice
+import { Toolbar, IconButton,Container, Badge, Grid, Typography, Box, Button, Card, CardContent, CardMedia } from '@mui/material';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function CustomerHome() {
 
@@ -46,6 +47,18 @@ if (user) {
         fetchDeviceDetails();
     }, []);
 
+    const NavProfile = () => {
+      navigate('/customerprofile');
+    }
+
+    const handleLogout = () => {
+      // Remove user details from session storage
+      sessionStorage.removeItem('user');
+  sessionStorage.removeItem('token');
+      console.log('User details cleared from session storage');
+      navigate('/');
+    };
+
     const fetchSellings = async () => {
         try {
           const res = await axios.get(`http://podsaas.online/api/customer/${user.email}`);
@@ -82,23 +95,67 @@ if (user) {
 
   return (
     <Container>
+      <Toolbar
+  sx={{
+    pr: '24px',
+    marginTop: '20px' // keep right padding when drawer closed
+  }}
+>
+  <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+  <IconButton sx={{ marginRight: 'auto' }} onClick={NavProfile} >
+  <Box 
+    sx={{
+      background: 'linear-gradient(90deg, rgba(198, 61, 231, 0.2), rgba(117, 40, 136, 0.2))',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 40,
+      height: 40,
+    }}
+  >
+    <AccountCircleOutlinedIcon 
+    />
+  </Box>
+</IconButton>
+
+
+    <Typography
+      component="h1"
+      variant="h6"
+      noWrap
+      sx={{ 
+        flexGrow: 1, 
+        textAlign: 'center', 
+        background: 'linear-gradient(90deg, #C63DE7, #752888)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        fontFamily: 'Public Sans, sans-serif',
+        fontWeight: 'bold'
+      }}
+    >
+      SMARTCO
+    </Typography>
+    
+    <IconButton onClick={handleLogout} sx={{ marginLeft: 'auto' }}>
+    <Box 
+    sx={{
+      background: 'linear-gradient(90deg, rgba(198, 61, 231, 0.2), rgba(117, 40, 136, 0.2))',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 40,
+      height: 40,
+    }}
+  >
+        <LogoutIcon />
+      </Box>
+    </IconButton>
+  </Box>
+</Toolbar>
+
       <Box textAlign="center" mb={4}>
-      <Typography
-            component="h1"
-            variant="h6"
-            noWrap
-            sx={{ 
-              flexGrow: 1, 
-              background: 'linear-gradient(90deg, #C63DE7, #752888)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontFamily: 'Public Sans, sans-serif',
-              fontWeight: 'bold',
-              marginTop:'20px'
-            }}
-          >
-            SMARTCO
-          </Typography>
           <Box bgcolor="secondary.light" p={4} borderRadius={2} textAlign="center" sx={{ background: 'linear-gradient(90deg, rgba(198, 61, 231, 0.2), rgba(117, 40, 136, 0.2))', marginTop: "20px", position: 'relative' }}>
       <Grid container spacing={2} alignItems="center" justifyContent="center">
         <Grid item xs={12} md={8}>
