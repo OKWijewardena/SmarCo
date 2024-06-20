@@ -392,7 +392,7 @@ sessionStorage.removeItem('token');
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {devices.map((device) => (
+                                            {devices.slice().reverse().map((device) => (
                                                 <TableRow key={device._id}>
                                                     <TableCell>{device.deviceName}</TableCell>
                                                     <TableCell>{device.price}</TableCell>

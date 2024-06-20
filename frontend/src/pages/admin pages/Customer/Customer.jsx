@@ -345,7 +345,7 @@ sessionStorage.removeItem('token');
               </TableRow>
             </TableHead>
             <TableBody>
-            {customers.map((customer) => (
+            {customers.slice().reverse().map((customer) => (
                         <TableRow key={customer._id}>
                           <TableCell>{customer.name}</TableCell>
                           <TableCell>{customer.email}</TableCell>

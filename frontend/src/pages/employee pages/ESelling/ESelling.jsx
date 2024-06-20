@@ -402,7 +402,7 @@ sessionStorage.removeItem('token');
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {sellings.map((selling) => (
+                      {sellings.slice().reverse().map((selling) => (
                         <TableRow key={selling._id}>
                           <TableCell>{selling.deviceName}</TableCell>
                           <TableCell>{selling.emiNumber}</TableCell>
