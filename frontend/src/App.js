@@ -17,7 +17,6 @@ import EDevice from "./pages/employee pages/EDevice/EDevice";
 import EPayment from "./pages/employee pages/EPayment/EPayment";
 import ESelling from "./pages/employee pages/ESelling/ESelling";
 import Login from "./pages/Login/Login";
-import { Forget_password } from "./pages/Login/Forget_password";
 import CustomerList from "./pages/admin pages/List/customerList";
 import DeviceList from "./pages/admin pages/List/DeviceList"
 import EmployeeList from "./pages/admin pages/List/EmployeeList"
@@ -28,6 +27,8 @@ import UpdateEmployee from "./pages/admin pages/admin update pages/UpdateEmploye
 import EUpdateDevices from "./pages/employee pages/employee update pages/EUpdateDevices";
 import Report from "./pages/admin pages/List/Report";
 import ProtectedRoute from "./pages/Login/ProtectedRoute";
+import Forget_password from './pages/Login/Forget_password';
+import Resetpassword from './pages/Login/Resetpassword';
 
 function App() {
   return (
@@ -59,6 +60,8 @@ function App() {
         <Route exact path="employee/updateemployee/:id" element={<ProtectedRoute><UpdateEmployee /></ProtectedRoute>} />
         <Route exact path="edevice/eupdatedevice/:id" element={<ProtectedRoute><EUpdateDevices /></ProtectedRoute>} />
         <Route exact path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
+        <Route exact path="/forget_password" element={<Forget_password/>} />
+        <Route exact path="/Reset_password" element={<Resetpassword/>} />
       </Routes>
     </div>
   );

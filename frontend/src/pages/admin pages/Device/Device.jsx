@@ -407,7 +407,7 @@ sessionStorage.removeItem('token');
                                                     <TableCell>
         {device.imageName && (
           <img
-            src={`../../../../backend/deviceImages/${device.imageName}`}
+            src={`images/deviceImages/${device.imageName}`}
             alt={device.deviceName}
             style={{ width: '100px', height: '100px' }}
           />
