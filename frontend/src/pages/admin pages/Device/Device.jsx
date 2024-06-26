@@ -152,33 +152,24 @@ sessionStorage.removeItem('token');
     };
 
     const handleFileChange = (event) => {
-        setForm({ ...form, imageName: event.target.files[0] });
-    };
+        setForm({ ...form, imageName: event.target.files[0]});
+    };    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        console.log(form);
+
         const formData = new FormData();
         Object.keys(form).forEach(key => {
             formData.append(key, form[key]);
         });
+        console.log(formData);
         try {
             await axios.post('http://podsaas.online/device/addDevice', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-            });
-            setForm({
-                deviceName: '',
-                price: '',
-                color: '',
-                shopName: '',
-                modelNumber: '',
-                storage: '',
-                ram:'',
-                warrenty: '',
-                emiNumber: '',
-                purchaseDate: '',
-                imageName: ''
             });
             fetchDevices();
         } catch (error) {
@@ -407,7 +398,7 @@ sessionStorage.removeItem('token');
                                                     <TableCell>
         {device.imageName && (
           <img
-            src={`images/deviceImages/${device.imageName}`}
+            src={`${device.imageName}`}
             alt={device.deviceName}
             style={{ width: '100px', height: '100px' }}
           />

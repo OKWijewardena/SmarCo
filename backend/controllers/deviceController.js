@@ -1,72 +1,65 @@
 const Device = require("../models/deviceModel");
+const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-// const dscf = require('../../frontend/src/images/deviceImages')
+const upload = multer({ dest: 'uploads/' });
 
-// Define the upload path
-const uploadPath = path.join(__dirname, '../../frontend/public/images/deviceImages');
-
-// Ensure the upload path exists
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
-}
-
-// Set up multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadPath); // Folder to save the images
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname); // File name
-  }
+// Set up Cloudinary configuration
+cloudinary.config({
+  cloud_name: 'dzel2lewy',
+  api_key: '987584592789527',
+  api_secret: 'E-0c0rc9n_4MSgmawaSOTnntr6c'
 });
 
-const upload = multer({ storage: storage }).single('imageName');
 
+// Assume `upload.single('imageName')` is the middleware for the route
 exports.addDevice = async (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      console.error('Multer Error:', err);
-      return res.status(500).json({ message: "Error uploading file" });
+  try {
+    // Destructure all other fields except `imageName`
+    const {
+      deviceName,
+      price,
+      color,
+      shopName,
+      modelNumber,
+      storage,
+      ram,
+      warrenty,
+      emiNumber,
+      purchaseDate
+    } = req.body;
+
+    let imageUrl = '';
+    if (req.file) {
+      // Use `req.file.path` instead of `imageName`
+      const result = await cloudinary.uploader.upload(req.file.path, { resource_type: 'auto' });
+      imageUrl = result.secure_url;
     }
-    try {
-      const {
-        deviceName,
-        price,
-        color,
-        shopName,
-        modelNumber,
-        storage,
-        ram,
-        warrenty,
-        emiNumber,
-        purchaseDate
-      } = req.body;
 
-      const newDevice = new Device({
-        deviceName,
-        price,
-        color,
-        shopName,
-        modelNumber,
-        storage,
-        ram,
-        warrenty,
-        emiNumber,
-        purchaseDate,
-        imageName: req.file ? req.file.filename : ''
-      });
+    const newDevice = new Device({
+      deviceName,
+      price,
+      color,
+      shopName,
+      modelNumber,
+      storage,
+      ram,
+      warrenty,
+      emiNumber,
+      purchaseDate,
+      imageName: imageUrl // Save the Cloudinary URL
+    });
 
-      await newDevice.save();
-
-      res.json("New Device Added");
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Internal server error" });
+    await newDevice.save();
+    res.json("New Device Added");
+  } catch (err) {
+    console.error(err);
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: err.message, errors: err.errors });
     }
-  });
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
+
 
 exports.getAllDevices = async (req, res) => {
   try {

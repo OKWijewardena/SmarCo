@@ -202,6 +202,12 @@ if (user) {
                   Purchase Date: {selling.date}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
+                  Device Price: {selling.price}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Advance: {selling.advance}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
                   Remaining Balance: {selling.balance}
                 </Typography>
               </CardContent>

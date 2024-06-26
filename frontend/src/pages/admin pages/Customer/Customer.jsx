@@ -354,8 +354,8 @@ sessionStorage.removeItem('token');
                           <TableCell>{customer.telephone_no}</TableCell>
                           <TableCell>{customer.address}</TableCell>
                           <TableCell>{customer.nationality}</TableCell>
-                          <TableCell>{customer.paci_number}</TableCell>
                           <TableCell>{customer.civil_id}</TableCell>
+                          <TableCell>{customer.paci_number}</TableCell>
                           <TableCell>
                           <Link to={`updatecustomer/${customer.email}`}>
                                                         <IconButton color="primary">

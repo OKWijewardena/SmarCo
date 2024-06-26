@@ -3,8 +3,10 @@ const asyncHandler = require("express-async-handler");
 // Controller to add a new selling record
 exports.addSelling = async (req, res) => {
     const { deviceName, emiNumber, customerName, civilID, price, months, date, advance, imageName } = req.body;
+
+    const installment = parseFloat(price) / parseFloat(months);
     
-    const currentbalance = parseFloat(price) * parseFloat(months);
+    const currentbalance = parseFloat(price) - parseFloat(advance);
     const balance = String(currentbalance);
     const customArray = [];
   
@@ -16,7 +18,7 @@ exports.addSelling = async (req, res) => {
       
       const monthData = { 
         date: formattedNextMonthDate,
-        price: String(price),
+        price: String(installment),
         status: 'unpaid'
       };
       
