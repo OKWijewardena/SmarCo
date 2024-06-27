@@ -11,15 +11,6 @@ export default function CustomerPurchase() {
     const navigate = useNavigate();
 
   const user = JSON.parse(sessionStorage.getItem('user'));
-  // Check if the user object exists and then access the email property
-  const civil_id = user.civil_id;
-if (user) {
-  const civil_id = user.civil_id;
-  console.log('civil id:', civil_id); // You can use the email as needed
-  
-} else {
-  console.log('No user data found in session storage');
-}
 
 const backward = () => {
     navigate('/customerHome');
