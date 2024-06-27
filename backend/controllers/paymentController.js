@@ -3,12 +3,13 @@ const Payment = require("../models/paymentModel");
 
 // Controller to add a new payment
 exports.addPayment = (req, res) => {
-  const { customerName, civilID, deviceName, price, date } = req.body;
+  const { customerName, civilID, deviceName, emiNumber, price, date } = req.body;
 
   const newPayment = new Payment({
     customerName,
     civilID,
     deviceName,
+    emiNumber,
     price,
     date,
   });
@@ -38,12 +39,13 @@ exports.getAllPayments = (req, res) => {
 
 // Controller to update a payment
 exports.updatePayment = async (req, res) => {
-  const { customerName, civilID, deviceName, price, date } = req.body;
+  const { customerName, civilID, deviceName, emiNumber, price, date } = req.body;
 
   const updatePayment = {
     customerName,
     civilID,
     deviceName,
+    emiNumber,
     price,
     date,
   };
@@ -70,16 +72,15 @@ exports.deletePayment = (req, res) => {
 };
 
 // Controller to get a single payment by ID
-exports.getOnePayment = (req, res) => {
-  Payment.find({ civilID: req.params.civilID })
-    .then((payment) => {
-      res.json(payment);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: "Error retrieving payment" });
-    });
-
+exports.getOnePayment = async (req, res) => {
+  const { civilID, emiNumber } = req.body;
+  try {
+    const payments = await Payment.find({ civilID, emiNumber });
+    res.json(payments);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Error retrieving payment" });
+  }
 };
 
 

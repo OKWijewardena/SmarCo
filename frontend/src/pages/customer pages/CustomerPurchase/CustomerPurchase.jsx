@@ -45,9 +45,15 @@ sessionStorage.removeItem('token');
         try {
             const response = await axios.get(`http://podsaas.online/selling/getOneSellingID/${id}`);
           console.log(id);
-         
-
             setSellings(response.data);
+            const CIVILID = response.data.civilID;
+            const EMINUMBER = response.data.emiNumber;
+
+            const Newpayments = {civilID:CIVILID, emiNumber:EMINUMBER};
+
+            const res = await axios.post("http://podsaas.online/payment/getOnePayment", Newpayments)
+            setData(res.data);
+            
         } catch (error) {
             console.error('Error fetching devices:', error);
         }
@@ -55,23 +61,7 @@ sessionStorage.removeItem('token');
     
     useEffect(() => {
         fetchSellings();
-
-        fetch(`http://podsaas.online/payment/getOnePayment/${civil_id}`, {
-          method: 'GET'
-      })
-      
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => setData(data))
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            // Handle error accordingly
-        });
-    }, [fetchSellings]);
+    }, []);
 
     const downloadPDF = (rowData) => { // Modify the function to accept rowData
         fetch('http://podsaas.online/convertToPaymentInvoicePDF', {
@@ -171,7 +161,7 @@ sessionStorage.removeItem('token');
             {sellings.deviceName}
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                <img src={`/images/deviceImages/${sellings.imageName}`} alt="device" style={{ width: '100%', maxWidth: 300 }} />
+                <img src={`${sellings.imageName}`} alt="device" style={{ width: '100%', maxWidth: 300 }} />
             </Box>
             <Card sx={{ mb: 2 }}>
                 <CardContent>

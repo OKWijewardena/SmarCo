@@ -191,7 +191,7 @@ if (user) {
               <CardMedia
                 component="img"
                 height="140"
-                image={`/images/deviceImages/${selling.imageName}`}
+                image={`${selling.imageName}`}
                 alt={selling.emiNumber}               
               />
               <CardContent>

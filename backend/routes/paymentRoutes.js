@@ -15,6 +15,6 @@ router.put("/updatePayment/:civilID", paymentController.updatePayment);
 router.delete("/deletePayment/:id", paymentController.deletePayment);
 
 // Route for getting a single payment by ID
-router.get("/getOnePayment/:civilID", paymentController.getOnePayment);
+router.post("/getOnePayment", paymentController.getOnePayment);
 
 module.exports = router;
