@@ -72,12 +72,8 @@ exports.getAllDevices = async (req, res) => {
 };
 
 exports.updateDevice = async (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.status(500).json({ message: "Error uploading file" });
-    }
-    try {
-      const {
+
+  const {
         deviceName,
         price,
         color,
@@ -87,7 +83,8 @@ exports.updateDevice = async (req, res) => {
         ram,
         warrenty,
         emiNumber,
-        purchaseDate
+        purchaseDate,
+        imageName
       } = req.body;
 
       const updatedDevice = {
@@ -101,16 +98,15 @@ exports.updateDevice = async (req, res) => {
         warrenty,
         emiNumber,
         purchaseDate,
-        imageName: req.file ? req.file.filename : req.body.imageName
+        imageName
       };
-
+    try {
       await Device.findByIdAndUpdate(req.params.id, updatedDevice);
       res.status(200).send({ status: "Device Updated" });
     } catch (err) {
       console.error(err);
       res.status(500).send({ status: "Error with updating", error: err.message });
     }
-  });
 };
 
 exports.deleteDevice = async (req, res) => {
