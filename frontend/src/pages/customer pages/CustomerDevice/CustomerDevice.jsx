@@ -110,7 +110,7 @@ export default function CustomerDevice() {
           <Grid item xs={12} key={index}>
             <Card>
               <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <img src={`/images/deviceImages/${device.imageName}`}
+                <img src={`${device.imageName}`}
             alt={device.deviceName} style={{ width: 60, height: 'auto', marginRight: 16 }} />
                 <Box>
                   <Typography variant="h6">{device.deviceName}</Typography>

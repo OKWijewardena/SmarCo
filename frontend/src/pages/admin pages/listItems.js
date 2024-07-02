@@ -72,7 +72,7 @@ export const mainListItems = (
 export const secondaryListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
-      Saved reports
+      reports
     </ListSubheader>
 
     <Link to="/CustomerList" style={{textDecoration: 'none', color:"black"}}>
@@ -109,6 +109,15 @@ export const secondaryListItems = (
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Payment List" />
+    </ListItemButton>
+    </Link>
+
+    <Link to="/saleList" style={{textDecoration: 'none', color:"black"}}>
+    <ListItemButton>
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary="Sales List" />
     </ListItemButton>
     </Link>
   </React.Fragment>

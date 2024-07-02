@@ -384,21 +384,34 @@ sessionStorage.removeItem('token');
               </Box>
 
               {/* Table Section */}
-              <Box sx={{ mt: 4 }}>
+              <Box sx={{ 
+       mt: 6,
+       display: 'flex',
+       flexDirection: 'column',
+       alignItems: 'center',
+       marginTop: 4,
+       padding: 3,
+       backgroundColor: '#fff',
+       borderRadius: 1,
+       boxShadow: 3,
+       maxWidth: 1500, // Adjust this value as needed
+       flexGrow: 1,
+       mx: 'auto',  
+    }}>
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Device Name</TableCell>
-                        <TableCell>Emi Number</TableCell>
-                        <TableCell>Customer Name</TableCell>
-                        <TableCell>Civil ID</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Months</TableCell>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Advance</TableCell>
-                        <TableCell>Balance</TableCell>
-                        <TableCell>Action</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Device Name</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Emi Number</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Customer Name</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Civil ID</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Price</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Months</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Date</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Advance</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Balance</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Action</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

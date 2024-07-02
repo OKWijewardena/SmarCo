@@ -191,7 +191,6 @@ const handleFetch = () => {
             const itemPurchaseDate = new Date(item.purchaseDate);
             const itemExpiryDate = new Date(item.expireDate);
             return (deviceName === '' || item.deviceName.includes(deviceName)) &&
-                (quantity === '' || item.quantity.includes(quantity)) &&
                 (price === '' || item.price.includes(price)) &&
                 (color === '' || item.color.includes(color)) &&
                 (shopName === '' || item.shopName.includes(shopName)) &&
@@ -208,7 +207,6 @@ const handleFetch = () => {
 
         // Clear all fields after fetch
         setDeviceName('');
-        setQuantity('');
         setPrice('');
         setColor('');
         setShopName('');
@@ -325,9 +323,6 @@ sx={{
   <Grid container spacing={2}>
     <Grid item xs={12} sm={3}>
     <TextField margin="normal" fullWidth label="Device Name" value={deviceName} onChange={e => setDeviceName(e.target.value)} />
-    </Grid>
-    <Grid item xs={12} sm={3}>
-      <TextField margin="normal"  fullWidth label="Quantity" value={quantity} onChange={e => setQuantity(e.target.value)}  />
     </Grid>
     <Grid item xs={12} sm={3}>
       <TextField margin="normal"  fullWidth label="Price" value={price} onChange={e => setPrice(e.target.value)}  />

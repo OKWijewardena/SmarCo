@@ -176,7 +176,7 @@ const handleFetch = () => {
     let filteredData = originalData.filter(item => {
         return (name === '' || item.name === name) &&
             (email === '' || item.email === email) &&
-            (civil_id === '' || item.civil_id === Number(civil_id)) &&
+            (civil_id === '' || item.civil_id === (civil_id)) &&
             (nationality === '' || item.nationality === nationality) &&
             (address === '' || item.address === address) &&
             (mobile === '' || item.mobile === Number(mobile)) &&

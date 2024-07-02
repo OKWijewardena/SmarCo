@@ -36,7 +36,8 @@ const device = new mongoose.Schema({
     },
     emiNumber : {
         type : String,
-        required : true
+        required : true,
+        unique:[true,"EMI Number already taken"],
     },
     purchaseDate : {
         type : String,

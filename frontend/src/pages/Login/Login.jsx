@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Paper, Avatar, TextField, Button, Typography, Link, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Paper, Avatar, TextField, Button, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
 import { Grid } from '@mui/material';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     label: {
@@ -106,11 +107,11 @@ export default function Login() {
                     >
                         Sign in
                     </Button>
+                    <Link to="/forget_password" style={{ color: 'rgb(117, 40, 136)' }}>
                     <Typography style={{ color: 'rgb(117, 40, 136)' }}>
-                        <Link href="/forget_password" style={{ color: 'rgb(117, 40, 136)' }}>
                             Forgot password?
-                        </Link>
                     </Typography>
+                    </Link>
                 </form>
             </Paper>
         </Grid>

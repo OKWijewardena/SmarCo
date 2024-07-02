@@ -354,18 +354,30 @@ sessionStorage.removeItem('token');
               </Box>
 
               {/* Table Section */}
-              <Box sx={{ mt: 4 }}>
+              <Box sx={{ 
+       mt: 6,
+       display: 'flex',
+       flexDirection: 'column',
+       alignItems: 'center',
+       marginTop: 4,
+       padding: 3,
+       backgroundColor: '#fff',
+       borderRadius: 1,
+       boxShadow: 3,
+       maxWidth: 1500, // Adjust this value as needed
+       flexGrow: 1,
+       mx: 'auto',  
+    }}>
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>User Name</TableCell>
-                        <TableCell>E-mail</TableCell>
-                        <TableCell>Mobile</TableCell>
-                        <TableCell>Address</TableCell>
-                        <TableCell>Role</TableCell>
-                        <TableCell>Password</TableCell>
-                        <TableCell>Action</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >User Name</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >E-mail</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Mobile</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Address</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Role</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Action</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -376,7 +388,6 @@ sessionStorage.removeItem('token');
                           <TableCell>{employee.phone}</TableCell>
                           <TableCell>{employee.address}</TableCell>
                           <TableCell>{employee.role}</TableCell>
-                          <TableCell>{employee.password}</TableCell>
                           <TableCell>
                             <Link to={`updateemployee/${employee.email}`}>
                             <IconButton color="primary">

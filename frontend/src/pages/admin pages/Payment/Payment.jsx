@@ -395,17 +395,30 @@ sessionStorage.removeItem('token');
               </Dialog>
 
               {/* Table Section */}
-              <Box sx={{ mt: 4 }}>
+              <Box sx={{ 
+       mt: 6,
+       display: 'flex',
+       flexDirection: 'column',
+       alignItems: 'center',
+       marginTop: 4,
+       padding: 3,
+       backgroundColor: '#fff',
+       borderRadius: 1,
+       boxShadow: 3,
+       maxWidth: 1500, // Adjust this value as needed
+       flexGrow: 1,
+       mx: 'auto',  
+    }}>
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Customer Name</TableCell>
-                        <TableCell>Civil ID</TableCell>
-                        <TableCell>Device Name</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Action</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Customer Name</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Civil ID</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Device Name</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Price</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Date</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Action</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

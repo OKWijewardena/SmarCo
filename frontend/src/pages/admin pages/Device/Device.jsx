@@ -171,6 +171,7 @@ sessionStorage.removeItem('token');
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            alert("New Device added successfully");
             fetchDevices();
         } catch (error) {
             console.error('Error adding devices:', error);
@@ -363,23 +364,36 @@ sessionStorage.removeItem('token');
                                 </Box>
                             </Box>
                             {/* Table Section */}
-                            <Box sx={{ mt: 4 }}>
+                            <Box sx={{ 
+       mt: 6,
+       display: 'flex',
+       flexDirection: 'column',
+       alignItems: 'center',
+       marginTop: 4,
+       padding: 3,
+       backgroundColor: '#fff',
+       borderRadius: 1,
+       boxShadow: 3,
+       maxWidth: 1500, // Adjust this value as needed
+       flexGrow: 1,
+       mx: 'auto',  
+    }}>
                                 <TableContainer component={Paper}>
                                     <Table sx={{ minWidth: 650 }}>
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>Device Name</TableCell>
-                                                <TableCell>Price</TableCell>
-                                                <TableCell>Colour</TableCell>
-                                                <TableCell>Shop Name</TableCell>
-                                                <TableCell>Model Number</TableCell>
-                                                <TableCell>Storage</TableCell>
-                                                <TableCell>Ram</TableCell>
-                                                <TableCell>Warrenty</TableCell>
-                                                <TableCell>Emi Number</TableCell>
-                                                <TableCell>Purchase Date</TableCell>
-                                                <TableCell>Image Name</TableCell>
-                                                <TableCell>Action</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Device Name</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Price</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Colour</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Shop Name</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Model Number</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Storage</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Ram</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Warrenty</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Emi Number</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Purchase Date</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Image Name</TableCell>
+                                                <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Action</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>

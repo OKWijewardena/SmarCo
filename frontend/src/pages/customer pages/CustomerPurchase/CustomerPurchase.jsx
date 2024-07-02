@@ -11,6 +11,15 @@ export default function CustomerPurchase() {
     const navigate = useNavigate();
 
   const user = JSON.parse(sessionStorage.getItem('user'));
+  // Check if the user object exists and then access the email property
+  const civil_id = user.civil_id;
+if (user) {
+  const civil_id = user.civil_id;
+  console.log('civil id:', civil_id); // You can use the email as needed
+  
+} else {
+  console.log('No user data found in session storage');
+}
 
 const backward = () => {
     navigate('/customerHome');
@@ -31,6 +40,8 @@ sessionStorage.removeItem('token');
     
     const [sellings, setSellings] = useState([]);
     const [data, setData] = useState([]);
+    const [civilID, setCivilID] = useState('');
+    const [emiNumber, setemiNumber] = useState('');
 
     const fetchSellings = useCallback(async () => {
         try {
@@ -183,6 +194,12 @@ sessionStorage.removeItem('token');
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <Typography variant="body1" align="right" sx={{ mt: 2 }}>
+                        Device price: {sellings.price}/=
+                    </Typography>
+                    <Typography variant="body1" align="right" sx={{ mt: 2 }}>
+                        Advance: {sellings.advance}/=
+                    </Typography>
                     <Typography variant="body1" align="right" sx={{ mt: 2 }}>
                         Remaining Balance: {sellings.balance}/=
                     </Typography>

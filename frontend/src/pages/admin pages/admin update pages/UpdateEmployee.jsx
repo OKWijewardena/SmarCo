@@ -300,6 +300,7 @@ sessionStorage.removeItem('token');
                     </Select>
                   </FormControl>
                   <TextField
+                  sx={{display: 'none'}}
                     margin="normal"
                     required
                     fullWidth

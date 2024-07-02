@@ -76,17 +76,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
   
 
-export default function Customer(){
+export default function Customer() {
 
   const navigate = useNavigate();
-
-
   const user = JSON.parse(sessionStorage.getItem('user'));
 
   if (user) {
     const role = user.role;
     console.log('Role:', role);
-    
   } else {
     console.log('No user data found in session storage');
   }
@@ -96,7 +93,7 @@ export default function Customer(){
     navigate('/not-authorized');
   }
 
-    const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -132,7 +129,7 @@ export default function Customer(){
   const handleLogout = () => {
     // Remove user details from session storage
     sessionStorage.removeItem('user');
-sessionStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     console.log('User details cleared from session storage');
     navigate('/');
   };
@@ -173,179 +170,174 @@ sessionStorage.removeItem('token');
       await axios.post('http://podsaas.online/api/customer/register', NewCustomer);
       await axios.post('http://podsaas.online/api/users/register', NewUser);
       alert("New Customer added successfully");
+      fetchCustomers();
     } catch (error) {
       console.error('Error adding customer:', error);
       alert(`Error adding customer: ${error.response ? error.response.data.message : error.message}`);
     }
   };
 
-    return(
-        <div>
-            <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar sx={{backgroundColor: 'white', color: '#637381'}}position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
+  return (
+    <div>
+      <ThemeProvider theme={mdTheme}>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <AppBar sx={{backgroundColor: 'white', color: '#637381'}} position="absolute" open={open}>
+            <Toolbar
               sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
+                pr: '24px', // keep right padding when drawer closed
               }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-            component="h1"
-            variant="h6"
-            noWrap
-            sx={{ 
-              flexGrow: 1, 
-              background: 'linear-gradient(90deg, #C63DE7, #752888)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontFamily: 'Public Sans, sans-serif',
-              fontWeight: 'bold',
-            }}
-          >
-            SMARTCO
-          </Typography>
-            <IconButton color="inherit" onClick={handleLogout}>
-              <Badge color="secondary">
-                <LogoutIcon />
-              </Badge>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: '36px',
+                  ...(open && { display: 'none' }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                component="h1"
+                variant="h6"
+                noWrap
+                sx={{ 
+                  flexGrow: 1, 
+                  background: 'linear-gradient(90deg, #C63DE7, #752888)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  fontFamily: 'Public Sans, sans-serif',
+                  fontWeight: 'bold',
+                }}
+              >
+                SMARTCO
+              </Typography>
+              <IconButton color="inherit" onClick={handleLogout}>
+                <Badge color="secondary">
+                  <LogoutIcon />
+                </Badge>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              {mainListItems}
+              <Divider sx={{ my: 1 }} />
+              {secondaryListItems}
+            </List>
+          </Drawer>
           <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginTop: 4,
-          padding: 3,
-          backgroundColor: '#fff',
-          borderRadius: 1,
-          boxShadow: 3,
-          maxWidth: 500, // Adjust the maxWidth as needed
-          width: '100%',
-          mx: 'auto', // Center the box
-        }}>
-        <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color:"#637381" }}>
-          Customer Details
-        </Typography>
-        <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
-          <TextField margin="normal" required fullWidth label="User Name" onChange={(e) => {
-                      setName(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="E-mail" onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Mobile Number" onChange={(e) => {
-                      setMobile(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="WhatsApp Number" onChange={(e) => {
-                      setWhatsapp_no(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Telephone Number" onChange={(e) => {
-                      setTelephone_no(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Address" onChange={(e) => {
-                      setAddress(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Nationality" onChange={(e) => {
-                      setNationality(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Civil ID" onChange={(e) => {
-                      setCivil_id(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Paci Number" onChange={(e) => {
-                      setPaci_number(e.target.value);
-                    }}/>
-          <TextField margin="normal" required fullWidth label="Password" type="password" onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}/>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
+            component="main"
             sx={{
-              mt: 3,
-              mb: 2,
-              backgroundColor: '#752888',
-              '&:hover': {
-                backgroundColor: '#C63DE7',
-              },
-              fontFamily: 'Public Sans, sans-serif',
-              fontWeight: 'bold',
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
+              flexGrow: 1,
+              height: '100vh',
+              overflow: 'auto',
             }}
           >
-            Register
-          </Button>
-        </Box>
-      </Box>
+            <Toolbar />
+            <Container>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginTop: 4,
+                  padding: 3,
+                  backgroundColor: '#fff',
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  maxWidth: 500, // Adjust the maxWidth as needed
+                  width: '100%',
+                  mx: 'auto', // Center the box
+                }}
+              >
+                <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color:"#637381" }}>
+                  Customer Details
+                </Typography>
+                <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
+                  <TextField margin="normal" required fullWidth label="User Name" onChange={(e) => setName(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="E-mail" onChange={(e) => setEmail(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Mobile Number" onChange={(e) => setMobile(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="WhatsApp Number" onChange={(e) => setWhatsapp_no(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Telephone Number" onChange={(e) => setTelephone_no(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Address" onChange={(e) => setAddress(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Nationality" onChange={(e) => setNationality(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Civil ID" onChange={(e) => setCivil_id(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Paci Number" onChange={(e) => setPaci_number(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: '#752888',
+                      '&:hover': {
+                        backgroundColor: '#C63DE7',
+                      },
+                      fontFamily: 'Public Sans, sans-serif',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Box>
+              </Box>
 
-      {/* Table Section */}
-      <Box sx={{ mt: 4 }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>User Name</TableCell>
-                <TableCell>E-mail</TableCell>
-                <TableCell>Mobile</TableCell>
-                <TableCell>Whatsapp Number</TableCell>
-                <TableCell>Telephone Number</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Nationality</TableCell>
-                <TableCell>Civil ID</TableCell>
-                <TableCell>Paci Number</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-            {customers.slice().reverse().map((customer) => (
+              {/* Table Section */}
+              <Box sx={{ 
+       mt: 6,
+       display: 'flex',
+       flexDirection: 'column',
+       alignItems: 'center',
+       marginTop: 4,
+       padding: 3,
+       backgroundColor: '#fff',
+       borderRadius: 1,
+       boxShadow: 3,
+       maxWidth: 1500, // Adjust this value as needed
+       flexGrow: 1,
+       mx: 'auto',  
+    }}>
+                <TableContainer component={Paper}>
+                  <Table >
+                    <TableHead>
+                      <TableRow>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >User Name</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >E-mail</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Mobile</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Whatsapp Number</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Telephone Number</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Address</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Nationality</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Civil ID</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Paci Number</TableCell>
+                        <TableCell style={{ backgroundColor: '#752888', color: 'white' }} >Action</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {customers.slice().reverse().map((customer) => ( // Use slice().reverse() to reverse the order
                         <TableRow key={customer._id}>
                           <TableCell>{customer.name}</TableCell>
                           <TableCell>{customer.email}</TableCell>
@@ -357,25 +349,25 @@ sessionStorage.removeItem('token');
                           <TableCell>{customer.civil_id}</TableCell>
                           <TableCell>{customer.paci_number}</TableCell>
                           <TableCell>
-                          <Link to={`updatecustomer/${customer.email}`}>
-                                                        <IconButton color="primary">
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        </Link>
+                            <Link to={`updatecustomer/${customer.email}`}>
+                              <IconButton color="primary">
+                                <EditIcon />
+                              </IconButton>
+                            </Link>
                             <IconButton color="secondary" onClick={() => handleDelete(customer.email)}>
                               <DeleteIcon />
                             </IconButton>
                           </TableCell>
                         </TableRow>
                       ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-          </Container>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </Container>
+          </Box>
         </Box>
-      </Box>
-    </ThemeProvider>
-        </div>
-    )
+      </ThemeProvider>
+    </div>
+  );
 }
