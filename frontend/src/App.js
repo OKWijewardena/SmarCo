@@ -21,6 +21,7 @@ import CustomerList from "./pages/admin pages/List/customerList";
 import DeviceList from "./pages/admin pages/List/DeviceList"
 import EmployeeList from "./pages/admin pages/List/EmployeeList"
 import PaymentList from "./pages/admin pages/List/PaymentList"
+import SaleList from "./pages/admin pages/List/SaleList"
 import UpdateCustomer from "./pages/admin pages/admin update pages/UpdateCustomer";
 import UpdateDevice from "./pages/admin pages/admin update pages/UpdateDevice";
 import UpdateEmployee from "./pages/admin pages/admin update pages/UpdateEmployee";
@@ -41,6 +42,7 @@ function App() {
         <Route exact path="/DeviceList" element={<ProtectedRoute><DeviceList /></ProtectedRoute>} />
         <Route exact path="/EmployeeList" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
         <Route exact path="/PaymentList" element={<ProtectedRoute><PaymentList /></ProtectedRoute>} />
+        <Route exact path="/saleList" element={<ProtectedRoute><SaleList /></ProtectedRoute>} />
         <Route exact path="/device" element={<ProtectedRoute><Device /></ProtectedRoute>} />
         <Route exact path="/employee" element={<ProtectedRoute><Employee /></ProtectedRoute>} />
         <Route exact path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
