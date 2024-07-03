@@ -53,11 +53,11 @@ const convertToPDF = async (req, res) => {
     }
 
     // Find the month with the highest payment
-    let highestPaymentMonth = Object.keys(totalPaymentsByMonth).reduce((a, b) => totalPaymentsByMonth[a] > totalPaymentsByMonth[b] ? a : b);
-    let x = parseFloat(totalPaymentsByMonth[highestPaymentMonth]);
+let highestPaymentMonth = Object.keys(totalPaymentsByMonth).reduce((a, b) => totalPaymentsByMonth[a] > totalPaymentsByMonth[b] ? a : b);
+let x = parseFloat(totalPaymentsByMonth[highestPaymentMonth]);
 
-    let lowestPaymentMonth = Object.keys(totalPaymentsByMonth).reduce((a, b) => totalPaymentsByMonth[a] < totalPaymentsByMonth[b] ? a : b);
-    let y = parseFloat(totalPaymentsByMonth[lowestPaymentMonth]);
+let lowestPaymentMonth = Object.keys(totalPaymentsByMonth).reduce((a, b) => totalPaymentsByMonth[a] < totalPaymentsByMonth[b] ? a : b);
+let y = parseFloat(totalPaymentsByMonth[lowestPaymentMonth]);
 
     // Read the HTML template
     const source = fs.readFileSync(path.join(__dirname, '../template/invoicespdfTemplate.html'), 'utf8');
@@ -92,6 +92,14 @@ const convertToPaymentInvoicePDF = async (req, res) => {
         item.customerData = customerData;
     }
 
+    for (let item of data) {
+        const response = await axios.get(`http://podsaas.online/selling/getbyCIDEMI/${item.civilID}/${item.emiNumber}`);
+        const sellingData = response.data;
+        item.sellingData = sellingData;
+
+    }
+
+    
     // Calculate the total price first
     let totalPrice = data.reduce((total, item) => total + Number(item.price), 0);
 
@@ -122,7 +130,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
 };
 
 async function convertHTMLToPDF(htmlContent, pdfFilePath, margins = {top: '10mm', right: '1mm', bottom: '10mm', left: '1mm'}){
-    const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // Launch Puppeteer with --no-sandbox and --disable-setuid-sandbox flags
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(htmlContent);
     const pdf = await page.pdf({ format : 'A4', margin : margins, printBackground: true }); // Added printBackground: true

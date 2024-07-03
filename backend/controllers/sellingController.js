@@ -115,6 +115,25 @@ exports.getOneSelling = (req, res) => {
     });
 };
 
+exports.getonesellingByIdEmi = (req, res) => {
+  const { civilID, emiNumber } = req.params;
+  console.log("Searching for civil_id:", civilID, "and emi_no:", emiNumber);
+
+  Selling.findOne({ civilID, emiNumber })
+    .then((sellingRecord) => {
+      if (!sellingRecord) {
+        console.log("No record found.");
+        return res.status(404).json({ message: "Record not found" });
+      }
+      console.log("Found record:", sellingRecord);
+      res.json(sellingRecord);
+    })
+    .catch((err) => {
+      console.error("Error retrieving selling record:", err);
+      res.status(500).json({ error: "Error retrieving selling record" });
+    });
+};
+
 // Controller to get a single selling record by ID
 exports.getOneSellingID = (req, res) => {
   Selling.findOne({ _id: req.params.id })

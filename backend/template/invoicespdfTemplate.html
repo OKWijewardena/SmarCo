@@ -281,35 +281,39 @@ body {
 <div class="invoice-content">
 
 <div class="table-responsive">
-<table class="table table-invoice"style="color: rgb(117 40 136)">
-<thead style="color: rgb(3, 3, 3) ">
-
-    <tr style="background-color: rgb(218 188 225); -webkit-print-color-adjust: exact; ">
-        <th class="text-left ">Device</th>
-        <th class="text-left" width="10%">Civil  Id </th>
-        <th class="text-left" width="10%">Customer </th>
-        <th class="text-left" width="10%">Date</th>
-        <th class="text-left"  width="10%">price</th>
-    </tr>
+  <table class="table table-invoice"style="color: rgb(117 40 136)">
+    <thead style="color: rgb(3, 3, 3) ">
     
-    </thead>
-    <tbody>
-    <tr>
-    
-        {{#each data}}
-        <tr>
-            <span class="text-inverse">
-                <td class="text-left">{{this.deviceName}}</td>
-            </span>
-            <td style="" text-left" width="20%">{{this.civilID}}</td>
-            <td class="text-left" width="20%">{{this.customerName}}</td>
-            <td class="text-left" width="20%">{{this.date}}</td>
-            <td class="text-left" width="20%"><span class="pricee">{{this.price}}</span><span class="currency"> (KWD)</span></td>
+        <tr style="background-color: rgb(218 188 225); -webkit-print-color-adjust: exact; ">
+            <th class="text-left ">Device</th>
+            <th class="text-left" width="10%">Civil  Id </th>
+            <th class="text-left" width="10%">Advance </th>
+            <th class="text-left" width="10%">Customer </th>
+            <th class="text-left" width="10%">Date</th>
+            <th class="text-left"  width="10%">price</th>
         </tr>
-        {{/each}}
-    </tr>
-    
-</tbody>
+        
+        </thead>
+        <tbody>
+        <tr>
+        
+            {{#each data}}
+            <tr>
+                <span class="text-inverse">
+                    <td class="text-left">{{this.deviceName}}</td>
+                </span>
+                <td style="" text-left" width="20%">{{this.civilID}}</td>
+                <td style="" text-left" width="20%">{{sellingData.advance}}</td>
+                <td class="text-left" width="20%">{{this.customerName}}</td>
+                <td class="text-left" width="20%">{{this.date}}</td>
+                <td class="text-left" width="20%"><span class="pricee">{{this.price}}</span><span class="currency"> (KWD)</span></td>
+            </tr>
+            {{/each}}
+        </tr>
+        
+    </tbody>
+    </table>
+
 </table>
 </div>
 
