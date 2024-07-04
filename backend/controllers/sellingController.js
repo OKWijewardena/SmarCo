@@ -163,6 +163,7 @@ exports.updatePaymentHistory = async (req, res) => {
     for (let i = 0; i < customArray.length; i++) {
       const itemDate = new Date(customArray[i].date);
       const itemPrice = parseFloat(customArray[i].price);
+      const nextPrice = parseFloat(customArray[i+1].price);
 
       if (itemDate >= new Date(date) && itemPrice === parseFloat(payment) && customArray[i].status === "unpaid") {
         customArray[i].status = "paid";
@@ -174,7 +175,7 @@ exports.updatePaymentHistory = async (req, res) => {
       } else if (itemDate >= new Date(date) && itemPrice > parseFloat(payment) && customArray[i].status === "unpaid") {
         customArray[i].status = "paid";
         customArray[i].price = payment.toString();
-        const newPrice = (2 * itemPrice - parseFloat(payment)).toFixed(2);
+        const newPrice = (nextPrice + (itemPrice - parseFloat(payment))).toFixed(2);
         balance -= parseFloat(payment);
         balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
 
@@ -189,7 +190,7 @@ exports.updatePaymentHistory = async (req, res) => {
       } else if (itemDate >= new Date(date) && itemPrice < parseFloat(payment) && customArray[i].status === "unpaid") {
         customArray[i].status = "paid";
         customArray[i].price = payment.toString();
-        const newPrice = (itemPrice - (parseFloat(payment) - itemPrice)).toFixed(2);
+        const newPrice = (nextPrice - (parseFloat(payment) - itemPrice)).toFixed(2);
         balance -= parseFloat(payment);
         balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
 
