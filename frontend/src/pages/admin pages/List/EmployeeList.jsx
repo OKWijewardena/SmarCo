@@ -72,6 +72,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 const EmployeeList = () => {
+
+  const navigate = useNavigate();
+
   let date = new Date();
     let day = date.getDate();
     let month = date.getMonth() + 1; // JavaScript months are 0-based counting
