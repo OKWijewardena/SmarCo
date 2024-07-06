@@ -22,6 +22,12 @@ app.use('/images/deviceImages', express.static(imagesPath));
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
+const deviceExcelRoutes = require('./routes/deviceExcelRoute');
+const customerExcelRotes=require('./routes/customerExcelRoute');
+const employeeandAdminExcel=require('./routes/adminandemployeeExcelRoute');
+const paymentExcel=require('./routes/paymentExcelRoute');
+const salesExcel=require('./routes/salesExcelRoute');
+
 // Define API routes
 app.use("/api/device", require("./routes/deviceRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
@@ -37,6 +43,12 @@ app.use("/api/devicepdf",require("./routes/devicePdfRoutes"));
 app.use("/api/salespdf",require("./routes/salespdfRoutes"));
 app.use("/", require("./routes/customerpdfRoutes"));
 app.use("/", require("./routes/employeeAndAdminPdfRoutes"));
+
+app.use('/api/excel', deviceExcelRoutes);
+app.use('/api/customer', customerExcelRotes);
+app.use('/api/employee', employeeandAdminExcel);
+app.use('/api/paymentExcel', paymentExcel);
+app.use('/api/salesExcel', salesExcel);
 
 // Error handler middleware
 app.use(errorHandler);

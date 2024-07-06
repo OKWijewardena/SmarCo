@@ -30,6 +30,9 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { Link, useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -81,6 +84,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
  const mdTheme = createTheme();
 const SaleList = () => {
+
+  const navigate = useNavigate();
+
    let date = new Date();
    let day = date.getDate();
    let month = date.getMonth() + 1; // JavaScript months are 0-based counting
@@ -121,6 +127,14 @@ const SaleList = () => {
           console.error('Error fetching data:', error);
       });
   }, []);
+
+  const handleLogout = () => {
+    // Remove user details from session storage
+    sessionStorage.removeItem('user');
+sessionStorage.removeItem('token');
+    console.log('User details cleared from session storage');
+    navigate('/');
+  };
   
   const downloadPDF = () => {
     fetch('http://podsaas.online/api/salespdf/convertsalesPDF', {
@@ -156,6 +170,44 @@ const SaleList = () => {
     .catch(error => alert(error));
 };
 
+const downloadExcel = () => {
+  fetch('http://podsaas.online/api/salesExcel/salesExcel', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // Send current data to the backend
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.blob(); // If the response is OK, get the Excel blob
+      } else {
+          throw new Error('Error converting to Excel');
+      }
+  })
+  .then(blob => {
+      // Create a blob URL
+      const url = window.URL.createObjectURL(blob);
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = url;
+      let formattedDateTime = `${day}/${month}/${year}, ${hours}:${minutes}`;
+     
+      link.download = `Sales Report - ${formattedDateTime}.xlsx`;
+      // Append the link to the body
+      document.body.appendChild(link);
+      // Simulate click
+      link.click();
+      // Remove the link when done
+      document.body.removeChild(link);
+  })
+  .catch(error => alert(error));
+};
+
+
+  
+
+
 
 
   const resetTable = () => {
@@ -176,6 +228,7 @@ const SaleList = () => {
       });
       
   };
+
 
 // Update your handleFetch function to also filter based on the search term
 const handleFetch = () => {
@@ -266,11 +319,11 @@ return (
 >
   SMARTCO
 </Typography>
-  <IconButton color="inherit">
-    <Badge badgeContent={4} color="secondary">
-      <NotificationsIcon />
-    </Badge>
-  </IconButton>
+<IconButton color="inherit" onClick={handleLogout}>
+              <Badge color="secondary">
+                <LogoutIcon />
+      </Badge>
+    </IconButton>
 </Toolbar>
 </AppBar>
 <Drawer variant="permanent" open={open}>
@@ -376,7 +429,7 @@ Sales List
 </Grid>
 
 <Grid container spacing={2} direction="row" justifyContent="space-between">
-  <Grid item xs={12} sm={4}>
+  <Grid item xs={12} sm={3}>
     <Button
       
       onClick={handleFetch}
@@ -396,7 +449,7 @@ Sales List
       Fetch
     </Button>
   </Grid>
-  <Grid item xs={12} sm={4}>
+  <Grid item xs={12} sm={3}>
     <Button
      
       onClick={resetTable}
@@ -416,7 +469,7 @@ Sales List
       Reset
     </Button>
   </Grid>
-  <Grid item xs={12} sm={4}>
+  <Grid item xs={12} sm={3}>
     <Button
     
   
@@ -437,6 +490,28 @@ Sales List
       Download PDF
     </Button>
   </Grid>
+  <Grid item xs={12} sm={3}>
+    <Button
+    
+  
+      onClick={downloadExcel}
+      fullWidth
+      variant="contained"
+      sx={{
+        mt: 3,
+        mb: 2,
+        backgroundColor: '#752888',
+        '&:hover': {
+          backgroundColor: '#C63DE7',
+        },
+        fontFamily: 'Public Sans, sans-serif',
+        fontWeight: 'bold',
+      }}
+    >
+      Download Excel
+    </Button>
+  </Grid>
+ 
 </Grid>
 </Box>
 </Box>
