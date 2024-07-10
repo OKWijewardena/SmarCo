@@ -105,7 +105,7 @@ const DeviceList = () => {
     const [expiryDate, setExpiryDate] = useState(null);
    
     useEffect(() => {
-        fetch('http://podsaas.online/api/device/getDevice', {
+        fetch('http://localhost:8000/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
@@ -130,7 +130,7 @@ sessionStorage.removeItem('token');
       navigate('/');
     };
     const downloadPDF = () => {
-      fetch('http://podsaas.online/api/devicepdf/convertdevicePDF', {
+      fetch('http://localhost:8000/api/devicepdf/convertdevicePDF', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ sessionStorage.removeItem('token');
       .catch(error => alert(error));
   };
   const downloadExcel = () => {
-    fetch('http://podsaas.online/api/excel/add', {
+    fetch('http://localhost:8000/api/excel/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ sessionStorage.removeItem('token');
 
     const resetTable = () => {
       
-        fetch('http://podsaas.online/api/device/getDevice', {
+        fetch('http://localhost:8000/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
@@ -230,7 +230,6 @@ const handleFetch = () => {
                 (shopName === '' || item.shopName.includes(shopName)) &&
                 (modelNumber === '' || item.modelNumber.includes(modelNumber)) &&
                 (storage === '' || item.storage.includes(storage)) &&
-                (warrenty === '' || item.warrenty.includes(warrenty)) &&
                 (emiNumber === '' || item.emiNumber.includes(emiNumber)) &&
                 (!purchaseDateFrom || itemPurchaseDate >= purchaseDateFrom) && 
                 (!purchaseDateTo || itemPurchaseDate <= purchaseDateTo ) &&
@@ -246,7 +245,6 @@ const handleFetch = () => {
         setShopName('');
         setModelNumber('');
         setStorage('');
-        setWarrenty('');
         setEmiNumber('');
         setPurchaseDateFrom(null); // Set to null to clear the date picker
         setPurchaseDateTo(null); // Set to null to clear the date picker
@@ -359,9 +357,6 @@ sx={{
     <TextField margin="normal" fullWidth label="Device Name" value={deviceName} onChange={e => setDeviceName(e.target.value)} />
     </Grid>
     <Grid item xs={12} sm={3}>
-      <TextField margin="normal"  fullWidth label="Quantity" value={quantity} onChange={e => setQuantity(e.target.value)}  />
-    </Grid>
-    <Grid item xs={12} sm={3}>
       <TextField margin="normal"  fullWidth label="Price" value={price} onChange={e => setPrice(e.target.value)}  />
     </Grid>
     <Grid item xs={12} sm={3}>
@@ -375,9 +370,6 @@ sx={{
     </Grid>
     <Grid item xs={12} sm={3}>
       <TextField margin="normal"  fullWidth label="Storage" value={storage} onChange={e => setStorage(e.target.value)}  />
-    </Grid>
-    <Grid item xs={12} sm={3}>
-      <TextField margin="normal"  fullWidth label="Warrenty" value={warrenty} onChange={e => setWarrenty(e.target.value)}  />
     </Grid>
     <Grid item xs={12} sm={3}>
       <TextField margin="normal"  fullWidth label="EMEI Number" value={emiNumber} onChange={e => setEmiNumber(e.target.value)}  />
