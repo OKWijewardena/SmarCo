@@ -105,7 +105,7 @@ const DeviceList = () => {
     const [expiryDate, setExpiryDate] = useState(null);
    
     useEffect(() => {
-        fetch('http://localhost:8000/api/device/getDevice', {
+        fetch('http://podsaas.online/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
@@ -130,7 +130,7 @@ sessionStorage.removeItem('token');
       navigate('/');
     };
     const downloadPDF = () => {
-      fetch('http://localhost:8000/api/devicepdf/convertdevicePDF', {
+      fetch('http://podsaas.online/api/devicepdf/convertdevicePDF', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ sessionStorage.removeItem('token');
       .catch(error => alert(error));
   };
   const downloadExcel = () => {
-    fetch('http://localhost:8000/api/excel/add', {
+    fetch('http://podsaas.online/api/excel/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ sessionStorage.removeItem('token');
 
     const resetTable = () => {
       
-        fetch('http://localhost:8000/api/device/getDevice', {
+        fetch('http://podsaas.online/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
