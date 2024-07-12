@@ -22,4 +22,6 @@ router.get("/getOneDevice/:emiNumber", deviceController.getOneDevice);
 // Route for delete device by emi number
 router.delete("/deleteDeviceemi/:emiNumber", deviceController.deleteDeviceEMI);
 
+router.get("/getOneDevicebyemi/:emiNumber", deviceController.getOneDevicebyemi);
+
 module.exports = router;

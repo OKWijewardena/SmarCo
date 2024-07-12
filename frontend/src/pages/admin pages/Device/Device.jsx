@@ -160,6 +160,42 @@ sessionStorage.removeItem('token');
 
         console.log(form);
 
+        const { emiNumber } = form; // Assuming 'emiNumber' is a key in your form data
+    
+        try {
+          // Check if EMI number is available in the selling table
+          const sellingResponse = await axios.get(
+            `http://podsaas.online/selling/getbyEmi/${emiNumber}`
+          );
+    
+          if (sellingResponse.data.message !== "data not available") {
+            alert("This EMI number is already taken in the selling table.");
+            return; // Stop the function execution
+          } else {
+            console.log("EMI number not found in the selling table.");
+          }
+        } catch (error) {
+          console.error("Error checking EMI number in the selling table:", error);
+          return; // Stop the function execution if there is a different error
+        }
+    
+        try {
+          // Check if EMI number is available in the device table
+          const deviceResponse = await axios.get(
+            `http://podsaas.online/device/getOneDevicebyemi/${emiNumber}`
+          );
+    
+          if (deviceResponse.data.message !== "data not available") {
+            alert("This EMI number is already taken in the device table.");
+            return; // Stop the function execution
+          } else {
+            console.log("EMI number not found in the device table.");
+          }
+        } catch (error) {
+          console.error("Error checking EMI number in the device table:", error);
+          return; // Stop the function execution if there is a different error
+        }
+
         const formData = new FormData();
         Object.keys(form).forEach(key => {
             formData.append(key, form[key]);

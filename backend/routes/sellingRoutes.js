@@ -25,4 +25,6 @@ router.post("/paymentHistory", sellingController.updatePaymentHistory);
 
 router.get("/getbyCIDEMI/:civilID/:emiNumber", sellingController.getonesellingByIdEmi);
 
+router.get("/getbyEmi/:emi", sellingController.getonesellingByIdEminumber);
+
 module.exports = router;

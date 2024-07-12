@@ -146,6 +146,24 @@ exports.getOneSellingID = (req, res) => {
     });
 };
 
+exports.getonesellingByIdEminumber = (req, res) => {
+  const { emi } = req.params;
+  console.log({ emi });
+  Selling.findOne({ emiNumber: emi })
+    .then((sellingRecord) => {
+      if (!sellingRecord) {
+        console.log("No record found.");
+        return res.status(200).json({ message: "data not available" });
+      }
+      console.log("Found record:", sellingRecord);
+      res.json(sellingRecord);
+    })
+    .catch((err) => {
+      console.error("Error retrieving selling record:", err);
+      res.status(500).json({ error: "Error retrieving selling record" });
+    });
+};
+
 exports.updatePaymentHistory = async (req, res) => {
   const { civilID, emiNumber, date, payment } = req.body;
 

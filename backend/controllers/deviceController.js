@@ -140,3 +140,18 @@ exports.deleteDevice = async (req, res) => {
         res.status(500).json({ error: "Error retrieving payment" });
       });
   };
+
+  exports.getOneDevicebyemi = (req, res) => {
+    Device.findOne({ emiNumber: req.params.emiNumber })
+      .then((device) => {
+        if (!device) {
+          console.log("No device found.");
+          return res.status(200).json({ message: "data not available" });
+        }
+        res.json(device);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ error: "Error retrieving device" });
+      });
+  };
