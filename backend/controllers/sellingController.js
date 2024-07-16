@@ -182,64 +182,66 @@ exports.updatePaymentHistory = async (req, res) => {
     for (let i = 0; i < customArray.length; i++) {
       const itemDate = new Date(customArray[i].date);
       const itemPrice = parseFloat(customArray[i].price);
-      console.log("itemPrice", itemPrice);
-      const nextPrice = customArray[i + 1] ? parseFloat(customArray[i + 1].price) : undefined;
-      console.log("nextPrice", nextPrice);
-      console.log("Payment", Payment);
+      console.log("itemPrice",itemPrice);
+      const nextPrice = parseFloat(customArray[i+1].price);
+      console.log("nextPrice",nextPrice);
+      console.log("Payment",Payment);
 
       if (Payment === 0) {
         isPaymentUpdated = true;
         break;
-      } else if (itemDate >= new Date(date) && itemPrice === Payment && customArray[i].status === "unpaid") {
+      }
+      else if (itemDate >= new Date(date) && itemPrice === Payment && customArray[i].status === "unpaid") {
         customArray[i].status = "paid";
-        customArray[i].price = payment.toFixed(2);
+        customArray[i].price = payment.toString();
         Payment = 0;
 
       } else if (itemDate >= new Date(date) && itemPrice > Payment && customArray[i].status === "unpaid") {
         customArray[i].status = "paid";
-        customArray[i].price = payment.toFixed(2);
-        const newPrice = (nextPrice + (itemPrice - Payment));
+        customArray[i].price = payment.toString();
+        const newPrice = (nextPrice + (itemPrice - Payment)).toFixed(2);
 
         if (customArray[i + 1]) {
-          customArray[i + 1].price = newPrice.toFixed(2);
+          customArray[i + 1].price = newPrice.toString();
         } else {
           console.error('No next item to update the price for.');
-          isPaymentUpdated = true;
-          break;
         }
         Payment = 0;
 
       } else if (itemDate >= new Date(date) && itemPrice < Payment && customArray[i].status === "unpaid") {
         customArray[i].status = "paid";
-        customArray[i].price = Payment.toFixed(2);
-        let tempPrice = (Payment - itemPrice);
+        customArray[i].price = Payment.toString();
+        let tempPrice = (Payment - itemPrice).toFixed(2);
 
-        if (tempPrice > nextPrice) {
+        if(tempPrice > nextPrice) {
+
           if (customArray[i + 1]) {
             Payment -= itemPrice;
+
           } else {
             console.error('No next item to update the price for.');
-            isPaymentUpdated = true;
-            break;
           }
-        } else {
-          const newPrice = (nextPrice - tempPrice);
-
-          if (customArray[i + 1]) {
-            customArray[i + 1].price = newPrice.toFixed(2);
-          } else {
-            console.error('No next item to update the price for.');
-            isPaymentUpdated = true;
-            break;
-          }
-
-          Payment = 0;
+          
         }
+        else {
+
+        const newPrice = (nextPrice - tempPrice).toFixed(2);
+
+        if (customArray[i + 1]) {
+          customArray[i + 1].price = newPrice.toString();
+        } else {
+          console.error('No next item to update the price for.');
+        }
+
+        Payment = 0;
+
+      }
+
       }
     }
 
-    balance -= parseFloat(payment);
-    balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
+        balance -= parseFloat(payment);
+        balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
 
     if (!isPaymentUpdated) {
       return res.status(404).json({ message: "No matching unpaid record found with the given date and payment amount" });
