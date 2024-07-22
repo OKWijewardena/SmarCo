@@ -79,6 +79,9 @@ export default function Payment() {
 
   const navigate = useNavigate();
 
+  const [searchCivilID, setSearchCivilID] = useState('');
+  const [selling, setSelling] = useState([]);
+
   const [open, setOpen] = useState(true);
   const [payments, setPayments] = useState([]);
   const [customerName, setCustomerName] = useState('');
@@ -146,6 +149,20 @@ sessionStorage.removeItem('token');
     }
   };
 
+  const fetchSellingDetails = async (civilID) => {
+    try {
+      const response = await axios.get(`http://podsaas.online/selling/getOneSelling/${civilID}`);
+      setSelling(response.data);
+    } catch (error) {
+      console.error('Error fetching selling details:', error);
+    }
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    fetchSellingDetails(searchCivilID);
+  };
+
   const handleSubmit = async (event) => {
 
     event.preventDefault();
@@ -176,6 +193,13 @@ sessionStorage.removeItem('token');
       alert("CivilID and Emi Number not match");
       console.error('Error adding payment:', error);
     }
+  };
+
+  const handleSelect = (row) => {
+    setCustomerName(row.customerName);
+    setCivilID(row.civilID);
+    setDeviceName(row.deviceName);
+    setEmiNumber(row.emiNumber);
   };
 
   return (
@@ -251,6 +275,93 @@ sessionStorage.removeItem('token');
           >
             <Toolbar />
             <Container>
+            <Box
+                sx={{
+                  marginTop: 4,
+                  padding: 3,
+                  backgroundColor: '#fff',
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  maxWidth: 800,
+                  width: '100%',
+                  mx: 'auto',
+                }}
+              >
+                <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color: "#637381" }}>
+                  Search Selling Details
+                </Typography>
+                <Box component="form" sx={{ mt: 1 }} onSubmit={handleSearch}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    label="Search by Civil ID"
+                    name="searchCivilID"
+                    value={searchCivilID}
+                    onChange={(e) => setSearchCivilID(e.target.value)}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, backgroundColor: '#752888',
+                    '&:hover': {
+                      backgroundColor: '#C63DE7',
+                    },
+                    fontFamily: 'Public Sans, sans-serif',
+                    fontWeight: 'bold', }}
+                  >
+                    Search
+                  </Button>
+                </Box>
+              </Box>
+
+              {selling.length > 0 && (
+                <TableContainer component={Paper} sx={{ mt: 4 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                      <TableCell>Customer Name</TableCell>
+                        <TableCell>Civil ID</TableCell>
+                        <TableCell>Device</TableCell>
+                        <TableCell>EMI Number</TableCell>
+                        <TableCell>Price</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Device Image</TableCell>
+                        
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {selling.map((row) => (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.customerName}</TableCell>
+                          <TableCell>{row.civilID}</TableCell>
+                          <TableCell>{row.deviceName}</TableCell>
+                          <TableCell>{row.emiNumber}</TableCell>
+                          <TableCell>{row.price}</TableCell>
+                          <TableCell>{row.date}</TableCell>
+                          <TableCell><img
+            src={`${row.imageName}`}
+            style={{ width: '100px', height: '100px' }}
+          /></TableCell>
+                          
+                          <TableCell>
+                            <Button sx={{mt: 3, mb: 2, backgroundColor: '#752888',
+                    '&:hover': {
+                      backgroundColor: '#C63DE7',
+                    },
+                    color: 'white',
+                    fontFamily: 'Public Sans, sans-serif',
+                    fontWeight: 'bold',}}
+                    onClick={() => handleSelect(row)}>
+                              Select
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
               <Box
                 sx={{
                   display: 'flex',
@@ -276,6 +387,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Customer Name"
                     name="customerName"
+                    value={customerName}
                     onChange={(e) => {
                       setCustomerName(e.target.value);
                     }}
@@ -286,6 +398,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Civil ID"
                     name="civilID"
+                    value={civilID}
                     onChange={(e) => {
                       setCivilID(e.target.value);
                     }}
@@ -296,6 +409,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Device Name"
                     name="deviceName"
+                    value={deviceName}
                     onChange={(e) => {
                       setDeviceName(e.target.value);
                     }}
@@ -306,6 +420,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="EMI Number"
                     name="emiNumber"
+                    value={emiNumber}
                     onChange={(e) => {
                       setEmiNumber(e.target.value);
                     }}
@@ -316,6 +431,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Price"
                     name="price"
+
                     onChange={(e) => {
                       setPrice(e.target.value);
                     }}
