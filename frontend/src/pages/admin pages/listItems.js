@@ -120,6 +120,15 @@ export const secondaryListItems = (
       <ListItemText primary="Sales List" />
     </ListItemButton>
     </Link>
+
+    <Link to="/DealendList" style={{ textDecoration: "none", color: "black" }}>
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Deal End List" />
+      </ListItemButton>
+    </Link>
   </React.Fragment>
   
 );

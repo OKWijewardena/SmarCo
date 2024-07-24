@@ -27,6 +27,7 @@ const customerExcelRotes=require('./routes/customerExcelRoute');
 const employeeandAdminExcel=require('./routes/adminandemployeeExcelRoute');
 const paymentExcel=require('./routes/paymentExcelRoute');
 const salesExcel=require('./routes/salesExcelRoute');
+const dealendExcel = require("./routes/dealendExcelRoute");
 
 // Define API routes
 app.use("/api/device", require("./routes/deviceRoutes"));
@@ -35,16 +36,19 @@ app.use("/api/employee&admin", require("./routes/employee&adminRoutes"));
 app.use("/api/customer", require("./routes/customerRoutes"));
 app.use("/device", require("./routes/deviceRoutes"));
 app.use("/selling", require("./routes/sellingRoutes"));
+app.use("/dealend", require("./routes/dealendRoutes"));
 app.use("/payment", require("./routes/paymentRoutes"));
 app.use("/api/invoice", require("./routes/invoiceRote"));
 app.use("/api", require("./routes/forgetPassword"));
 app.use("/", require("./routes/invoicePdfRouter"));
 app.use("/api/devicepdf",require("./routes/devicePdfRoutes"));
+app.use("/api/dealendpdf", require("./routes/dealendpdfRoutes"));
 app.use("/api/salespdf",require("./routes/salespdfRoutes"));
 app.use("/", require("./routes/customerpdfRoutes"));
 app.use("/", require("./routes/employeeAndAdminPdfRoutes"));
 
 app.use('/api/excel', deviceExcelRoutes);
+app.use("/api/dealendexcel", dealendExcel);
 app.use('/api/customer', customerExcelRotes);
 app.use('/api/employee', employeeandAdminExcel);
 app.use('/api/paymentExcel', paymentExcel);

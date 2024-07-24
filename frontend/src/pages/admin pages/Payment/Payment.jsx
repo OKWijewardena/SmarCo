@@ -429,7 +429,7 @@ sessionStorage.removeItem('token');
                     margin="normal"
                     required
                     fullWidth
-                    label="Price"
+                    label="Amount"
                     name="price"
 
                     onChange={(e) => {
