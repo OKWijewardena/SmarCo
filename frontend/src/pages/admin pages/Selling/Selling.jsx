@@ -211,8 +211,8 @@ sessionStorage.removeItem('token');
       };
 
       try {
-        await axios.post('http://localhost:8000/dealend/addDealend', DealendPurchase);
-        await axios.delete(`http://localhost:8000/selling/deleteSelling/${id}`);
+        await axios.post('http://podsaas.online/dealend/addDealend', DealendPurchase);
+        await axios.delete(`http://podsaas.online/selling/deleteSelling/${id}`);
         alert("Deal ended successfully");
         fetchSellings();
         

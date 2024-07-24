@@ -109,7 +109,7 @@ const DealendList = () => {
   const [salesDateTo, setsalesDateTo] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/dealend/getDealend", {
+    fetch("http://podsaas.online/dealend/getDealend", {
       method: "GET",
     })
       .then((response) => {
@@ -150,7 +150,7 @@ const DealendList = () => {
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
 
-    fetch("http://localhost:8000/api/dealendpdf/convertdealendPDF", {
+    fetch("http://podsaas.online/api/dealendpdf/convertdealendPDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -196,7 +196,7 @@ const DealendList = () => {
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
 
-    fetch("http://localhost:8000/api/dealendexcel/dealendExcel", {
+    fetch("http://podsaas.online/api/dealendexcel/dealendExcel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -229,7 +229,7 @@ const DealendList = () => {
   };
 
   const resetTable = () => {
-    fetch("http://localhost:8000/dealend/getDealend", {
+    fetch("http://podsaas.online/dealend/getDealend", {
       method: "GET",
     })
       .then((response) => {
