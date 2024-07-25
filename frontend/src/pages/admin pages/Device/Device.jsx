@@ -156,63 +156,82 @@ sessionStorage.removeItem('token');
     };    
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        console.log(form);
-
-        const { emiNumber } = form; // Assuming 'emiNumber' is a key in your form data
-    
-        try {
+      event.preventDefault();
+  
+      console.log(form);
+  
+      const { emiNumber } = form; // Assuming 'emiNumber' is a key in your form data
+  
+      try {
           // Check if EMI number is available in the selling table
-          const sellingResponse = await axios.get(
-            `http://podsaas.online/selling/getbyEmi/${emiNumber}`
-          );
-    
+          const sellingResponse = await axios.get(`http://podsaas.online/selling/getbyEmi/${emiNumber}`);
+  
           if (sellingResponse.data.message !== "data not available") {
-            alert("This EMI number is already taken in the selling table.");
-            return; // Stop the function execution
+              alert("This EMI number is already taken in the selling table.");
+              return; // Stop the function execution
           } else {
-            console.log("EMI number not found in the selling table.");
+              console.log("EMI number not found in the selling table.");
           }
-        } catch (error) {
+      } catch (error) {
           console.error("Error checking EMI number in the selling table:", error);
           return; // Stop the function execution if there is a different error
-        }
-    
-        try {
+      }
+  
+      try {
           // Check if EMI number is available in the device table
-          const deviceResponse = await axios.get(
-            `http://podsaas.online/device/getOneDevicebyemi/${emiNumber}`
-          );
-    
+          const deviceResponse = await axios.get(`http://podsaas.online/device/getOneDevicebyemi/${emiNumber}`);
+  
           if (deviceResponse.data.message !== "data not available") {
-            alert("This EMI number is already taken in the device table.");
-            return; // Stop the function execution
+              alert("This EMI number is already taken in the device table.");
+              return; // Stop the function execution
           } else {
-            console.log("EMI number not found in the device table.");
+              console.log("EMI number not found in the device table.");
           }
-        } catch (error) {
+      } catch (error) {
           console.error("Error checking EMI number in the device table:", error);
           return; // Stop the function execution if there is a different error
-        }
-
-        const formData = new FormData();
-        Object.keys(form).forEach(key => {
-            formData.append(key, form[key]);
-        });
-        console.log(formData);
-        try {
-            await axios.post('http://podsaas.online/device/addDevice', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            alert("New Device added successfully");
-            fetchDevices();
-        } catch (error) {
-            console.error('Error adding devices:', error);
-        }
-    };
+      }
+  
+      const formData = new FormData();
+      Object.keys(form).forEach(key => {
+          formData.append(key, form[key]);
+      });
+      console.log(formData);
+  
+      try {
+          // Add device to device table
+          await axios.post('http://podsaas.online/device/addDevice', formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+          fetchDevices();
+  
+          // Add device to inventory table
+          const inventoryData = {
+              deviceName: form.deviceName,
+              price: form.price,
+              color: form.color,
+              shopName: form.shopName,
+              modelNumber: form.modelNumber,
+              storage: form.storage,
+              ram: form.ram,
+              warrenty: form.warrenty,
+              emiNumber: form.emiNumber,
+              purchaseDate: form.purchaseDate,
+          };
+  
+          await axios.post('http://podsaas.online/inventory/addInventory', inventoryData, {
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          alert("New Device added successfully");
+  
+      } catch (error) {
+          console.error('Error adding devices or inventory:', error);
+      }
+  };
 
     return(
         <div>
