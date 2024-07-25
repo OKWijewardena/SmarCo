@@ -83,7 +83,7 @@ export default function CustomerPurchase() {
 
   const downloadPDF = (rowData) => {
     // Modify the function to accept rowData
-    fetch("http://podsaas.online/convertToPaymentInvoicePDF", {
+    fetch("http://podsaas.online/convertToCustomerPaymentInvoicePDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
