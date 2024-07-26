@@ -330,7 +330,7 @@ sx={{
   mx: 'auto', // Center the box
 }}>
 <Typography component="h1" variant="h5" gutterBottom sx={{ fontFamily: 'Public Sans, sans-serif', fontWeight: 'bold', color:"#637381" }}>
-  Device List
+Payment List
 </Typography>
 <Box component="form" sx={{ mt: 1 }}>
   <Grid container spacing={2}>

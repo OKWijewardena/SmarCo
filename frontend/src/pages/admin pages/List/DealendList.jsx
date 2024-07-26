@@ -35,6 +35,9 @@ import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Link, useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -86,6 +89,9 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 const DealendList = () => {
+
+  const navigate = useNavigate();
+
   let date = new Date();
   let day = date.getDate();
   let month = date.getMonth() + 1; // JavaScript months are 0-based counting
@@ -135,6 +141,14 @@ const DealendList = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+
+  const handleLogout = () => {
+    // Remove user details from session storage
+    sessionStorage.removeItem('user');
+sessionStorage.removeItem('token');
+    console.log('User details cleared from session storage');
+    navigate('/');
+  };
 
   const downloadPDF = () => {
     // Create a copy of the data with the totalPaid calculated
@@ -267,8 +281,6 @@ const DealendList = () => {
         (civilID === "" || item.civilID.includes(civilID)) &&
         (price === "" || item.price.includes(price)) &&
         (months === "" || item.months.includes(months)) &&
-        (advance === "" || item.advance.includes(advance)) &&
-        (balance === "" || item.balance.includes(balance)) &&
         (!salesDateFrom || itemsalesDate >= salesDateFrom) &&
         (!salesDateTo || itemsalesDate <= salesDateTo)
       );
@@ -283,8 +295,6 @@ const DealendList = () => {
     setcivilID("");
     setprice("");
     setmonths("");
-    setadvance("");
-    setbalance("");
     setsalesDateFrom(null); // Set to null to clear the date picker
     setsalesDateTo(null); // Set to null to clear the date picker
   };
@@ -344,11 +354,11 @@ const DealendList = () => {
               >
                 SMARTCO
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
+              <IconButton color="inherit" onClick={handleLogout}>
+              <Badge color="secondary">
+                <LogoutIcon />
+      </Badge>
+    </IconButton>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
@@ -466,24 +476,6 @@ const DealendList = () => {
                         label="months"
                         value={months}
                         onChange={(e) => setmonths(e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                      <TextField
-                        margin="normal"
-                        fullWidth
-                        label="advance"
-                        value={advance}
-                        onChange={(e) => setadvance(e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                      <TextField
-                        margin="normal"
-                        fullWidth
-                        label="balance"
-                        value={balance}
-                        onChange={(e) => setbalance(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} style={{ marginTop: "16px" }}>
