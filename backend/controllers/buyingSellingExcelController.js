@@ -13,7 +13,7 @@ exports.byingSellingExcel = async (req, res) => {
 
   // Add report information at the top
   worksheet.mergeCells("A3:K3");
-  worksheet.getCell("A3").value = "Buying And Selling Excel Report";
+  worksheet.getCell("A3").value = "Sales Report";
   worksheet.getCell("A3").font = { bold: true, size: 16 };
 
   worksheet.mergeCells("A2:K2");
@@ -33,9 +33,11 @@ exports.byingSellingExcel = async (req, res) => {
     "Civil ID",
     "Months",
     "Date",
-    "Price",
-    "purchasePrice",
-    "profit",
+    "Selling Price",
+    "Purchase Price",
+    "Total Paid",
+    "TotalReceivable",
+    "Profit",
   ]);
 
   // Style the header row
@@ -65,6 +67,8 @@ exports.byingSellingExcel = async (req, res) => {
     { key: "date", width: 20 },
     { key: "price", width: 20 },
     { key: "purchasePrice", width: 20 },
+    { key: "totalPaid", width: 20 },
+    { key: "totalReceivable", width: 20 },
     { key: "profit", width: 40 },
   ];
 
@@ -80,6 +84,8 @@ exports.byingSellingExcel = async (req, res) => {
       date: item.date,
       price: item.price,
       purchasePrice: item.purchasePrice,
+      totalPaid: item.totalPaid,
+      totalReceivable: item.totalPayableBalance,
       profit: item.profit,
     });
   });

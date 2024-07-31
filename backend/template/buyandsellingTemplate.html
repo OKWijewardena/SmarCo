@@ -149,7 +149,7 @@
             <span class="pull-right hidden-print">
               Generated Date: <span id="currentDate"></span>
             </span>
-            <div style="align-items: center">Buying and Selling Report</div>
+            <div style="align-items: center">Sales Report</div>
           </div>
 
           <script>
@@ -189,8 +189,10 @@
                     <th class="text-left">Civil ID</th>
                     <th class="text-left" width="10%">Months</th>
                     <th class="text-left">Sales Date</th>
-                    <th class="text-left">Price</th>
+                    <th class="text-left">Selling Price</th>
                     <th class="text-left">Purchase Price</th>
+                    <th class="text-left">Total Paid</th>
+                    <th class="text-left">Total Receivable</th>
                     <th class="text-left">Profit</th>
                   </tr>
                 </thead>
@@ -206,6 +208,8 @@
                     <td class="text-left">{{this.date}}</td>
                     <td class="text-left">{{this.price}}</td>
                     <td class="text-left">{{this.purchasePrice}}</td>
+                    <td class="text-left">{{this.totalPaid}}</td>
+                    <td class="text-left">{{this.totalPayableBalance}}</td>
                     <td class="text-left">{{this.profit}}</td>
                   </tr>
                   {{/each}}

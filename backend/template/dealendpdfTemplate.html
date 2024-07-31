@@ -187,7 +187,8 @@
                     <th class="text-left">EMEI Number</th>
                     <th class="text-left">Customer Name</th>
                     <th class="text-left">Civil ID</th>
-                    <th class="text-left">Price</th>
+                    <th class="text-left">Selling Price</th>
+                    <th class="text-left">Purchase Price</th>
                     <th class="text-left" width="10%">Months</th>
                     <th class="text-left">Sales Date</th>
                     <th class="text-left">Total Paid</th>
@@ -198,15 +199,15 @@
                   {{#each data}}
                   <tr>
                     <td class="text-left">{{this.deviceName}}</td>
-
                     <td class="text-left">{{this.emiNumber}}</td>
                     <td class="text-left">{{this.customerName}}</td>
                     <td class="text-left">{{this.civilID}}</td>
                     <td class="text-left">{{this.price}}</td>
+                    <td class="text-left">{{this.purchasePrice}}</td>
                     <td class="text-left">{{this.months}}</td>
                     <td class="text-left">{{this.date}}</td>
                     <td class="text-left">{{this.totalPaid}}</td>
-                    <td class="text-left">{{this.balance}}</td>
+                    <td class="text-left">{{this.totalPayableBalance}}</td>
                   </tr>
                   {{/each}}
                 </tbody>

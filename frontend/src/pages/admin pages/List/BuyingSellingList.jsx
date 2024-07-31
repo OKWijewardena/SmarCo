@@ -146,6 +146,13 @@ const BuyingSellingList = () => {
             sellingItem.customArray
               .filter((payment) => payment.status === "paid")
               .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
+
+          let totalPayableBalance = sellingItem.customArray
+            .filter((payment) => payment.status === "unpaid")
+            .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
+
+          totalPayableBalance = Math.round(totalPayableBalance);
+
           const purchasePrice = inventoryItem
             ? parseFloat(inventoryItem.price)
             : 0;
@@ -157,6 +164,7 @@ const BuyingSellingList = () => {
             totalPaid,
             purchasePrice,
             profit,
+            totalPayableBalance,
           };
         });
 
@@ -170,64 +178,6 @@ const BuyingSellingList = () => {
     fetchSellingData();
   }, []);
 
-  const handleLogout = () => {
-    // Remove user details from session storage
-    sessionStorage.removeItem('user');
-sessionStorage.removeItem('token');
-    console.log('User details cleared from session storage');
-    navigate('/');
-  };
-
-  const downloadPDF = () => {
-    // Create a copy of the data with the totalPaid calculated
-    const updatedData = data.map((item) => {
-      const totalPaid =
-        parseFloat(item.advance) +
-        item.customArray
-          .filter((payment) => payment.status === "paid")
-          .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
-
-      // Create a new object excluding 'advance' and including 'totalPaid'
-      const { advance, ...rest } = item;
-      return { ...rest, totalPaid: totalPaid.toFixed(2) };
-    });
-    console.log(updatedData);
-
-    fetch(
-      "http://podsaas.online/api/buyingSellingpdf/convertTobuyingSellingPDF",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(updatedData), // Send the updated data to the backend
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.blob(); // If the response is OK, get the PDF blob
-        } else {
-          throw new Error("Error converting to PDF");
-        }
-      })
-      .then((blob) => {
-        // Create a blob URL
-        const url = window.URL.createObjectURL(blob);
-        // Create a link element
-        const link = document.createElement("a");
-        link.href = url;
-        let formattedDateTime = `${day}/${month}/${year}, ${hours}:${minutes}`;
-        link.download = `Bying And Selling Report - ${formattedDateTime}.pdf`;
-        // Append the link to the body
-        document.body.appendChild(link);
-        // Simulate click
-        link.click();
-        // Remove the link when done
-        document.body.removeChild(link);
-      })
-      .catch((error) => alert(error));
-  };
 
   const downloadExcel = () => {
     // Create a copy of the data with the totalPaid calculated
@@ -297,6 +247,13 @@ sessionStorage.removeItem('token');
             sellingItem.customArray
               .filter((payment) => payment.status === "paid")
               .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
+
+          let totalPayableBalance = sellingItem.customArray
+            .filter((payment) => payment.status === "unpaid")
+            .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
+
+          totalPayableBalance = Math.round(totalPayableBalance);
+
           const purchasePrice = inventoryItem
             ? parseFloat(inventoryItem.price)
             : 0;
@@ -305,6 +262,7 @@ sessionStorage.removeItem('token');
 
           return {
             ...sellingItem,
+            totalPayableBalance,
             totalPaid,
             purchasePrice,
             profit,
@@ -320,11 +278,17 @@ sessionStorage.removeItem('token');
       });
   };
 
-  // Update your handleFetch function to also filter based on the search term
   const handleFetch = () => {
     let filteredData = originalData.filter((item) => {
-      const itemsalesDate = new Date(item.date);
-      const itemExpiryDate = new Date(item.expireDate);
+      const itemsalesDate = new Date(item.date); // Convert item date to Date object
+
+      let fromDate = salesDateFrom ? new Date(salesDateFrom) : null;
+      let toDate = salesDateTo ? new Date(salesDateTo) : null;
+
+      // Adjust the time of fromDate and toDate to consider the whole day
+      if (fromDate) fromDate.setHours(0, 0, 0, 0);
+      if (toDate) toDate.setHours(23, 59, 59, 999);
+
       return (
         (deviceName === "" || item.deviceName.includes(deviceName)) &&
         (emiNumber === "" || item.emiNumber.includes(emiNumber)) &&
@@ -332,8 +296,10 @@ sessionStorage.removeItem('token');
         (civilID === "" || item.civilID.includes(civilID)) &&
         (price === "" || item.price.includes(price)) &&
         (months === "" || item.months.includes(months)) &&
-        (!salesDateFrom || itemsalesDate >= salesDateFrom) &&
-        (!salesDateTo || itemsalesDate <= salesDateTo)
+        (advance === "" || item.advance.includes(advance)) &&
+        (balance === "" || item.balance.includes(balance)) &&
+        (!fromDate || itemsalesDate >= fromDate) &&
+        (!toDate || itemsalesDate <= toDate)
       );
     });
 
@@ -349,6 +315,134 @@ sessionStorage.removeItem('token');
     setsalesDateFrom(null); // Set to null to clear the date picker
     setsalesDateTo(null); // Set to null to clear the date picker
   };
+  const downloadPDF = () => {
+    // Create a copy of the data with the totalPaid calculated
+    const updatedData = data.map((item) => {
+      const totalPaid =
+        parseFloat(item.advance) +
+        item.customArray
+          .filter((payment) => payment.status === "paid")
+          .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
+
+      // Create a new object excluding 'advance' and including 'totalPaid'
+      const { advance, ...rest } = item;
+      return { ...rest, totalPaid: totalPaid.toFixed(2) };
+    });
+    console.log(updatedData);
+
+    fetch(
+      "http://podsaas.online/api/buyingSellingpdf/convertTobuyingSellingPDF",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData), // Send the updated data to the backend
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.blob(); // If the response is OK, get the PDF blob
+        } else {
+          throw new Error("Error converting to PDF");
+        }
+      })
+      .then((blob) => {
+        // Create a blob URL
+        const url = window.URL.createObjectURL(blob);
+        // Create a link element
+        const link = document.createElement("a");
+        link.href = url;
+
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const formattedDateTime = `${day}/${month}/${year}, ${hours}:${minutes}`;
+
+        link.download = `Buying_and_Selling_Report_${formattedDateTime}.pdf`;
+        // Append the link to the body
+        document.body.appendChild(link);
+        // Simulate click
+        link.click();
+        // Remove the link when done
+        document.body.removeChild(link);
+      })
+      .catch((error) => alert(error));
+  };
+
+  const downloadMonthendPDF = () => {
+    // Get the current date
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    // Filter data for the current month
+    const filteredData = data.filter((item) => {
+      const itemDate = new Date(item.date);
+      return itemDate >= startOfMonth && itemDate <= endOfMonth;
+    });
+
+    // Create a copy of the filtered data with the totalPaid calculated
+    const updatedData = filteredData.map((item) => {
+      const totalPaid =
+        parseFloat(item.advance) +
+        item.customArray
+          .filter((payment) => payment.status === "paid")
+          .reduce((sum, payment) => sum + parseFloat(payment.price), 0);
+
+      // Create a new object excluding 'advance' and including 'totalPaid'
+      const { advance, ...rest } = item;
+      return { ...rest, totalPaid: totalPaid.toFixed(2) };
+    });
+
+    console.log(updatedData);
+
+    fetch(
+      "http://podsaas.online/api/buyingSellingpdf/convertTobuyingSellingPDF",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData), // Send the updated data to the backend
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.blob(); // If the response is OK, get the PDF blob
+        } else {
+          throw new Error("Error converting to PDF");
+        }
+      })
+      .then((blob) => {
+        // Create a blob URL
+        const url = window.URL.createObjectURL(blob);
+        // Create a link element
+        const link = document.createElement("a");
+        link.href = url;
+
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const formattedDateTime = `${day}/${month}/${year}, ${hours}:${minutes}`;
+
+        link.download = `Buying_and_Selling_Report_${formattedDateTime}.pdf`;
+        // Append the link to the body
+        document.body.appendChild(link);
+        // Simulate click
+        link.click();
+        // Remove the link when done
+        document.body.removeChild(link);
+      })
+      .catch((error) => alert(error));
+  };
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -361,6 +455,14 @@ sessionStorage.removeItem('token');
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    // Remove user details from session storage
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    console.log("User details cleared from session storage");
+    navigate("/");
   };
 
   return (
@@ -471,7 +573,7 @@ sessionStorage.removeItem('token');
                     color: "#637381",
                   }}
                 >
-                  Buying And Selling List
+                  Sales List
                 </Typography>
                 <Box component="form" sx={{ mt: 1 }}>
                   <Grid container spacing={2}>
@@ -618,6 +720,25 @@ sessionStorage.removeItem('token');
                     </Grid>
                     <Grid item xs={12} sm={3}>
                       <Button
+                        onClick={downloadMonthendPDF}
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                          mt: 3,
+                          mb: 2,
+                          backgroundColor: "#752888",
+                          "&:hover": {
+                            backgroundColor: "#C63DE7",
+                          },
+                          fontFamily: "Public Sans, sans-serif",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Month-End PDF
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <Button
                         onClick={downloadExcel}
                         fullWidth
                         variant="contained"
@@ -729,7 +850,7 @@ sessionStorage.removeItem('token');
                               color: "white",
                             }}
                           >
-                            purchase Price
+                            Purchase Price
                           </TableCell>
                           <TableCell
                             style={{
@@ -737,7 +858,23 @@ sessionStorage.removeItem('token');
                               color: "white",
                             }}
                           >
-                            Profit
+                            Total Paid
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              backgroundColor: "#752888",
+                              color: "white",
+                            }}
+                          >
+                            Total Receivable
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              backgroundColor: "#752888",
+                              color: "white",
+                            }}
+                          >
+                            Device Profit
                           </TableCell>
                         </TableRow>
                       </TableHead>
@@ -756,6 +893,8 @@ sessionStorage.removeItem('token');
                               <TableCell>{item.date}</TableCell>
                               <TableCell>{item.price}</TableCell>
                               <TableCell>{item.purchasePrice}</TableCell>
+                              <TableCell>{item.totalPaid}</TableCell>
+                              <TableCell>{item.totalPayableBalance}</TableCell>
                               <TableCell>{item.profit}</TableCell>
                             </TableRow>
                           ))}

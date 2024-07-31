@@ -31,11 +31,12 @@ exports.dealendExcel = async (req, res) => {
     "Emei Number",
     "Customer Name",
     "Civil ID",
-    "Price",
+    "Selling Price",
+    "Purchase Price",
     "Months",
     "Date",
     "totalPaid",
-    "Balance",
+    "totalPayableBalance",
   ]);
 
   // Style the header row
@@ -62,6 +63,7 @@ exports.dealendExcel = async (req, res) => {
     { key: "customerName", width: 20 },
     { key: "civilID", width: 20 },
     { key: "price", width: 20 },
+    { key: "purchasePrice", width: 20 },
     { key: "months", width: 40 },
     { key: "date", width: 20 },
     { key: "totalPaid", width: 20 },
@@ -77,10 +79,11 @@ exports.dealendExcel = async (req, res) => {
       customerName: item.customerName,
       civilID: item.civilID,
       price: item.price,
+      purchasePrice: item.purchasePrice,
       months: item.months,
       date: item.date,
       totalPaid: item.totalPaid,
-      balance: item.balance,
+      balance: item.totalPayableBalance,
     });
   });
 

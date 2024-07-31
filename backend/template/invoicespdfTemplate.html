@@ -287,9 +287,10 @@ body {
         <tr style="background-color: rgb(218 188 225); -webkit-print-color-adjust: exact; ">
             <th class="text-left ">Device</th>
             <th class="text-left" width="10%">Civil  Id </th>
-            <th class="text-left" width="10%">Advance </th>
             <th class="text-left" width="10%">Customer </th>
             <th class="text-left" width="10%">Date</th>
+            <th class="text-left" width="10%">Emei Number</th>
+            <th class="text-left" width="10%">paymentType</th>
             <th class="text-left"  width="10%">price</th>
         </tr>
         
@@ -303,10 +304,12 @@ body {
                     <td class="text-left">{{this.deviceName}}</td>
                 </span>
                 <td style="" text-left" width="20%">{{this.civilID}}</td>
-                <td style="" text-left" width="20%">{{sellingData.advance}}</td>
-                <td class="text-left" width="20%">{{this.customerName}}</td>
+                <td style="" text-left" width="20%">{{this.customerName}}</td>
                 <td class="text-left" width="20%">{{this.date}}</td>
-                <td class="text-left" width="20%"><span class="pricee">{{this.price}}</span><span class="currency"> (KWD)</span></td>
+                <td class="text-left" width="20%">{{this.emiNumber}}</td>
+                <td class="text-left" width="20%">{{this.paymentType}}</td>
+
+                <td class="text-left" width="20%"><span class="pricee">{{this.price}}</span></td>
             </tr>
             {{/each}}
         </tr>
