@@ -29,6 +29,7 @@ const paymentExcel=require('./routes/paymentExcelRoute');
 const salesExcel=require('./routes/salesExcelRoute');
 const dealendExcel = require("./routes/dealendExcelRoute");
 const byingSellingExcel = require("./routes/buyingSellingExcelRoute");
+const upcomingpaymentExcel = require("./routes/upcomingPaymentExcelRoute");
 
 // Define API routes
 app.use("/api/device", require("./routes/deviceRoutes"));
@@ -47,6 +48,7 @@ app.use("/", require("./routes/convertToPaymentInvoicePDFRoute"));
 app.use("/api/devicepdf",require("./routes/devicePdfRoutes"));
 app.use("/api/dealendpdf", require("./routes/dealendpdfRoutes"));
 app.use("/api/buyingSellingpdf", require("./routes/buyingSellingPdfRoute"));
+app.use("/api/convertToupcomingPaymentPDF",require("./routes/upcomingPaymentPdfRoute"));
 app.use("/api/salespdf",require("./routes/salespdfRoutes"));
 app.use("/", require("./routes/customerpdfRoutes"));
 app.use("/", require("./routes/employeeAndAdminPdfRoutes"));
@@ -58,6 +60,7 @@ app.use('/api/customer', customerExcelRotes);
 app.use('/api/employee', employeeandAdminExcel);
 app.use('/api/paymentExcel', paymentExcel);
 app.use('/api/salesExcel', salesExcel);
+app.use("/api/upcomingPaymentExcel", upcomingpaymentExcel);
 
 // Error handler middleware
 app.use(errorHandler);
