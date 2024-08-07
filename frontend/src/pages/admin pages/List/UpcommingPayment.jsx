@@ -224,16 +224,23 @@ const UpcommingPayment = () => {
               const paymentDate = new Date(payment.date);
               const paymentDateString = paymentDate.toISOString().split("T")[0];
 
-              if (paymentDateString === currentDateString) {
+              if (payment.status === "paid") {
+                return status !== "Overdue" && status !== "Due Today"
+                  ? "Paid"
+                  : status;
+              } else if (
+                paymentDateString === currentDateString &&
+                status !== "Overdue"
+              ) {
                 return "Due Today"; // Priority for Due Today
-              } else if (payment.status === "paid") {
-                if (status === "Unknown") return "Paid"; // Only set to Paid if status is Unknown
-              } else if (payment.status === "unpaid") {
-                if (paymentDate.getDate() < currentDate) {
-                  if (status === "Unknown") return "Overdue"; // Only set to Overdue if status is Unknown
-                } else {
-                  if (status === "Unknown") return "Unpaid"; // Only set to Unpaid if status is Unknown
-                }
+              } else if (payment.status === "unpaid" && paymentDate < now) {
+                return "Overdue"; // Priority for Overdue
+              } else if (payment.status === "unpaid" && paymentDate >= now) {
+                return status !== "Overdue" &&
+                  status !== "Due Today" &&
+                  status !== "Paid"
+                  ? "Unpaid"
+                  : status;
               }
               return status; // Maintain the status if already set
             }, "Unknown");
@@ -430,7 +437,7 @@ const UpcommingPayment = () => {
         const formattedDateTime = `${now.getDate()}/${
           now.getMonth() + 1
         }/${now.getFullYear()}, ${now.getHours()}:${now.getMinutes()}`;
-        link.download = `Sales Report - ${formattedDateTime}.pdf`;
+        link.download = `upcoming Payment Pdf Report - ${formattedDateTime}.pdf`;
         // Append the link to the body
         document.body.appendChild(link);
         // Simulate click
@@ -495,7 +502,7 @@ const UpcommingPayment = () => {
         const link = document.createElement("a");
         link.href = url;
         let formattedDateTime = `${day}/${month}/${year}, ${hours}:${minutes}`;
-        link.download = `Sales Report - ${formattedDateTime}.xlsx`;
+        link.download = `upcoming payment excel Report - ${formattedDateTime}.xlsx`;
         // Append the link to the body
         document.body.appendChild(link);
         // Simulate click
@@ -549,7 +556,6 @@ const UpcommingPayment = () => {
         const now = new Date();
         const currentMonth = now.getMonth(); // 0-based (0 = January)
         const currentYear = now.getFullYear();
-        const currentDate = now.getDate();
         const currentDateString = now.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
         // Helper function to validate date format
@@ -586,16 +592,23 @@ const UpcommingPayment = () => {
               const paymentDate = new Date(payment.date);
               const paymentDateString = paymentDate.toISOString().split("T")[0];
 
-              if (paymentDateString === currentDateString) {
+              if (payment.status === "paid") {
+                return status !== "Overdue" && status !== "Due Today"
+                  ? "Paid"
+                  : status;
+              } else if (
+                paymentDateString === currentDateString &&
+                status !== "Overdue"
+              ) {
                 return "Due Today"; // Priority for Due Today
-              } else if (payment.status === "paid") {
-                if (status === "Unknown") return "Paid"; // Only set to Paid if status is Unknown
-              } else if (payment.status === "unpaid") {
-                if (paymentDate.getDate() < currentDate) {
-                  if (status === "Unknown") return "Overdue"; // Only set to Overdue if status is Unknown
-                } else {
-                  if (status === "Unknown") return "Unpaid"; // Only set to Unpaid if status is Unknown
-                }
+              } else if (payment.status === "unpaid" && paymentDate < now) {
+                return "Overdue"; // Priority for Overdue
+              } else if (payment.status === "unpaid" && paymentDate >= now) {
+                return status !== "Overdue" &&
+                  status !== "Due Today" &&
+                  status !== "Paid"
+                  ? "Unpaid"
+                  : status;
               }
               return status; // Maintain the status if already set
             }, "Unknown");
@@ -607,7 +620,7 @@ const UpcommingPayment = () => {
 
             return {
               ...sellingItem,
-              currentMonthAmount: currentMonthAmount.toFixed(2), // Format as needed
+              currentMonthAmount: Math.round(currentMonthAmount), // Round to nearest number
               currentMonthDate, // Adding current month date
               status: status || "Unknown", // Ensure status is always a string
             };
@@ -641,10 +654,10 @@ const UpcommingPayment = () => {
 
           return {
             ...sellingItem,
-            totalPaid,
-            purchasePrice,
-            profit,
-            totalPayableBalance,
+            totalPaid: Math.round(totalPaid), // Round to nearest number
+            purchasePrice: Math.round(purchasePrice), // Round to nearest number
+            profit: Math.round(profit), // Round to nearest number
+            totalPayableBalance, // Already rounded
             customerMobile: customer.mobile || "N/A", // Adding customer mobile number
           };
         });
