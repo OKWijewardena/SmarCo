@@ -181,41 +181,65 @@ exports.updatePaymentHistory = async (req, res) => {
     for (let i = 0; i < customArray.length; i++) {
       const itemDate = new Date(customArray[i].date);
       const itemPrice = parseFloat(customArray[i].price);
-      const nextPrice = parseFloat(customArray[i+1].price);
+      let nextPrice = parseFloat(customArray[i].price);
+      
+      if (customArray[i + 1]) {
+        nextPrice = parseFloat(customArray[i + 1].price);
+      } else {
+        nextPrice = parseFloat(customArray[i].price);
+      }
 
-      if (itemDate >= new Date(date) && itemPrice === parseFloat(payment) && customArray[i].status === "unpaid") {
+      if (
+        itemDate >= new Date(date) &&
+        itemPrice === parseFloat(payment) &&
+        customArray[i].status === "unpaid"
+      ) {
         customArray[i].status = "paid";
         customArray[i].price = payment.toString();
         balance -= parseFloat(payment);
-        balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
+        balance = balance.toFixed(2); // Ensure balance is rounded to 2 decimals
         isPaymentUpdated = true;
         break;
-      } else if (itemDate >= new Date(date) && itemPrice > parseFloat(payment) && customArray[i].status === "unpaid") {
+      } else if (
+        itemDate >= new Date(date) &&
+        itemPrice > parseFloat(payment) &&
+        customArray[i].status === "unpaid"
+      ) {
         customArray[i].status = "paid";
         customArray[i].price = payment.toString();
-        const newPrice = (nextPrice + (itemPrice - parseFloat(payment))).toFixed(2);
+        const newPrice = (
+          nextPrice +
+          (itemPrice - parseFloat(payment))
+        ).toFixed(2);
         balance -= parseFloat(payment);
-        balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
+        balance = balance.toFixed(2); // Ensure balance is rounded to 2 decimals
 
         if (customArray[i + 1]) {
           customArray[i + 1].price = newPrice.toString();
         } else {
-          console.error('No next item to update the price for.');
+          console.error("No next item to update the price for.");
         }
 
         isPaymentUpdated = true;
         break;
-      } else if (itemDate >= new Date(date) && itemPrice < parseFloat(payment) && customArray[i].status === "unpaid") {
+      } else if (
+        itemDate >= new Date(date) &&
+        itemPrice < parseFloat(payment) &&
+        customArray[i].status === "unpaid"
+      ) {
         customArray[i].status = "paid";
         customArray[i].price = payment.toString();
-        const newPrice = (nextPrice - (parseFloat(payment) - itemPrice)).toFixed(2);
+        const newPrice = (
+          nextPrice -
+          (parseFloat(payment) - itemPrice)
+        ).toFixed(2);
         balance -= parseFloat(payment);
-        balance = balance.toFixed(2);  // Ensure balance is rounded to 2 decimals
+        balance = balance.toFixed(2); // Ensure balance is rounded to 2 decimals
 
         if (customArray[i + 1]) {
           customArray[i + 1].price = newPrice.toString();
         } else {
-          console.error('No next item to update the price for.');
+          console.error("No next item to update the price for.");
         }
 
         isPaymentUpdated = true;
@@ -224,13 +248,21 @@ exports.updatePaymentHistory = async (req, res) => {
     }
 
     if (!isPaymentUpdated) {
-      return res.status(404).json({ message: "No matching unpaid record found with the given date and payment amount" });
+      return res
+        .status(404)
+        .json({
+          message:
+            "No matching unpaid record found with the given date and payment amount",
+        });
     }
 
     selling.balance = balance.toString();
     await selling.save();
 
-    res.json({ message: "Payment status updated successfully", customArray: selling.customArray });
+    res.json({
+      message: "Payment status updated successfully",
+      customArray: selling.customArray,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
