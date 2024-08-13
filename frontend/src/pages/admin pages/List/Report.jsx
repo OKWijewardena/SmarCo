@@ -228,6 +228,28 @@ sessionStorage.removeItem('token');
           </Paper>
           </Link>
         </Grid>
+        <Grid item xs={12} md={4}>
+        <Link to={'/UpcommingPayment'} style={{textDecoration: 'none'}}>
+          <Paper sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 2 }}>
+            <Box>
+              <Typography variant="body1" component="p" gutterBottom>
+              Upcoming Payment Report
+              </Typography>
+            </Box>
+          </Paper>
+          </Link>
+        </Grid>
+        <Grid item xs={12} md={4}>
+        <Link to={'/DealendList'} style={{textDecoration: 'none'}}>
+          <Paper sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 2 }}>
+            <Box>
+              <Typography variant="body1" component="p" gutterBottom>
+              Dealend Report
+              </Typography>
+            </Box>
+          </Paper>
+          </Link>
+        </Grid>
 
       </Grid>
     </Box>
