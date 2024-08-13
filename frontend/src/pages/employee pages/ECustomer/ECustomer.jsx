@@ -76,7 +76,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
   
 
-export default function Customer() {
+export default function ECustomer() {
 
   const navigate = useNavigate();
   const user = JSON.parse(sessionStorage.getItem('user'));
@@ -88,10 +88,6 @@ export default function Customer() {
     console.log('No user data found in session storage');
   }
 
-  // Check if the user's role is "superadmin"
-  if (!user || user.role !== "superadmin") {
-    navigate('/not-authorized');
-  }
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

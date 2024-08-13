@@ -15,7 +15,7 @@ import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems } from '../listItems';
+import { mainListItems, secondaryListItems } from '../listItems';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -78,6 +78,18 @@ export default function EDevice(){
 
     const navigate = useNavigate();
 
+
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
+  if (user) {
+    const role = user.role;
+    console.log('Role:', role);
+    
+  } else {
+    console.log('No user data found in session storage');
+  }
+
+
     const [open, setOpen] = React.useState(true);
     const [devices, setDevices] = useState([]);
     const [form, setForm] = useState({
@@ -137,26 +149,85 @@ sessionStorage.removeItem('token');
 
     const handleFileChange = (event) => {
         setForm({ ...form, imageName: event.target.files[0]});
-    };
+    };    
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        const formData = new FormData();
-        Object.keys(form).forEach(key => {
-            formData.append(key, form[key]);
-        });
-        try {
-            await axios.post('http://podsaas.online/device/addDevice', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            alert("New Device added successfully");
-            fetchDevices();
-        } catch (error) {
-            console.error('Error adding devices:', error);
-        }
-    };
+      event.preventDefault();
+  
+      console.log(form);
+  
+      const { emiNumber } = form; // Assuming 'emiNumber' is a key in your form data
+  
+      try {
+          // Check if EMI number is available in the selling table
+          const sellingResponse = await axios.get(`http://podsaas.online/selling/getbyEmi/${emiNumber}`);
+  
+          if (sellingResponse.data.message !== "data not available") {
+              alert("This EMI number is already taken in the selling table.");
+              return; // Stop the function execution
+          } else {
+              console.log("EMI number not found in the selling table.");
+          }
+      } catch (error) {
+          console.error("Error checking EMI number in the selling table:", error);
+          return; // Stop the function execution if there is a different error
+      }
+  
+      try {
+          // Check if EMI number is available in the device table
+          const deviceResponse = await axios.get(`http://podsaas.online/device/getOneDevicebyemi/${emiNumber}`);
+  
+          if (deviceResponse.data.message !== "data not available") {
+              alert("This EMI number is already taken in the device table.");
+              return; // Stop the function execution
+          } else {
+              console.log("EMI number not found in the device table.");
+          }
+      } catch (error) {
+          console.error("Error checking EMI number in the device table:", error);
+          return; // Stop the function execution if there is a different error
+      }
+  
+      const formData = new FormData();
+      Object.keys(form).forEach(key => {
+          formData.append(key, form[key]);
+      });
+      console.log(formData);
+  
+      try {
+          // Add device to device table
+          await axios.post('http://podsaas.online/device/addDevice', formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+          fetchDevices();
+  
+          // Add device to inventory table
+          const inventoryData = {
+              deviceName: form.deviceName,
+              price: form.price,
+              color: form.color,
+              shopName: form.shopName,
+              modelNumber: form.modelNumber,
+              storage: form.storage,
+              ram: form.ram,
+              warrenty: form.warrenty,
+              emiNumber: form.emiNumber,
+              purchaseDate: form.purchaseDate,
+          };
+  
+          await axios.post('http://podsaas.online/inventory/addInventory', inventoryData, {
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          alert("New Device added successfully");
+  
+      } catch (error) {
+          console.error('Error adding devices or inventory:', error);
+      }
+  };
 
     return(
         <div>
@@ -209,6 +280,7 @@ sessionStorage.removeItem('token');
                         <List component="nav">
                             {mainListItems}
                             <Divider sx={{ my: 1 }} />
+                            {secondaryListItems}
                         </List>
                     </Drawer>
                     <Box
