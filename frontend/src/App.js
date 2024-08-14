@@ -30,6 +30,7 @@ import UpdateCustomer from "./pages/admin pages/admin update pages/UpdateCustome
 import UpdateDevice from "./pages/admin pages/admin update pages/UpdateDevice";
 import UpdateEmployee from "./pages/admin pages/admin update pages/UpdateEmployee";
 import EUpdateDevices from "./pages/employee pages/employee update pages/EUpdateDevices";
+import EUpdateCustomer from "./pages/employee pages/employee update pages/EUpdateCustomer";
 import Report from "./pages/admin pages/List/Report";
 import ProtectedRoute from "./pages/Login/ProtectedRoute";
 import Forget_password from "./pages/Login/Forget_password";
@@ -381,6 +382,15 @@ function App() {
           element={
             <ProtectedRoute>
               <EUpdateDevices />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="ecustomer/eupdatecustomer/:id"
+          element={
+            <ProtectedRoute>
+              <EUpdateCustomer />
             </ProtectedRoute>
           }
         />
