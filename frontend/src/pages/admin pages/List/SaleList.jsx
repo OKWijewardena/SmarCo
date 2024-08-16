@@ -115,7 +115,7 @@ const SaleList = () => {
   const [salesDateTo, setsalesDateTo] = useState(null);
 
   useEffect(() => {
-    fetch("http://podsaas.online/selling/getSelling", {
+    fetch("http://app.smartco.live/selling/getSelling", {
       method: "GET",
     })
       .then((response) => {
@@ -164,7 +164,7 @@ sessionStorage.removeItem('token');
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
 
-    fetch("http://podsaas.online/api/salespdf/convertsalesPDF", {
+    fetch("http://app.smartco.live/api/salespdf/convertsalesPDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -210,7 +210,7 @@ sessionStorage.removeItem('token');
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
 
-    fetch("http://podsaas.online/api/salesExcel/salesExcel", {
+    fetch("http://app.smartco.live/api/salesExcel/salesExcel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -243,7 +243,7 @@ sessionStorage.removeItem('token');
   };
 
   const resetTable = () => {
-    fetch("http://podsaas.online/selling/getSelling", {
+    fetch("http://app.smartco.live/selling/getSelling", {
       method: "GET",
     })
       .then((response) => {

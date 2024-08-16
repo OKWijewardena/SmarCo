@@ -109,8 +109,8 @@ export default function Customer() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://podsaas.online/api/customer/${id}`);
-      await axios.delete(`http://podsaas.online/api/users/${id}`);
+      await axios.delete(`http://app.smartco.live/api/customer/${id}`);
+      await axios.delete(`http://app.smartco.live/api/users/${id}`);
       alert("Customer record deleted successfully");
       fetchCustomers();// Refresh the customer list after deletion
     } catch (error) {
@@ -133,7 +133,7 @@ export default function Customer() {
 
   const resetTable = () => {
   
-    fetch('http://podsaas.online/api/customer/', {
+    fetch('http://app.smartco.live/api/customer/', {
         method: 'GET'
     })
     .then(response => {
@@ -151,7 +151,7 @@ export default function Customer() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/api/customer/');
+      const response = await axios.get('http://app.smartco.live/api/customer/');
       setCustomer(response.data);
       setSearchCustomer(response.data);
     } catch (error) {
@@ -184,8 +184,8 @@ export default function Customer() {
     }
 
     try {
-      await axios.post('http://podsaas.online/api/customer/register', NewCustomer);
-      await axios.post('http://podsaas.online/api/users/register', NewUser);
+      await axios.post('http://app.smartco.live/api/customer/register', NewCustomer);
+      await axios.post('http://app.smartco.live/api/users/register', NewUser);
       alert("New Customer added successfully");
       fetchCustomers();
     } catch (error) {

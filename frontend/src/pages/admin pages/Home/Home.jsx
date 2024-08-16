@@ -125,7 +125,7 @@ sessionStorage.removeItem('token');
 
   const fetchPayments = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/payment/getPayment');
+      const response = await axios.get('http://app.smartco.live/payment/getPayment');
       setPayments(response.data);
     } catch (error) {
       console.error('Error fetching payments:', error);
@@ -134,7 +134,7 @@ sessionStorage.removeItem('token');
 
   const fetchInventory = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/inventory/getInventory');
+      const response = await axios.get('http://app.smartco.live/inventory/getInventory');
       setInventory(response.data);
     } catch (error) {
       console.error('Error fetching inventory:', error);
@@ -143,7 +143,7 @@ sessionStorage.removeItem('token');
 
   const fetchSelinngDetails = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/selling/getSelling');
+      const response = await axios.get('http://app.smartco.live/selling/getSelling');
       setSoldDevicesCount(response.data.length); // Assuming each device represents a sold device
       setSelling(response.data);
     } catch (error) {
@@ -153,7 +153,7 @@ sessionStorage.removeItem('token');
 
   const fetchDeviceDetails = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/device/getDevice');
+      const response = await axios.get('http://app.smartco.live/device/getDevice');
       setUnSoldDevicesCount(response.data.length); // Assuming each device represents a sold device
       setDevices(response.data);
     } catch (error) {
@@ -163,7 +163,7 @@ sessionStorage.removeItem('token');
 
   const fetchMonthlySellingDetails = async () => {
     try {
-      const response = await axios.get('http://podsaas.online/selling/getSelling');
+      const response = await axios.get('http://app.smartco.live/selling/getSelling');
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       

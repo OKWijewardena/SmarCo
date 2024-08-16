@@ -61,7 +61,7 @@ export default function CustomerUpdate() {
 
   // const fetchCustomer = async () => {
   //   try {
-  //     const res = await axios.get(`http://podsaas.online/api/customer/${user.email}`);
+  //     const res = await axios.get(`http://app.smartco.live/api/customer/${user.email}`);
   //     setCustomer(res.data);
   //   } catch (error) {
   //     console.error('Error fetching customer:', error);
@@ -69,7 +69,7 @@ export default function CustomerUpdate() {
   // };
   function fetchCustomers() {
     let mounted = true;
-    fetch(`http://podsaas.online/api/customer/${user.email}`)
+    fetch(`http://app.smartco.live/api/customer/${user.email}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -106,7 +106,7 @@ export default function CustomerUpdate() {
     };
 
     try {
-      await axios.put(`http://podsaas.online/api/customer/${email}`, UpdatedCustomer);
+      await axios.put(`http://app.smartco.live/api/customer/${email}`, UpdatedCustomer);
       alert("New Customer updated successfully");
       navigate('/customerprofile');
     } catch (error) {

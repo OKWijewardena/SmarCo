@@ -90,7 +90,7 @@ const EmployeeList = () => {
   const [role, setrole] = useState('');
 
   useEffect(() => {
-    fetch('http://podsaas.online/api/employee&admin/', {
+    fetch('http://app.smartco.live/api/employee&admin/', {
         method: 'GET'
     })
     .then(response => {
@@ -115,7 +115,7 @@ sessionStorage.removeItem('token');
   navigate('/');
 };
 const downloadPDF = () => {
-  fetch('http://podsaas.online/employeeAndAdminPdf', {
+  fetch('http://app.smartco.live/employeeAndAdminPdf', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -150,7 +150,7 @@ const downloadPDF = () => {
 };
 
 const downloadExcel = () => {
-  fetch('http://podsaas.online/api/employee/employeeandadminexcel', {
+  fetch('http://app.smartco.live/api/employee/employeeandadminexcel', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -185,7 +185,7 @@ const downloadExcel = () => {
 
 const resetTable = () => {
   
-    fetch('http://podsaas.online/api/employee&admin/', {
+    fetch('http://app.smartco.live/api/employee&admin/', {
         method: 'GET'
     })
     .then(response => {

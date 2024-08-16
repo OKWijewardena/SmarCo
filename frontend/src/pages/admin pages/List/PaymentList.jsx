@@ -107,7 +107,7 @@ const PaymentList = () => {
       try {
         // Fetch payment data
         const paymentResponse = await fetch(
-          "http://podsaas.online/payment/getPayment/",
+          "http://app.smartco.live/payment/getPayment/",
           { method: "GET" }
         );
         if (!paymentResponse.ok) {
@@ -117,7 +117,7 @@ const PaymentList = () => {
 
         // Fetch selling data
         const sellingResponse = await fetch(
-          "http://podsaas.online/selling/getSelling",
+          "http://app.smartco.live/selling/getSelling",
           { method: "GET" }
         );
         if (!sellingResponse.ok) {
@@ -182,7 +182,7 @@ const PaymentList = () => {
   };
   const downloadPDF = () => {
     console.log(data);
-    fetch("http://podsaas.online/convertPDF", {
+    fetch("http://app.smartco.live/convertPDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -215,7 +215,7 @@ const PaymentList = () => {
       .catch((error) => alert(error));
   };
   const downloadExcel = () => {
-    fetch("http://podsaas.online/api/paymentExcel/paymentExcel", {
+    fetch("http://app.smartco.live/api/paymentExcel/paymentExcel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -252,7 +252,7 @@ const PaymentList = () => {
     try {
       // Fetch payment data
       const paymentResponse = await fetch(
-        "http://podsaas.online/payment/getPayment/",
+        "http://app.smartco.live/payment/getPayment/",
         { method: "GET" }
       );
       if (!paymentResponse.ok) {
@@ -262,7 +262,7 @@ const PaymentList = () => {
 
       // Fetch selling data
       const sellingResponse = await fetch(
-        "http://podsaas.online/selling/getSelling",
+        "http://app.smartco.live/selling/getSelling",
         { method: "GET" }
       );
       if (!sellingResponse.ok) {

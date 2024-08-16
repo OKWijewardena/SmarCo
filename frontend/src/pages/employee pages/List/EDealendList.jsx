@@ -118,7 +118,7 @@ const EDealendList = () => {
     const fetchDealendData = async () => {
       try {
         const dealendResponse = await fetch(
-          "http://podsaas.online/dealend/getDealend",
+          "http://app.smartco.live/dealend/getDealend",
           {
             method: "GET",
           }
@@ -130,7 +130,7 @@ const EDealendList = () => {
 
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "http://podsaas.online/inventory/getInventory",
+          "http://app.smartco.live/inventory/getInventory",
           {
             method: "GET",
           }
@@ -204,7 +204,7 @@ sessionStorage.removeItem('token');
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
     console.log(updatedData);
-    fetch("http://podsaas.online/api/dealendpdf/convertdealendPDF", {
+    fetch("http://app.smartco.live/api/dealendpdf/convertdealendPDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -251,7 +251,7 @@ sessionStorage.removeItem('token');
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
 
-    fetch("http://podsaas.online/api/dealendexcel/dealendExcel", {
+    fetch("http://app.smartco.live/api/dealendexcel/dealendExcel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -288,7 +288,7 @@ sessionStorage.removeItem('token');
       try {
         // Fetch dealend data
         const dealendResponse = await fetch(
-          "http://podsaas.online/dealend/getDealend",
+          "http://app.smartco.live/dealend/getDealend",
           { method: "GET" }
         );
         if (!dealendResponse.ok) {
@@ -298,7 +298,7 @@ sessionStorage.removeItem('token');
 
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "http://podsaas.online/inventory/getInventory",
+          "http://app.smartco.live/inventory/getInventory",
           { method: "GET" }
         );
         if (!inventoryResponse.ok) {

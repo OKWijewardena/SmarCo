@@ -59,7 +59,7 @@ export default function CustomerProfile() {
 
   const fetchCustomer = async () => {
     try {
-      const res = await axios.get(`http://podsaas.online/api/customer/${user.email}`);
+      const res = await axios.get(`http://app.smartco.live/api/customer/${user.email}`);
       setCustomer(res.data);
     } catch (error) {
       console.error('Error fetching customer:', error);

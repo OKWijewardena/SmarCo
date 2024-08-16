@@ -133,7 +133,7 @@ export default function EPayment() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get("http://podsaas.online/api/customer/");
+      const response = await axios.get("http://app.smartco.live/api/customer/");
       setCustomer(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -143,7 +143,7 @@ export default function EPayment() {
   const fetchPayments = async () => {
     try {
       const response = await axios.get(
-        "http://podsaas.online/payment/getPayment"
+        "http://app.smartco.live/payment/getPayment"
       );
       setPayments(response.data);
     } catch (error) {
@@ -153,7 +153,7 @@ export default function EPayment() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://podsaas.online/payment/deletePayment/${id}`);
+      await axios.delete(`http://app.smartco.live/payment/deletePayment/${id}`);
       alert("Selling record deleted successfully");
       fetchPayments(); // Refresh the selling list after deletion
     } catch (error) {
@@ -165,7 +165,7 @@ export default function EPayment() {
   const fetchSellingDetails = async (civilID) => {
     try {
       const response = await axios.get(
-        `http://podsaas.online/selling/getOneSelling/${civilID}`
+        `http://app.smartco.live/selling/getOneSelling/${civilID}`
       );
       setSelling(response.data);
     } catch (error) {
@@ -199,10 +199,10 @@ export default function EPayment() {
 
     try {
       await axios.post(
-        "http://podsaas.online/selling/paymentHistory",
+        "http://app.smartco.live/selling/paymentHistory",
         UpdatePayment
       );
-      await axios.post("http://podsaas.online/payment/addPayment", NewPayment);
+      await axios.post("http://app.smartco.live/payment/addPayment", NewPayment);
       handleCloseDialog();
       alert("New payment added successfully");
       fetchPayments();

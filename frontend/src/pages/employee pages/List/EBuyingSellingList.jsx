@@ -118,7 +118,7 @@ const BuyingSellingList = () => {
     const fetchSellingData = async () => {
       try {
         const response = await fetch(
-          "http://podsaas.online/selling/getSelling",
+          "http://app.smartco.live/selling/getSelling",
           { method: "GET" }
         );
         if (!response.ok) {
@@ -128,7 +128,7 @@ const BuyingSellingList = () => {
 
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "http://podsaas.online/inventory/getInventory",
+          "http://app.smartco.live/inventory/getInventory",
           { method: "GET" }
         );
         if (!inventoryResponse.ok) {
@@ -193,7 +193,7 @@ const BuyingSellingList = () => {
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
     console.log(updatedData);
-    fetch("http://podsaas.online/api/byingSellingExcel/byingSellingExcel", {
+    fetch("http://app.smartco.live/api/byingSellingExcel/byingSellingExcel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -227,8 +227,8 @@ const BuyingSellingList = () => {
 
   const resetTable = () => {
     Promise.all([
-      fetch("http://podsaas.online/selling/getSelling", { method: "GET" }),
-      fetch("http://podsaas.online/inventory/getInventory", { method: "GET" }),
+      fetch("http://app.smartco.live/selling/getSelling", { method: "GET" }),
+      fetch("http://app.smartco.live/inventory/getInventory", { method: "GET" }),
     ])
       .then(async ([sellingResponse, inventoryResponse]) => {
         if (!sellingResponse.ok || !inventoryResponse.ok) {
@@ -331,7 +331,7 @@ const BuyingSellingList = () => {
     console.log(updatedData);
 
     fetch(
-      "http://podsaas.online/api/buyingSellingpdf/convertTobuyingSellingPDF",
+      "http://app.smartco.live/api/buyingSellingpdf/convertTobuyingSellingPDF",
       {
         method: "POST",
         headers: {
@@ -401,7 +401,7 @@ const BuyingSellingList = () => {
     console.log(updatedData);
 
     fetch(
-      "http://podsaas.online/api/buyingSellingpdf/convertTobuyingSellingPDF",
+      "http://app.smartco.live/api/buyingSellingpdf/convertTobuyingSellingPDF",
       {
         method: "POST",
         headers: {
@@ -446,7 +446,7 @@ const BuyingSellingList = () => {
   const downloadOverallPDF = (id, civil_id) => {
     console.log(id, civil_id);
 
-    fetch("http://podsaas.online/convertToOverAllPaymentInvoicePDF", {
+    fetch("http://app.smartco.live/convertToOverAllPaymentInvoicePDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

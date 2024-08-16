@@ -96,7 +96,7 @@ const [whatsapp_no, setwhatsapp_no] = useState('');
 const [telephone_no, settelephone_no] = useState('');
 
 useEffect(() => {
-    fetch('http://podsaas.online/api/customer/', {
+    fetch('http://app.smartco.live/api/customer/', {
         method: 'GET'
     })
     .then(response => {
@@ -122,7 +122,7 @@ sessionStorage.removeItem('token');
 };
 
 const downloadPDF = () => {
-  fetch('http://podsaas.online/convertcustomerPDF', {
+  fetch('http://app.smartco.live/convertcustomerPDF', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -157,7 +157,7 @@ const downloadPDF = () => {
 };
 
 const downloadExcel = () => {
-  fetch('http://podsaas.online/api/customer/customerexcel', {
+  fetch('http://app.smartco.live/api/customer/customerexcel', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -192,7 +192,7 @@ const downloadExcel = () => {
 
 const resetTable = () => {
   
-    fetch('http://podsaas.online/api/customer/', {
+    fetch('http://app.smartco.live/api/customer/', {
         method: 'GET'
     })
     .then(response => {

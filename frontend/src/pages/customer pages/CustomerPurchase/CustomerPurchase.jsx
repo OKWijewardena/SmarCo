@@ -58,7 +58,7 @@ export default function CustomerPurchase() {
   const fetchSellings = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://podsaas.online/selling/getOneSellingID/${id}`
+        `http://app.smartco.live/selling/getOneSellingID/${id}`
       );
       console.log(id);
       setSellings(response.data);
@@ -68,7 +68,7 @@ export default function CustomerPurchase() {
       const Newpayments = { civilID: CIVILID, emiNumber: EMINUMBER };
 
       const res = await axios.post(
-        "http://podsaas.online/payment/getOnePayment",
+        "http://app.smartco.live/payment/getOnePayment",
         Newpayments
       );
       setData(res.data);
@@ -83,7 +83,7 @@ export default function CustomerPurchase() {
 
   const downloadPDF = (rowData) => {
     // Modify the function to accept rowData
-    fetch("http://podsaas.online/convertToCustomerPaymentInvoicePDF", {
+    fetch("http://app.smartco.live/convertToCustomerPaymentInvoicePDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function CustomerPurchase() {
   const downloadOverallPDF = () => {
     console.log(id, user.civil_id);
 
-    fetch("http://podsaas.online/convertToOverAllPaymentInvoicePDF", {
+    fetch("http://app.smartco.live/convertToOverAllPaymentInvoicePDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

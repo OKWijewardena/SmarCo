@@ -49,7 +49,7 @@
 <script>
 	getData();
 	function getData(){
-		fetch('http://podsaas.online/api/payment', {
+		fetch('http://app.smartco.live/api/payment', {
 			method: 'GET'
 		})
 		.then(response => {
@@ -81,6 +81,6 @@
 	}
 
     function downloadPDF() {
-  window.location.href = 'http://podsaas.online/convertPDF';
+  window.location.href = 'http://app.smartco.live/convertPDF';
 }
 </script>

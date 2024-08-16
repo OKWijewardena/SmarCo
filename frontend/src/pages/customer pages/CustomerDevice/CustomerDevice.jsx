@@ -29,7 +29,7 @@ export default function CustomerDevice() {
 
     const fetchDevices = async () => {
         try {
-            const response = await axios.get('http://podsaas.online/device/getDevice');
+            const response = await axios.get('http://app.smartco.live/device/getDevice');
             setDevices(response.data);
         } catch (error) {
             console.error('Error fetching devices:', error);
