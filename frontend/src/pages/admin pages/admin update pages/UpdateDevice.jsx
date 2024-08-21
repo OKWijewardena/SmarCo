@@ -111,7 +111,7 @@ sessionStorage.removeItem('token');
     function fetchDevices() {
 
         let mounted = true;
-    fetch(`http://app.smartco.live/device/getOneDevice/${id}`)
+    fetch(`https://app.smartco.live/device/getOneDevice/${id}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -156,7 +156,7 @@ sessionStorage.removeItem('token');
           };
 
           axios
-            .put(`http://app.smartco.live/device/updateDevice/${deviceID}`, UpdatedDevice)
+            .put(`https://app.smartco.live/device/updateDevice/${deviceID}`, UpdatedDevice)
             .then(() => {
                 alert('Device updated successfully!');
               navigate('/device');

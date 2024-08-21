@@ -117,7 +117,7 @@ sessionStorage.removeItem('token');
 
   const fetchSellings = async () => {
     try {
-      const response = await axios.get('http://app.smartco.live/selling/getSelling');
+      const response = await axios.get('https://app.smartco.live/selling/getSelling');
       setSellings(response.data);
     } catch (error) {
       console.error('Error fetching sellings:', error);
@@ -126,7 +126,7 @@ sessionStorage.removeItem('token');
 
   const fetchDeviceImage = async () => {
     try {
-      const response = await axios.get(`http://app.smartco.live/device/getOneDevice/${emiNumber}`);
+      const response = await axios.get(`https://app.smartco.live/device/getOneDevice/${emiNumber}`);
       setDevices(response.data);
       if (response.data.length > 0) {
         setImageName(response.data[0].imageName); // Assuming you want to set the first device's imageName by default
@@ -138,7 +138,7 @@ sessionStorage.removeItem('token');
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://app.smartco.live/selling/deleteSelling/${id}`);
+      await axios.delete(`https://app.smartco.live/selling/deleteSelling/${id}`);
       alert("Selling record deleted successfully");
       fetchSellings(); // Refresh the selling list after deletion
     } catch (error) {
@@ -176,8 +176,8 @@ sessionStorage.removeItem('token');
     };
 
     try {
-      await axios.post('http://app.smartco.live/selling/addSelling', NewPurchase);
-      await axios.delete(`http://app.smartco.live/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
+      await axios.post('https://app.smartco.live/selling/addSelling', NewPurchase);
+      await axios.delete(`https://app.smartco.live/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
       alert("New customer device purchased");
       fetchSellings(); // Refresh the selling list after submission
       handleDialogClose();
@@ -211,8 +211,8 @@ sessionStorage.removeItem('token');
       };
 
       try {
-        await axios.post('http://app.smartco.live/dealend/addDealend', DealendPurchase);
-        await axios.delete(`http://app.smartco.live/selling/deleteSelling/${id}`);
+        await axios.post('https://app.smartco.live/dealend/addDealend', DealendPurchase);
+        await axios.delete(`https://app.smartco.live/selling/deleteSelling/${id}`);
         alert("Deal ended successfully");
         fetchSellings();
         
