@@ -39,6 +39,7 @@ app.use("/api/customer", require("./routes/customerRoutes"));
 app.use("/device", require("./routes/deviceRoutes"));
 app.use("/selling", require("./routes/sellingRoutes"));
 app.use("/dealend", require("./routes/dealendRoutes"));
+app.use("/dealendReversion", require("./routes/dealendReverionRoute"));
 app.use("/payment", require("./routes/paymentRoutes"));
 app.use("/inventory", require("./routes/inventoryRoute"));
 app.use("/api/invoice", require("./routes/invoiceRote"));

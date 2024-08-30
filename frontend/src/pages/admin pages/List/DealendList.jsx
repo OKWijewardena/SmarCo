@@ -11,7 +11,8 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { Modal } from "@mui/material";
+
+import { Modal,Alert } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -29,6 +30,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Snackbar,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -113,8 +115,23 @@ const DealendList = () => {
   const [balance, setbalance] = useState("");
   const [salesDateFrom, setsalesDateFrom] = useState(null);
   const [salesDateTo, setsalesDateTo] = useState(null);
-
+  const [toggleMessage, setToggleMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('success'); // or 'error'
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' or 'error'
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+  
+  const showSnackbar = (message, severity) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+  
   useEffect(() => {
+   
     const fetchDealendData = async () => {
       try {
         const dealendResponse = await fetch(
@@ -123,11 +140,12 @@ const DealendList = () => {
             method: "GET",
           }
         );
+
         if (!dealendResponse.ok) {
           throw new Error("Network response was not ok");
         }
         const dealendData = await dealendResponse.json();
-
+        console.log("Request body:", dealendData);
         // Fetch inventory data
         const inventoryResponse = await fetch(
           "https://app.smartco.live/inventory/getInventory",
@@ -282,7 +300,53 @@ sessionStorage.removeItem('token');
       })
       .catch((error) => alert(error));
   };
-
+  const handleBackToInstallment = async (item) => {
+    try {
+      // Save to selling collection
+      const sellingResponse = await fetch('https://app.smartco.live/dealendReversion/addSelling', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          deviceName: item.deviceName,
+          emiNumber: item.emiNumber,
+          customerName: item.customerName,
+          civilID: item.civilID,
+          price: item.price,
+          months: item.months,
+          date: item.date,
+          advance: item.advance,
+          imageName: item.imageName,
+        }),
+      });
+  
+      if (!sellingResponse.ok) {
+        throw new Error('Failed to save selling record');
+      }
+  
+      // Delete from dealend collection
+      const deleteResponse = await fetch(`https://app.smartco.live/dealend/deleteDealend/${item._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!deleteResponse.ok) {
+        throw new Error('Failed to delete dealend record');
+      }
+  
+      resetTable(); // Refresh the data
+  
+      showSnackbar('Dealend record successfully transferred to selling!', 'success');
+    } catch (error) {
+      console.error('Error:', error);
+      showSnackbar('Failed to transfer dealend record.', 'error');
+    }
+  };
+  
+  
   const resetTable = () => {
     const fetchDealendAndInventoryData = async () => {
       try {
@@ -398,6 +462,24 @@ sessionStorage.removeItem('token');
 
   return (
     <div>
+     <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={3000}
+      onClose={handleSnackbarClose}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    >
+     <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{
+            backgroundColor: snackbarSeverity === 'success' ? 'rgb(117, 40, 136)' : '#f44336', // Custom colors for success and error
+            color: '#fff', // Text color
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+    </Snackbar>
       <ThemeProvider theme={mdTheme}>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
@@ -479,6 +561,7 @@ sessionStorage.removeItem('token');
           >
             <Toolbar />
             <Container>
+           
               <Box
                 sx={{
                   display: "flex",
@@ -780,6 +863,14 @@ sessionStorage.removeItem('token');
                           >
                             Pyable Balance
                           </TableCell>
+                          <TableCell
+                            style={{
+                              backgroundColor: "#752888",
+                              color: "white",
+                            }}
+                          >
+                            Action    
+                          </TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -789,8 +880,8 @@ sessionStorage.removeItem('token');
                               key={index}
                               onClick={() => handleRowClick(item)}
                             >
+                             
                               <TableCell>{item.deviceName}</TableCell>
-
                               <TableCell>{item.emiNumber}</TableCell>
                               <TableCell>{item.customerName}</TableCell>
                               <TableCell>{item.civilID}</TableCell>
@@ -800,13 +891,37 @@ sessionStorage.removeItem('token');
                               <TableCell>{item.date}</TableCell>
                               <TableCell>{item.totalPaid.toFixed(2)}</TableCell>
                               <TableCell>{item.balance}</TableCell>
+                              <TableCell>
+                              <Button
+  variant="contained"
+  onClick={(e) => {
+    e.stopPropagation(); // Prevent the row click event from firing
+    handleBackToInstallment(item);
+  }}
+  sx={{
+    backgroundColor: 'rgb(117, 40, 136)', // Custom background color
+    '&:hover': {
+      backgroundColor: 'rgb(90, 30, 100)', // Darker color on hover
+    },
+  }}
+>
+  Back To Installment
+</Button>
+                              </TableCell>
                             </TableRow>
                           ))}
                       </TableBody>
                     </Table>
                   </TableContainer>
                   {/* Modal */}
-                  <Modal
+
+                   {/* Display Alert message */}
+                   {toggleMessage && (
+                    <Alert variant="filled" severity={alertSeverity} sx={{ mt: 2 }}>
+                      {toggleMessage}
+                    </Alert>
+                  )}
+                  <Modal 
                     open={isModalOpen}
                     onClose={handleCloseModal}
                     aria-labelledby="modal-title"
