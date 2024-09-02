@@ -72,7 +72,7 @@ exports.upcomingPaymentExcel = async (req, res) => {
 
   // Add headers directly after the report information
   const headerRow = worksheet.addRow([
-    "Id",
+    
     "Device Name",
     "EMEI Number",
     "Civil ID",
@@ -104,7 +104,7 @@ exports.upcomingPaymentExcel = async (req, res) => {
 
   // Define column widths
   worksheet.columns = [
-    { key: "_id", width: 20 },
+   
     { key: "deviceName", width: 20 },
     { key: "emiNumber", width: 40 },
     { key: "civilID", width: 20 },
@@ -121,7 +121,7 @@ exports.upcomingPaymentExcel = async (req, res) => {
   // Add rows with the data
   data.forEach((item) => {
     worksheet.addRow({
-      _id: item._id,
+      
       deviceName: item.deviceName,
       emiNumber: item.emiNumber,
       civilID: item.civilID,

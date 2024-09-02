@@ -26,7 +26,7 @@ exports.byingSellingExcel = async (req, res) => {
 
   // Add headers directly after the report information
   const headerRow = worksheet.addRow([
-    "Id",
+   
     "Device Name",
     "Emei Number",
     "Customer Name",
@@ -58,7 +58,7 @@ exports.byingSellingExcel = async (req, res) => {
 
   // Define column widths
   worksheet.columns = [
-    { key: "_id", width: 20 },
+    
     { key: "deviceName", width: 20 },
     { key: "emiNumber", width: 40 },
     { key: "customerName", width: 20 },
@@ -75,7 +75,7 @@ exports.byingSellingExcel = async (req, res) => {
   // Add rows with the data
   salesExcelData.forEach((item) => {
     worksheet.addRow({
-      _id: item._id,
+    
       deviceName: item.deviceName,
       emiNumber: item.emiNumber,
       customerName: item.customerName,

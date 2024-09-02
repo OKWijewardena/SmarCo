@@ -173,6 +173,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
 
 const convertToOverAllPaymentInvoicePDF = async (req, res) => {
   let data = Array.isArray(req.body) ? req.body : [req.body];
+  console.log("boom", data);
   const { id, civil_id } = req.body;
   console.log("ID:", id);
   console.log("Civil ID:", civil_id);
@@ -196,8 +197,8 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
     // Use the date from sellingData
     let formattedDate = moment(sellingData.date).format("YYYY-MM-DD");
     item.date = formattedDate;
-
     item.statisticsDate = formattedDate;
+
     // Format selling price
     let formatter = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -210,15 +211,16 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
     item.monthNumber = index + 1;
     return item;
   });
+  
   // Calculate the total price first
-  let totalPrice = data.reduce((total, item) => total + Number(item.price), 0);
+  let totalPrice = data.reduce((total, item) => total + Number(item.sellingData.price), 0);
 
-  // Format the individual price field
+  // Formatter for prices
   let formatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
   });
 
-  // Register the Handlebars helper
+  // Register Handlebars helpers
   Handlebars.registerHelper("indexPlusOne", function (index) {
     return index + 1;
   });
@@ -227,11 +229,6 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
     return status === "paid"
       ? "color: green !important; font-weight: bold !important; text-transform: uppercase  !important;"
       : "color: red !important; font-weight: bold !important; text-transform: uppercase !important;";
-  });
-
-  data = data.map((item) => {
-    item.price = formatter.format(Number(item.price));
-    return item;
   });
 
   Handlebars.registerHelper("formatPrice", function (price) {
@@ -253,6 +250,11 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
     }
   });
 
+  data = data.map((item) => {
+    item.price = formatter.format(Number(item.sellingData.price));
+    return item;
+  });
+
   // Format the total price into Kuwaiti Dinar currency format
   let formattedPrice = formatter.format(totalPrice);
 
@@ -268,58 +270,36 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
   }, 0);
 
   // Format the total paid amount
-  let formattr = new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 2,
-  });
+  let formattedTotalPaidAmount = formatter.format(totalPaidAmount);
 
-  // Format the selling price separately
-  let formattedSellingPrice =
-    data.length > 0 ? data[0].formattedSellingPrice : "";
-  console.log(formattedSellingPrice);
-  let formattedTotalPaidAmount = formattr.format(totalPaidAmount);
-  console.log(formattedTotalPaidAmount);
+  // Calculate the unpaid amount
+  const totalPaidAmountNumber = parseFloat(totalPaidAmount);
+  const totalSellingPriceNumber = parseFloat(totalPrice);
+
+  // Ensure values are numbers before calculating unpaid amount
+  const totalUnpaidAmount = isNaN(totalSellingPriceNumber) || isNaN(totalPaidAmountNumber)
+    ? 0
+    : totalSellingPriceNumber - totalPaidAmountNumber;
+
+  // Format the unpaid amount to currency format
+  const formattedTotalUnpaidAmount = formatter.format(totalUnpaidAmount);
+  console.log("Unpaid Amount:", formattedTotalUnpaidAmount);
 
   // Read the HTML template
   const source = fs.readFileSync(
     path.join(__dirname, "../template/overAllpaymentInvoicePdfTemplate.html"),
     "utf8"
   );
-  let totalPaidamount = 0;
-  let totalUnpaidAmount = 0;
 
-  data.forEach((item) => {
-    let paidAmount = parseFloat(item.sellingData.advance || 0);
-    let unpaidAmount = 0;
-
-    for (let customItem of item.sellingData.customArray) {
-      if (customItem.status === "paid") {
-        paidAmount += parseFloat(customItem.price);
-      } else if (customItem.status === "unpaid") {
-        unpaidAmount += parseFloat(customItem.price);
-      }
-    }
-
-    totalPaidamount += paidAmount;
-    totalUnpaidAmount += unpaidAmount;
-  });
-  // Format the total paid amount
-  let formater = new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 2,
-  });
-
-  // Format the total unpaid amount
-  let formattedTotalUnpaidAmount = formater.format(totalUnpaidAmount);
-  console.log(formattedTotalUnpaidAmount);
-
-  // Compile the template with handlebars
-  const template = handlebars.compile(source);
+  // Compile the template with Handlebars
+  const template = Handlebars.compile(source);
   const html = template({
     data,
     formattedPrice,
     formattedTotalPaidAmount,
     formattedTotalUnpaidAmount,
-    formattedSellingPrice,
-  }); // Pass the total price and customer data to the template
+    formattedSellingPrice: data.length > 0 ? data[0].formattedSellingPrice : "",
+  });
 
   const pdf = await convertHTMLToPDF(html, "data.pdf");
   res.setHeader("Content-Type", "application/pdf");

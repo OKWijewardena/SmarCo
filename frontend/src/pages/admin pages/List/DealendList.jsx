@@ -429,8 +429,8 @@ sessionStorage.removeItem('token');
         (civilID === "" || item.civilID.includes(civilID)) &&
         (price === "" || item.price.includes(price)) &&
         (months === "" || item.months.includes(months)) &&
-        (!salesDateFrom || itemsalesDate >= salesDateFrom) &&
-        (!salesDateTo || itemsalesDate <= salesDateTo)
+        (!fromDate || itemsalesDate >= fromDate) &&
+        (!toDate || itemsalesDate <= toDate)
       );
     });
 
