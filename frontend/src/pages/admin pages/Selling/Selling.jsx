@@ -90,7 +90,14 @@ export default function Selling() {
   const [date, setDate] = useState('');
   const [advance, setAdvance] = useState('');
   const [imageName, setImageName] = useState('');
+  
   const [devices, setDevices] = useState([]);
+  const [searchEmiNumber, setSearchEmiNumber] = useState('');
+  const [customer, setCustomer] = useState([]);
+  const [searchCivilID, setSearchCivilID] = useState('');
+
+  const [discount, setDiscount] = useState([]);
+
   const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
@@ -124,10 +131,96 @@ sessionStorage.removeItem('token');
     }
   };
 
+  const fetchDeviceDetails = async (emiNumber) => {
+    try {
+      const response = await axios.get(
+        `https://app.smartco.live/device/getOneDevice/${emiNumber}`
+      );
+      setDevices(response.data);
+    } catch (error) {
+      console.error("Error fetching device details:", error);
+    }
+  };
+
+  const fetchAllDevices = async () => {
+    try {
+      const response = await axios.get('https://app.smartco.live/device/getDevice');
+      setDevices(response.data);
+    } catch (error) {
+      console.error('Error fetching devices:', error);
+    }
+  };
+
+  let customerArray = [];
+
+  const fetchCustomerDetails = async (civilID) => {
+    try {
+      const response = await axios.get(
+        `https://app.smartco.live/api/customer/civil/${civilID}`
+      );
+      console.log(response.data);
+
+    // Push the new customer data into the array
+    customerArray.push(response.data);
+
+    // Set the array of customers (if you have a state setter like React's setState)
+    setCustomer([...customerArray]);
+    } catch (error) {
+      console.error("Error fetching customer details:", error);
+    }
+  }
+
+    const fetchAllCustomers = async () => {
+      try {
+        const response = await axios.get('https://app.smartco.live/api/customer/');
+        setCustomer(response.data);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+      }
+    };
+
+    // const fetchAllDiscounts = async () => {
+    //   try {
+    //     const response = await axios.get('https://app.smartco.live/discount/getDiscount');
+    //     setDiscount(response.data);
+        
+    //   } catch (error) {
+    //     console.error('Error fetching discounts:', error);
+    //   }
+    // }
+
+    // const handleAllDiscount = (event) => {
+    //   event.preventDefault();
+    //   fetchAllDiscounts();
+    // }
+
+  const handleDeviceSearch = (event) => {
+    event.preventDefault();
+    fetchDeviceDetails(searchEmiNumber);
+  };
+
+  const handleAllDevices = (event) => {
+    event.preventDefault();
+    fetchAllDevices();
+  };
+
+  const handleCustomerSearch = (event) => {
+    event.preventDefault();
+    fetchCustomerDetails(searchCivilID);
+  };
+
+  const handleAllCustomers = (event) => {
+    event.preventDefault();
+    fetchAllCustomers();
+  };
+
+
+  
+
   const fetchDeviceImage = async () => {
     try {
       const response = await axios.get(`https://app.smartco.live/device/getOneDevice/${emiNumber}`);
-      setDevices(response.data);
+      // setDevices(response.data);
       if (response.data.length > 0) {
         setImageName(response.data[0].imageName); // Assuming you want to set the first device's imageName by default
       }
@@ -154,38 +247,6 @@ sessionStorage.removeItem('token');
 
   const handleDialogClose = () => {
     setOpenDialog(false);
-  };
-
-  const handleConfirmSubmit = async () => {
-    // Check if imageName is set
-    if (!imageName) {
-      alert("Image name is required. Please check the EMI Number.");
-      return;
-    }
-
-    const NewPurchase = {
-      deviceName,
-      emiNumber,
-      customerName,
-      civilID,
-      price,
-      months,
-      date,
-      advance,
-      imageName
-    };
-
-    try {
-      await axios.post('https://app.smartco.live/selling/addSelling', NewPurchase);
-      await axios.delete(`https://app.smartco.live/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
-      alert("New customer device purchased");
-      fetchSellings(); // Refresh the selling list after submission
-      handleDialogClose();
-    } catch (err) {
-      console.error(err.response ? err.response.data : err);
-      alert("An error occurred while adding the item to the stores.");
-      handleDialogClose();
-    }
   };
 
   const dealendSubmit = async (id,deviceName,
@@ -223,6 +284,48 @@ sessionStorage.removeItem('token');
       }
 
   }
+
+  const handleConfirmSubmit = async () => {
+    // Check if imageName is set
+    if (!imageName) {
+      alert("Image name is required. Please check the EMI Number.");
+      return;
+    }
+
+    const NewPurchase = {
+      deviceName,
+      emiNumber,
+      customerName,
+      civilID,
+      price,
+      months,
+      date,
+      advance,
+      imageName
+    };
+
+    try {
+      await axios.post('https://app.smartco.live/selling/addSelling', NewPurchase);
+      await axios.delete(`https://app.smartco.live/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
+      alert("New customer device purchased");
+      fetchSellings(); // Refresh the selling list after submission
+      handleDialogClose();
+    } catch (err) {
+      console.error(err.response ? err.response.data : err);
+      alert("An error occurred while adding the item to the stores.");
+      handleDialogClose();
+    }
+  };
+
+  const handleDeviceSelect = (row) => {
+    setDeviceName(row.deviceName);
+    setEmiNumber(row.emiNumber);
+  };
+
+  const handleCustomerSelect = (row) => {
+    setCustomerName(row.name);
+    setCivilID(row.civil_id);
+  };
 
   return (
     <div>
@@ -297,6 +400,363 @@ sessionStorage.removeItem('token');
           >
             <Toolbar />
             <Container>
+            <Box
+                sx={{
+                  marginTop: 4,
+                  padding: 3,
+                  backgroundColor: "#fff",
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  maxWidth: 800,
+                  width: "100%",
+                  mx: "auto",
+                }}
+              >
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  gutterBottom
+                  sx={{
+                    fontFamily: "Public Sans, sans-serif",
+                    fontWeight: "bold",
+                    color: "#637381",
+                  }}
+                >
+                  Search Device Details
+                </Typography>
+                <Box component="form" sx={{ mt: 1 }}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    label="Search by Emi Number"
+                    name="searchEmiNumber"
+                    value={searchEmiNumber}
+                    onChange={(e) => setSearchEmiNumber(e.target.value)}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleDeviceSearch}
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#752888",
+                      "&:hover": {
+                        backgroundColor: "#C63DE7",
+                      },
+                      fontFamily: "Public Sans, sans-serif",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Search
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleAllDevices}
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#752888",
+                      "&:hover": {
+                        backgroundColor: "#C63DE7",
+                      },
+                      fontFamily: "Public Sans, sans-serif",
+                      fontWeight: "bold",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Show All
+                  </Button>
+                </Box>
+              </Box>
+
+              {devices.length > 0 && (
+                <TableContainer component={Paper} sx={{ mt: 4 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                      <TableCell >Device Name</TableCell>
+                      <TableCell >Purchase Price</TableCell>
+                      <TableCell >Colour</TableCell>
+                      <TableCell >Shop Name</TableCell>
+                      <TableCell >Model Number</TableCell>
+                      <TableCell >Storage</TableCell>
+                      <TableCell >Ram</TableCell>
+                      <TableCell >Warrenty</TableCell>
+                      <TableCell >Emi Number</TableCell>
+                      <TableCell >Purchase Date</TableCell>
+                      <TableCell >Image Name</TableCell>
+
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {devices.map((row) => (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.deviceName}</TableCell>
+                          <TableCell>{row.price}</TableCell>
+                          <TableCell>{row.color}</TableCell>
+                          <TableCell>{row.shopName}</TableCell>
+                          <TableCell>{row.modelNumber}</TableCell>
+                          <TableCell>{row.storage}</TableCell>
+                          <TableCell>{row.ram}</TableCell>
+                          <TableCell>{row.warrenty}</TableCell>
+                          <TableCell>{row.emiNumber}</TableCell>
+                          <TableCell>{row.purchaseDate}</TableCell>
+                          <TableCell>
+        {row.imageName && (
+          <img
+            src={`${row.imageName}`}
+            alt={row.deviceName}
+            style={{ width: '100px', height: '100px' }}
+          />
+        )}
+      </TableCell>
+
+                          <TableCell>
+                            <Button
+                              sx={{
+                                mt: 3,
+                                mb: 2,
+                                backgroundColor: "#752888",
+                                "&:hover": {
+                                  backgroundColor: "#C63DE7",
+                                },
+                                color: "white",
+                                fontFamily: "Public Sans, sans-serif",
+                                fontWeight: "bold",
+                              }}
+                              onClick={() => handleDeviceSelect(row)}
+                            >
+                              Select
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+
+              <Box
+                sx={{
+                  marginTop: 4,
+                  padding: 3,
+                  backgroundColor: "#fff",
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  maxWidth: 800,
+                  width: "100%",
+                  mx: "auto",
+                }}
+              >
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  gutterBottom
+                  sx={{
+                    fontFamily: "Public Sans, sans-serif",
+                    fontWeight: "bold",
+                    color: "#637381",
+                  }}
+                >
+                  Search Customer Details
+                </Typography>
+                <Box component="form" sx={{ mt: 1 }}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    label="Search by Emi Number"
+                    name="searchCivilID"
+                    value={searchCivilID}
+                    onChange={(e) => setSearchCivilID(e.target.value)}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleCustomerSearch}
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#752888",
+                      "&:hover": {
+                        backgroundColor: "#C63DE7",
+                      },
+                      fontFamily: "Public Sans, sans-serif",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Search
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleAllCustomers}
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#752888",
+                      "&:hover": {
+                        backgroundColor: "#C63DE7",
+                      },
+                      fontFamily: "Public Sans, sans-serif",
+                      fontWeight: "bold",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Show All
+                  </Button>
+                </Box>
+              </Box>
+
+              {customer.length > 0 && (
+                <TableContainer component={Paper} sx={{ mt: 4 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                      <TableCell>User Name</TableCell>
+                      <TableCell>E-mail</TableCell>
+                      <TableCell>Mobile</TableCell>
+                      <TableCell>Whatsapp Number</TableCell>
+                      <TableCell>Telephone Number</TableCell>
+                      <TableCell>Address</TableCell>
+                      <TableCell>Nationality</TableCell>
+                      <TableCell>Civil ID</TableCell>
+                      <TableCell>Paci Number</TableCell>
+
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {customer.map((row) => (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.name}</TableCell>
+                          <TableCell>{row.email}</TableCell>
+                          <TableCell>{row.mobile}</TableCell>
+                          <TableCell>{row.whatsapp_no}</TableCell>
+                          <TableCell>{row.telephone_no}</TableCell>
+                          <TableCell>{row.address}</TableCell>
+                          <TableCell>{row.nationality}</TableCell>
+                          <TableCell>{row.civil_id}</TableCell>
+                          <TableCell>{row.paci_number}</TableCell>
+
+                          <TableCell>
+                            <Button
+                              sx={{
+                                mt: 3,
+                                mb: 2,
+                                backgroundColor: "#752888",
+                                "&:hover": {
+                                  backgroundColor: "#C63DE7",
+                                },
+                                color: "white",
+                                fontFamily: "Public Sans, sans-serif",
+                                fontWeight: "bold",
+                              }}
+                              onClick={() => handleCustomerSelect(row)}
+                            >
+                              Select
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+
+{/* <Box
+                sx={{
+                  marginTop: 4,
+                  padding: 3,
+                  backgroundColor: "#fff",
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  maxWidth: 800,
+                  width: "100%",
+                  mx: "auto",
+                }}
+              >
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  gutterBottom
+                  sx={{
+                    fontFamily: "Public Sans, sans-serif",
+                    fontWeight: "bold",
+                    color: "#637381",
+                  }}
+                >
+                  Discounts Details
+                </Typography>
+                <Box component="form" sx={{ mt: 1 }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleAllDiscount}
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#752888",
+                      "&:hover": {
+                        backgroundColor: "#C63DE7",
+                      },
+                      fontFamily: "Public Sans, sans-serif",
+                      fontWeight: "bold",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Show All
+                  </Button>
+                </Box>
+              </Box>
+
+              {discount.length > 0 && (
+                <TableContainer component={Paper} sx={{ mt: 4 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                      <TableCell>Discount Name</TableCell>
+                        <TableCell>Discount Rate</TableCell>
+                        <TableCell>Date</TableCell>
+
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {discount.map((row) => (
+                        <TableRow key={row._id}>
+                        <TableCell>{row.discountName}</TableCell>
+                        <TableCell>{row.rate}</TableCell>
+                        <TableCell>{row.date}</TableCell>
+
+                          <TableCell>
+                            <Button
+                              sx={{
+                                mt: 3,
+                                mb: 2,
+                                backgroundColor: "#752888",
+                                "&:hover": {
+                                  backgroundColor: "#C63DE7",
+                                },
+                                color: "white",
+                                fontFamily: "Public Sans, sans-serif",
+                                fontWeight: "bold",
+                              }}
+                              // onClick={() => handleCustomerSelect(row)}
+                            >
+                              Select
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )} */}
+
+
               <Box
                 sx={{
                   display: 'flex',
@@ -322,6 +782,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Device Name"
                     name="deviceName"
+                    value={deviceName}
                     onChange={(e) => {
                       setDeviceName(e.target.value);
                     }}
@@ -332,6 +793,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="EMI Number"
                     name="emiNumber"
+                    value={emiNumber}
                     onChange={(e) => {
                       setEmiNumber(e.target.value);
                       setImageName(''); // Reset imageName when emiNumber changes
@@ -343,6 +805,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Customer Name"
                     name="customerName"
+                    value={customerName}
                     onChange={(e) => {
                       setCustomerName(e.target.value);
                     }}
@@ -353,6 +816,7 @@ sessionStorage.removeItem('token');
                     fullWidth
                     label="Civil ID"
                     name="civilID"
+                    value={civilID}
                     onChange={(e) => {
                       setCivilID(e.target.value);
                     }}
