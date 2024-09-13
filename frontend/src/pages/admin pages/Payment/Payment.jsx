@@ -138,13 +138,23 @@ sessionStorage.removeItem('token');
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,civilID,emiNumber,price,date) => {
+    const deletePayment = {
+      civilID,
+      emiNumber,
+      date,
+      payment: price,
+    }
     try {
-      await axios.delete(`https://app.smartco.live/payment/deletePayment/${id}`);
+      await axios.post(
+        "http://localhost:8000/selling/deletepaymentHistory",
+        deletePayment
+      );
+      await axios.delete(`http://localhost:8000/payment/deletePayment/${id}`);
       alert("Selling record deleted successfully");
       fetchPayments(); // Refresh the selling list after deletion
     } catch (error) {
-      console.error('Error deleting selling:', error);
+      console.error("Error deleting selling:", error);
       alert("An error occurred while deleting the selling record.");
     }
   };
@@ -201,6 +211,8 @@ sessionStorage.removeItem('token');
     setDeviceName(row.deviceName);
     setEmiNumber(row.emiNumber);
   };
+
+  
 
   return (
     <div>
@@ -549,9 +561,12 @@ sessionStorage.removeItem('token');
                             {/* <IconButton color="primary">
                               <EditIcon />
                             </IconButton> */}
-                            <IconButton color="secondary" onClick={() => handleDelete(payment._id)}>
-                              <DeleteIcon />
-                            </IconButton>
+                            <IconButton
+                                color="secondary"
+                                onClick={() => handleDelete(payment._id,payment.civilID,payment.emiNumber,payment.price,payment.date)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
                           </TableCell>
                         </TableRow>
                       ))}
