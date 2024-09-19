@@ -139,6 +139,10 @@ const UpcommingPayment = () => {
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [totalAmountForMonth, setTotalAmountForMonth] = useState(0);
 
+  const [totalPaidToday, setTotalPaidToday] = useState(0);
+  const [totalPaidTodayTransactions, setTotalPaidTodayTransactions] = useState(0);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -352,6 +356,43 @@ const UpcommingPayment = () => {
           )
         );
 
+        // Today's paid and total paid today transactions
+      const totalPaidToday = Math.round(
+        mergedData
+          .filter((item) =>
+            item.customArray.some(
+              (payment) =>
+                payment.status === "paid" &&
+                new Date(payment.date).toISOString().split("T")[0] ===
+                  currentDateString
+            )
+          )
+          .reduce((sum, item) => {
+            return (
+              sum +
+              item.customArray
+                .filter(
+                  (payment) =>
+                    payment.status === "paid" &&
+                    new Date(payment.date).toISOString().split("T")[0] ===
+                      currentDateString
+                )
+                .reduce((paymentSum, payment) => paymentSum + payment.price, 0)
+            );
+          }, 0)
+      );
+
+      const totalPaidTodayTransactions = mergedData.filter((item) =>
+        item.customArray.some(
+          (payment) =>
+            payment.status === "paid" &&
+            new Date(payment.date).toISOString().split("T")[0] ===
+              currentDateString
+        )
+      ).length;
+
+
+
         setTotalReceivable(totalReceivable);
         setTotalReceivableTransactions(totalReceivableTransactions);
 
@@ -369,6 +410,10 @@ const UpcommingPayment = () => {
 
         setTotalTransactions(totalTransactions);
         setTotalAmountForMonth(totalAmountForMonth);
+
+        setTotalPaidToday(totalPaidToday);
+        setTotalPaidTodayTransactions(totalPaidTodayTransactions);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -673,7 +718,11 @@ const UpcommingPayment = () => {
   };
 
   const handleFetch = () => {
-    let filteredData = originalData.filter((item) => {
+
+      const now = new Date();
+      const todayDateString = now.toISOString().split("T")[0]; // Get current date in 'YYYY-MM-DD' format
+
+      let filteredData = originalData.filter((item) => {
       const itemsalesDate = new Date(item.currentMonthDate); // Convert item date to Date object
 
       let fromDate = salesDateFrom ? new Date(salesDateFrom) : null;
@@ -682,6 +731,16 @@ const UpcommingPayment = () => {
       // Adjust the time of fromDate and toDate to consider the whole day
       if (fromDate) fromDate.setHours(0, 0, 0, 0);
       if (toDate) toDate.setHours(23, 59, 59, 999);
+
+
+       // Check if "Today Paid" is selected and filter by today's date and payment status being "paid"
+    const isTodayPaid =
+    statusFilter === "today paid" &&
+    item.customArray.some(
+      (payment) =>
+        new Date(payment.date).toISOString().split("T")[0] === todayDateString &&
+        payment.status === "paid"
+    );
 
       return (
         (deviceName === "" || item.deviceName.includes(deviceName)) &&
@@ -694,7 +753,7 @@ const UpcommingPayment = () => {
         (balance === "" || item.balance.includes(balance)) &&
         (!fromDate || itemsalesDate >= fromDate) &&
         (!toDate || itemsalesDate <= toDate) &&
-        (statusFilter === "" || item.status === statusFilter)
+        (statusFilter === "" || item.status === statusFilter || isTodayPaid)
       );
     });
 
@@ -956,6 +1015,7 @@ const UpcommingPayment = () => {
                           <MenuItem value="Unpaid">Unpaid</MenuItem>
                           <MenuItem value="Overdue">Overdue</MenuItem>
                           <MenuItem value="Due Today">Due Today</MenuItem>
+                          <MenuItem value="today paid">Today Paid</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
@@ -1049,7 +1109,7 @@ const UpcommingPayment = () => {
                   <Box sx={{ flexGrow: 1, p: 2 }}>
                     <Grid container spacing={4}>
                       {/* Total Receivable */}
-                      <Grid item xs={12} sm={6} md={6}>
+                      <Grid item xs={12} sm={4} md={4}>
                         <Paper
                           sx={{
                             p: 3,
@@ -1088,7 +1148,7 @@ const UpcommingPayment = () => {
                             }}
                           >
                             <img
-                              src={image4}
+                              src={image3}
                               alt="Chart"
                               style={{
                                 height: "auto",
@@ -1102,7 +1162,7 @@ const UpcommingPayment = () => {
                       </Grid>
 
                       {/* Paid */}
-                      <Grid item xs={12} sm={6} md={6}>
+                      <Grid item xs={12} sm={4} md={4}>
                         <Paper
                           sx={{
                             p: 3,
@@ -1194,7 +1254,7 @@ const UpcommingPayment = () => {
                             }}
                           >
                             <img
-                              src={image5}
+                              src={image2}
                               alt="Chart"
                               style={{
                                 height: "auto",
@@ -1247,6 +1307,59 @@ const UpcommingPayment = () => {
                             }}
                           >
                             <img
+                              src={image1}
+                              alt="Chart"
+                              style={{
+                                height: "auto",
+                                width: "80px",
+                                maxWidth: "100%",
+                                objectFit: "contain",
+                              }}
+                            />
+                          </Box>
+                        </Paper>
+                      </Grid>
+
+                      {/* Today paid */}
+                      <Grid item xs={12} sm={4} md={4}>
+                        <Paper
+                          sx={{
+                            p: 3,
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <Box>
+                            <Typography
+                              variant="body1"
+                              component="p"
+                              gutterBottom
+                            >
+                              Today Paid
+                            </Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Typography variant="h5" component="p">
+                                ${totalPaidToday}
+                              </Typography>
+                              <Typography variant="body2" component="p">
+                                {totalPaidTodayTransactions} transactions
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: { xs: "none", sm: "block" },
+                            }}
+                          >
+                            <img
                               src={image5}
                               alt="Chart"
                               style={{
@@ -1259,6 +1372,7 @@ const UpcommingPayment = () => {
                           </Box>
                         </Paper>
                       </Grid>
+
 
                       {/* Overdue */}
                       <Grid item xs={12} sm={4} md={4}>
@@ -1300,7 +1414,7 @@ const UpcommingPayment = () => {
                             }}
                           >
                             <img
-                              src={image5}
+                              src={image2}
                               alt="Chart"
                               style={{
                                 height: "auto",

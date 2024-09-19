@@ -147,10 +147,10 @@ sessionStorage.removeItem('token');
     }
     try {
       await axios.post(
-        "http://localhost:8000/selling/deletepaymentHistory",
+        "https://app.smartco.live/selling/deletepaymentHistory",
         deletePayment
       );
-      await axios.delete(`http://localhost:8000/payment/deletePayment/${id}`);
+      await axios.delete(`https://app.smartco.live/payment/deletePayment/${id}`);
       alert("Selling record deleted successfully");
       fetchPayments(); // Refresh the selling list after deletion
     } catch (error) {
