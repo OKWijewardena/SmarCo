@@ -102,7 +102,7 @@ export default function EPayment() {
   const [price, setPrice] = useState("");
   const [date, setDate] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const [oneSelling, setOneSelling] = useState([]);
   const [customer, setCustomer] = useState([]);
 
   useEffect(() => {
@@ -173,6 +173,20 @@ export default function EPayment() {
     }
   };
 
+  let sellingArray = [];
+  const fetchOneSellingDetails = async (civilID,emiNumber) => {
+    try {
+      const response = await axios.get(
+        `https://app.smartco.live/selling/getbyCIDEMI/${civilID}/${emiNumber}`
+      );
+      sellingArray.push(response.data.customArray);
+      setOneSelling(response.data.customArray);
+      console.log(oneSelling);
+    } catch (error) {
+      console.error("Error fetching selling details:", error);
+    }
+  };
+
   const handleSearch = (event) => {
     event.preventDefault();
     fetchSellingDetails(searchCivilID);
@@ -217,7 +231,12 @@ export default function EPayment() {
     setCivilID(row.civilID);
     setDeviceName(row.deviceName);
     setEmiNumber(row.emiNumber);
+    fetchOneSellingDetails(row.civilID,row.emiNumber);
   };
+
+  const handlePriceSelect = (row) => {
+    setPrice(row.price);
+  }
 
   return (
     <div>
@@ -406,6 +425,55 @@ export default function EPayment() {
                   </Table>
                 </TableContainer>
               )}
+
+              {oneSelling.length > 0 && (
+                <TableContainer component={Paper} sx={{ mt: 4 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Price</TableCell>
+                        <TableCell>Status</TableCell>
+
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {oneSelling.map((row) => (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.date}</TableCell>
+                          <TableCell>{row.price}</TableCell>
+                          <TableCell><Button
+                            variant="contained"
+                            color={row.status === "paid" ? "success" : "error"}
+                            size="small"
+                          >{row.status}</Button></TableCell>
+
+                          <TableCell>
+                            <Button
+                              sx={{
+                                mt: 3,
+                                mb: 2,
+                                backgroundColor: "#752888",
+                                "&:hover": {
+                                  backgroundColor: "#C63DE7",
+                                },
+                                color: "white",
+                                fontFamily: "Public Sans, sans-serif",
+                                fontWeight: "bold",
+                              }}
+                              onClick={() => handlePriceSelect(row)}
+                            >
+                              Select
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                )}
+
               <Box
                 sx={{
                   display: "flex",
@@ -488,6 +556,7 @@ export default function EPayment() {
                     fullWidth
                     label="Amount"
                     name="price"
+                    value={price}
                     onChange={(e) => {
                       setPrice(e.target.value);
                     }}
@@ -655,12 +724,12 @@ export default function EPayment() {
                               {/* <IconButton color="primary">
                               <EditIcon />
                             </IconButton> */}
-                              <IconButton
+                              {/* <IconButton
                                 color="secondary"
                                 onClick={() => handleDelete(payment._id)}
                               >
                                 <DeleteIcon />
-                              </IconButton>
+                              </IconButton> */}
                             </TableCell>
                           </TableRow>
                         ))}

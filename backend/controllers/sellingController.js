@@ -150,7 +150,7 @@ exports.getonesellingByIdEmi = (req, res) => {
 
 // Controller to get a single selling record by ID
 exports.getOneSellingID = (req, res) => {
-  Selling.findOne({ _id: req.params.id })
+  Selling.find({ _id: req.params.id })
     .then((sellingRecord) => {
       res.json(sellingRecord);
     })
