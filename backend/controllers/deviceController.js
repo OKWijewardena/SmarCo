@@ -5,9 +5,9 @@ const upload = multer({ dest: 'uploads/' });
 
 // Set up Cloudinary configuration
 cloudinary.config({
-  cloud_name: 'dzel2lewy',
-  api_key: '987584592789527',
-  api_secret: 'E-0c0rc9n_4MSgmawaSOTnntr6c'
+  cloud_name: 'dpetznvmv',
+  api_key: '168744838856757',
+  api_secret: 'f65Q2OTAUiP5jgq66MBvd4mQiaE'
 });
 
 
