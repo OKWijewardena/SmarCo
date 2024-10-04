@@ -64,13 +64,12 @@ export default function CustomerPurchase() {
       setSellings(response.data);
       console.log(response.data);
 
-      {sellings.map((selling) => {
-        setCivilID(selling.civilID);
-        setemiNumber(selling.emiNumber);
-        
-      })}
+      const selling = response.data[0];
 
-      const Newpayments = { civilID: civilID, emiNumber: emiNumber };
+      const CivilID = selling.civilID;
+      const EmiNumber = selling.emiNumber;
+
+      const Newpayments = { civilID: CivilID, emiNumber: EmiNumber };
 
       const res = await axios.post(
         "https://app.smartco.live/payment/getOnePayment",
