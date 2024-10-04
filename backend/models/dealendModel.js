@@ -58,6 +58,14 @@ const dealend = new mongoose.Schema({
               required: true,
               default: 'unpaid', // Assuming default status is 'unpaid'
             },
+            updateprice: {
+              type: String,
+              required: true,
+            },
+            defaultdate: {
+              type: String,
+              required: true,
+            },
           },
         ],
         required: true,
