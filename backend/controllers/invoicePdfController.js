@@ -260,12 +260,20 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
 
   // Calculate total paid amount
   let totalPaidAmount = data.reduce((total, item) => {
+    // Parse the advance payment, defaulting to 0 if not present
     let paidAmount = parseFloat(item.sellingData.advance || 0);
-    for (let customItem of item.sellingData.customArray) {
-      if (customItem.status === "paid") {
-        paidAmount += parseFloat(customItem.price);
+    
+    // Check if customArray exists and is an array
+    if (Array.isArray(item.sellingData.customArray)) {
+      for (let customItem of item.sellingData.customArray) {
+        if (customItem.status === "paid") {
+          paidAmount += parseFloat(customItem.price || 0); // Ensure price is parsed correctly
+        }
       }
+    } else {
+      console.warn('customArray is not an array or is undefined for item:', item);
     }
+  
     return total + paidAmount;
   }, 0);
 
