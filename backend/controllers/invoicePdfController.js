@@ -217,162 +217,209 @@ const convertToPaymentInvoicePDF = async (req, res) => {
  */
 const convertToOverAllPaymentInvoicePDF = async (req, res) => {
   try {
+    // Ensure req.body is an array for consistent processing
     let data = Array.isArray(req.body) ? req.body : [req.body];
-    console.log("boom", data);
-    const { id, civil_id } = req.body;
-    console.log("ID:", id);
-    console.log("Civil ID:", civil_id);
+    console.log("Received Data:", JSON.stringify(data, null, 2));
 
-    // Retrieve customer data and selling data
+    // Iterate over each item in the data array
     for (let item of data) {
-      // Fetch customer data
-      const customerResponse = await axios.get(
-        `http://localhost:8000/api/customer/civil/${item.civil_id}`
-      );
-      const customerData = customerResponse.data;
-      console.log("Customer Data:", customerData);
-      item.customerData = customerData;
+      const { id, civil_id } = item;
+      console.log(`\nProcessing Item - ID: ${id}, Civil ID: ${civil_id}`);
 
-      // Fetch selling data
-      const sellingResponse = await axios.get(
-        `http://localhost:8000/selling/getOneSellingID/${item.id}`
-      );
-      const sellingData = sellingResponse.data;
-      console.log("Selling Data:", sellingData);
-      item.sellingData = sellingData;
+      // ----- Fetch Customer Data -----
+      try {
+        const customerResponse = await axios.get(
+          `http://localhost:8000/api/customer/civil/${civil_id}`
+        );
+        const customerData = customerResponse.data;
+        console.log("Customer Data:", JSON.stringify(customerData, null, 2));
+        item.customerData = customerData;
+      } catch (customerError) {
+        console.error(`Error fetching customer data for Civil ID: ${civil_id}`, customerError);
+        // Assign default values or handle as needed
+        item.customerData = {};
+      }
 
-      // Use the date from sellingData
-      let formattedDate = moment(sellingData.date).format("YYYY-MM-DD");
-      item.date = formattedDate;
-      item.statisticsDate = formattedDate;
+      // ----- Fetch Selling Data -----
+      try {
+        const sellingResponse = await axios.get(
+          `http://localhost:8000/selling/getOneSellingID/${id}`
+        );
+        const sellingDataArray = sellingResponse.data;
+        console.log("Selling Data Response:", JSON.stringify(sellingDataArray, null, 2));
 
-      // Format selling price
-      let formatter = new Intl.NumberFormat("en-US", {
-        minimumFractionDigits: 2,
-      });
-      item.formattedSellingPrice = formatter.format(Number(sellingData.price));
+        // Check if sellingDataArray is an array with at least one element
+        if (Array.isArray(sellingDataArray) && sellingDataArray.length > 0) {
+          const sellingData = sellingDataArray[0];
+          console.log("Processed Selling Data:", JSON.stringify(sellingData, null, 2));
+          item.sellingData = sellingData;
+
+          // ----- Format Dates -----
+          const formattedDate = moment(sellingData.date).format("YYYY-MM-DD");
+          item.date = formattedDate;
+          item.statisticsDate = formattedDate;
+
+          // ----- Format Selling Price -----
+          const formatter = new Intl.NumberFormat("en-US", {
+            minimumFractionDigits: 2,
+          });
+          item.formattedSellingPrice = formatter.format(Number(sellingData.price));
+        } else {
+          console.warn(`No selling data found for item ID: ${id}`);
+          item.sellingData = {}; // Assign an empty object or handle as needed
+        }
+      } catch (sellingError) {
+        console.error(`Error fetching selling data for ID: ${id}`, sellingError);
+        item.sellingData = {}; // Assign an empty object or handle as needed
+      }
     }
 
-    // Add monthNumber based on index
+    // ----- Add Month Number Based on Index -----
     data = data.map((item, index) => {
       item.monthNumber = index + 1;
       return item;
     });
 
-    // Calculate the total price
-    let totalPrice = data.reduce(
-      (total, item) => total + Number(item.sellingData.price),
-      0
-    );
+    // ----- Calculate Total Selling Price -----
+    const totalPrice = data.reduce((total, item) => {
+      const price = item.sellingData && item.sellingData.price
+        ? Number(item.sellingData.price)
+        : 0;
+      return total + price;
+    }, 0);
 
-    // Formatter for prices
-    let formatter = new Intl.NumberFormat("en-US", {
+    // ----- Formatter for Prices -----
+    const priceFormatter = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
     });
 
-    // Register Handlebars helpers
-    Handlebars.registerHelper("indexPlusOne", function (index) {
-      return index + 1;
-    });
-
-    Handlebars.registerHelper("statusColor", function (status) {
-      return status === "paid"
-        ? "color: green !important; font-weight: bold !important; text-transform: uppercase  !important;"
-        : "color: red !important; font-weight: bold !important; text-transform: uppercase !important;";
-    });
-
-    Handlebars.registerHelper("formatPrice", function (price) {
-      let formatter = new Intl.NumberFormat("en-US", {
-        minimumFractionDigits: 2,
+    // ----- Register Handlebars Helpers -----
+    // To prevent re-registering helpers on every request, check if they are already registered
+    if (!Handlebars.helpers.indexPlusOne) {
+      Handlebars.registerHelper("indexPlusOne", function (index) {
+        return index + 1;
       });
-      return formatter.format(Number(price));
-    });
+    }
 
-    Handlebars.registerHelper("advanceStatusColor", function (advance) {
-      if (advance > 0) {
-        return new Handlebars.SafeString(
-          `<span style="color: green !important; font-weight: bold !important; text-transform: uppercase !important;">PAID</span>`
-        );
-      } else {
-        return new Handlebars.SafeString(
-          `<span style="font-weight: bold !important; text-transform: uppercase !important;">UNPAID</span>`
-        );
-      }
-    });
+    if (!Handlebars.helpers.statusColor) {
+      Handlebars.registerHelper("statusColor", function (status) {
+        return status === "paid"
+          ? "color: green !important; font-weight: bold !important; text-transform: uppercase !important;"
+          : "color: red !important; font-weight: bold !important; text-transform: uppercase !important;";
+      });
+    }
 
-    // Format individual prices
+    if (!Handlebars.helpers.formatPrice) {
+      Handlebars.registerHelper("formatPrice", function (price) {
+        return priceFormatter.format(Number(price));
+      });
+    }
+
+    if (!Handlebars.helpers.advanceStatusColor) {
+      Handlebars.registerHelper("advanceStatusColor", function (advance) {
+        if (advance > 0) {
+          return new Handlebars.SafeString(
+            `<span style="color: green !important; font-weight: bold !important; text-transform: uppercase !important;">PAID</span>`
+          );
+        } else {
+          return new Handlebars.SafeString(
+            `<span style="color: red !important; font-weight: bold !important; text-transform: uppercase !important;">UNPAID</span>`
+          );
+        }
+      });
+    }
+
+    // ----- Format Individual Prices -----
     data = data.map((item) => {
-      item.price = formatter.format(Number(item.sellingData.price));
+      const price = item.sellingData && item.sellingData.price
+        ? Number(item.sellingData.price)
+        : 0;
+      item.price = priceFormatter.format(price);
       return item;
     });
 
-    // Format the total price into Kuwaiti Dinar currency format
-    let formattedPrice = formatter.format(totalPrice);
+    // ----- Format the Total Price -----
+    const formattedPrice = priceFormatter.format(totalPrice);
 
-    // Calculate total paid amount with validation
-    let totalPaidAmount = data.reduce((total, item) => {
-      let paidAmount = parseFloat(item.sellingData.advance || 0);
+    // ----- Calculate Total Paid Amount -----
+    const totalPaidAmount = data.reduce((total, item) => {
+      let paidAmount = 0;
 
-      // Validate customArray
-      if (Array.isArray(item.sellingData.customArray)) {
-        for (let customItem of item.sellingData.customArray) {
-          if (customItem.status === "paid") {
-            paidAmount += parseFloat(customItem.price);
+      if (item.sellingData) {
+        // Add advance if available
+        paidAmount += parseFloat(item.sellingData.advance) || 0;
+
+        // Add prices from customArray where status is 'paid'
+        if (Array.isArray(item.sellingData.customArray)) {
+          for (let customItem of item.sellingData.customArray) {
+            if (customItem.status === "paid") {
+              paidAmount += parseFloat(customItem.price) || 0;
+            }
           }
+        } else {
+          console.warn(
+            `customArray is missing or not an array for item ID: ${item.id}`
+          );
         }
-      } else {
-        console.warn(
-          `customArray is missing or not an array for item ID: ${item.id}`
-        );
       }
 
       return total + paidAmount;
     }, 0);
 
-    // Format the total paid amount
-    let formattedTotalPaidAmount = formatter.format(totalPaidAmount);
+    // ----- Format Total Paid Amount -----
+    const formattedTotalPaidAmount = priceFormatter.format(totalPaidAmount);
 
-    // Calculate the unpaid amount
-    const totalPaidAmountNumber = parseFloat(totalPaidAmount);
-    const totalSellingPriceNumber = parseFloat(totalPrice);
-
-    // Ensure values are numbers before calculating unpaid amount
-    const totalUnpaidAmount =
-      isNaN(totalSellingPriceNumber) || isNaN(totalPaidAmountNumber)
-        ? 0
-        : totalSellingPriceNumber - totalPaidAmountNumber;
-
-    // Format the unpaid amount to currency format
-    const formattedTotalUnpaidAmount = formatter.format(totalUnpaidAmount);
+    // ----- Calculate Unpaid Amount -----
+    const totalUnpaidAmount = totalPrice - totalPaidAmount;
+    const formattedTotalUnpaidAmount = priceFormatter.format(totalUnpaidAmount);
     console.log("Unpaid Amount:", formattedTotalUnpaidAmount);
 
-    // Read the HTML template
-    const source = fs.readFileSync(
-      path.join(__dirname, "../template/overAllpaymentInvoicePdfTemplate.html"),
-      "utf8"
-    );
+    // ----- Read and Compile the HTML Template -----
+    const templatePath = path.join(__dirname, "../template/overAllpaymentInvoicePdfTemplate.html");
+    const templateSource = fs.readFileSync(templatePath, "utf8");
+    const template = Handlebars.compile(templateSource);
 
-    // Compile the template with Handlebars
-    const template = Handlebars.compile(source);
+    // ----- Generate HTML with Handlebars -----
     const html = template({
       data,
       formattedPrice,
       formattedTotalPaidAmount,
       formattedTotalUnpaidAmount,
-      formattedSellingPrice:
-        data.length > 0 ? data[0].formattedSellingPrice : "",
+      // You can add more formatted data here if needed
     });
 
-    // Convert HTML to PDF
-    const pdf = await convertHTMLToPDF(html, "data.pdf");
+    // ----- Convert HTML to PDF -----
+    const pdfBuffer = await convertHTMLToPDF(html, "data.pdf");
+
+    // ----- Send PDF as Response -----
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=data.pdf");
-    res.send(pdf);
+    res.setHeader("Content-Disposition", "attachment; filename=overall_payment_invoice.pdf");
+    res.send(pdfBuffer);
   } catch (error) {
     console.error("Error generating Overall Payment Invoice PDF:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+async function convertHTMLToPDF(
+  htmlContent,
+  pdfFilePath,
+  margins = { top: "10mm", right: "1mm", bottom: "10mm", left: "1mm" }
+) {
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+  const page = await browser.newPage();
+  await page.setContent(htmlContent);
+  const pdf = await page.pdf({
+    format: "A4",
+    margin: margins,
+    printBackground: true,
+  }); // Added printBackground: true
+  await browser.close();
+  return pdf;
+}
+
 
 module.exports = {
   convertToPDF,
