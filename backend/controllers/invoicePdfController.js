@@ -160,7 +160,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
     // Retrieve customer data
     for (let item of data) {
       const response = await axios.get(
-        `http://localhost:8000/api/customer/civil/${item.civilID}`
+        `https://app.smartco.live/api/customer/civil/${item.civilID}`
       );
       const customerData = response.data;
       item.customerData = customerData;
@@ -169,7 +169,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
     // Retrieve selling data
     for (let item of data) {
       const response = await axios.get(
-        `http://localhost:8000/selling/getOneSellingID/${item.id}`
+        `https://app.smartco.live/selling/getOneSellingID/${item.id}`
       );
       const sellingData = response.data;
       item.sellingData = sellingData;
@@ -229,7 +229,7 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
       // ----- Fetch Customer Data -----
       try {
         const customerResponse = await axios.get(
-          `http://localhost:8000/api/customer/civil/${civil_id}`
+          `https://app.smartco.live/api/customer/civil/${civil_id}`
         );
         const customerData = customerResponse.data;
         console.log("Customer Data:", JSON.stringify(customerData, null, 2));
@@ -243,7 +243,7 @@ const convertToOverAllPaymentInvoicePDF = async (req, res) => {
       // ----- Fetch Selling Data -----
       try {
         const sellingResponse = await axios.get(
-          `http://localhost:8000/selling/getOneSellingID/${id}`
+          `https://app.smartco.live/selling/getOneSellingID/${id}`
         );
         const sellingDataArray = sellingResponse.data;
         console.log("Selling Data Response:", JSON.stringify(sellingDataArray, null, 2));
