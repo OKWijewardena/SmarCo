@@ -535,7 +535,10 @@ sessionStorage.removeItem('token');
       </Typography>
     </Box>
     <Box>
-      <img src={image1} alt="Chart" style={{ height: '80px', marginLeft: '16px' }} />
+      <img src={image1} alt="Chart" style={{ height: 'auto', 
+          width: '100%', // Make the image responsive
+          maxHeight: '80px', // Limit the maximum height
+          marginLeft: '8px' }} />
     </Box>
   </Paper>
 </Grid>
@@ -583,7 +586,10 @@ sessionStorage.removeItem('token');
       </Typography>
     </Box>
     <Box>
-      <img src={image2} alt="Chart" style={{ height: '80px', marginLeft: '16px' }} />
+      <img src={image2} alt="Chart" style={{ height: 'auto', 
+          width: '100%', // Make the image responsive
+          maxHeight: '80px', // Limit the maximum height
+          marginLeft: '8px' }} />
     </Box>
   </Paper>
 </Grid>
@@ -628,7 +634,10 @@ sessionStorage.removeItem('token');
       </Typography>
     </Box>
     <Box>
-      <img src={image3} alt="Chart" style={{ height: '80px', marginLeft: '16px' }} />
+      <img src={image3} alt="Chart" style={{ height: 'auto', 
+          width: '100%', // Make the image responsive
+          maxHeight: '80px', // Limit the maximum height
+          marginLeft: '8px' }} />
     </Box>
   </Paper>
 </Grid>
@@ -665,7 +674,10 @@ sessionStorage.removeItem('token');
       </Typography>
     </Box>
     <Box>
-      <img src={image4} alt="Chart" style={{ height: '80px', marginLeft: '16px' }} />
+      <img src={image4} alt="Chart" style={{ height: 'auto', 
+          width: '100%', // Make the image responsive
+          maxHeight: '80px', // Limit the maximum height
+          marginLeft: '8px' }} />
     </Box>
   </Paper>
 </Grid>
@@ -710,7 +722,10 @@ sessionStorage.removeItem('token');
       </Typography>
     </Box>
     <Box>
-      <img src={image4} alt="Chart" style={{ height: '80px', marginLeft: '16px' }} />
+      <img src={image4} alt="Chart" style={{ height: 'auto', 
+          width: '100%', // Make the image responsive
+          maxHeight: '80px', // Limit the maximum height
+          marginLeft: '8px' }} />
     </Box>
   </Paper>
 </Grid>
