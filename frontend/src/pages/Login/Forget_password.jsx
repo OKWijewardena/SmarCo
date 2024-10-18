@@ -79,7 +79,7 @@ const handleSubmit = async (e) => {
         to_email: res.data.email, // user's email
         customer_name:res.data.name,
         otp_code: otp_code, // generated OTP
-      }, 'l80KzJlwdVwy0cDHA') // replace with your user ID
+      }, 'DKodxJRDdbkiegNFq') // replace with your user ID 
       .then((result) => {
           console.log('Email sent:', result.text);
       }, (error) => {
