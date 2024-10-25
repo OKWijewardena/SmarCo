@@ -175,9 +175,9 @@ export default function CustomerUpdate() {
           <TextField margin="normal" required fullWidth label="User Name" value={name} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setName(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="E-mail" value={email} InputLabelProps={{ shrink: true }}  onChange={(e) => {
+          {/* <TextField margin="normal" required fullWidth label="E-mail" value={email} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setEmail(e.target.value);
-                    }}/>
+                    }}/> */}
           <TextField margin="normal" required fullWidth label="Mobile Number" value={mobile} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setMobile(e.target.value);
                     }}/>
@@ -193,9 +193,9 @@ export default function CustomerUpdate() {
           <TextField margin="normal" required fullWidth label="Nationality" value={nationality} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setNationality(e.target.value);
                     }}/>
-          <TextField margin="normal" required fullWidth label="Civil ID" value={civil_id} InputLabelProps={{ shrink: true }}  onChange={(e) => {
+          {/* <TextField margin="normal" required fullWidth label="Civil ID" value={civil_id} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setCivil_id(e.target.value);
-                    }}/>
+                    }}/> */}
           <TextField margin="normal" required fullWidth label="Paci Number" value={paci_number} InputLabelProps={{ shrink: true }}  onChange={(e) => {
                       setPaci_number(e.target.value);
                     }}/>
