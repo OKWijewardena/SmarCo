@@ -106,6 +106,7 @@ export default function Customer() {
   const [customers, setCustomer] = useState([]);
   const [searchCustomer, setSearchCustomer] = useState([]);
   const [searchCivilID, setSearchCivilID] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleDelete = async (id) => {
     try {
