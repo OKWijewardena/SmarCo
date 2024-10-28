@@ -149,6 +149,27 @@ export default function Customer() {
     });
 };
 
+const validate = () => {
+  const errors = [];
+
+  if (!/^[a-zA-Z\s]+$/.test(name)) {
+    errors.push("Name should not contain numbers or special characters.");
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.push("Enter a valid email address.");
+  }
+
+  if (/[^a-zA-Z0-9]/.test(civil_id)) {
+    errors.push("Civil ID should not contain special characters.");
+  }
+
+  setErrors(errors.length ? { name: errors.includes("Name should not contain numbers or special characters.") ? "Name should not contain numbers or special characters." : "",
+                             email: errors.includes("Enter a valid email address.") ? "Enter a valid email address." : "",
+                             civil_id: errors.includes("Civil ID should not contain special characters.") ? "Civil ID should not contain special characters." : ""} : {});
+  return errors;
+};
+
   const fetchCustomers = async () => {
     try {
       const response = await axios.get('https://app.smartco.live/api/customer/');
@@ -162,6 +183,11 @@ export default function Customer() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const errors = validate();
+    if (errors.length > 0) {
+      alert("Please correct the following errors:\n\n" + errors.join("\n"));
+      return;
+    }
 
     const NewCustomer = {
       name,
@@ -308,14 +334,14 @@ export default function Customer() {
                   Customer Details
                 </Typography>
                 <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
-                  <TextField margin="normal" required fullWidth label="User Name" onChange={(e) => setName(e.target.value)} />
-                  <TextField margin="normal" required fullWidth label="E-mail" onChange={(e) => setEmail(e.target.value)} />
+                <TextField margin="normal" required fullWidth label="User Name" onChange={(e) => setName(e.target.value)}  error={!!errors.email} helperText={errors.email}/>
+                  <TextField margin="normal" required fullWidth label="E-mail" onChange={(e) => setEmail(e.target.value)}  error={!!errors.name} helperText={errors.name} />
                   <TextField margin="normal" required fullWidth label="Mobile Number" onChange={(e) => setMobile(e.target.value)} />
                   <TextField margin="normal" required fullWidth label="WhatsApp Number" onChange={(e) => setWhatsapp_no(e.target.value)} />
                   <TextField margin="normal" required fullWidth label="Telephone Number" onChange={(e) => setTelephone_no(e.target.value)} />
                   <TextField margin="normal" required fullWidth label="Address" onChange={(e) => setAddress(e.target.value)} />
                   <TextField margin="normal" required fullWidth label="Nationality" onChange={(e) => setNationality(e.target.value)} />
-                  <TextField margin="normal" required fullWidth label="Civil ID" onChange={(e) => setCivil_id(e.target.value)} />
+                  <TextField margin="normal" required fullWidth label="Civil ID" onChange={(e) => setCivil_id(e.target.value)}  error={!!errors.email} helperText={errors.email}/>
                   <TextField margin="normal" required fullWidth label="Paci Number" onChange={(e) => setPaci_number(e.target.value)} />
                   <TextField margin="normal" required fullWidth label="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
                   <Button
