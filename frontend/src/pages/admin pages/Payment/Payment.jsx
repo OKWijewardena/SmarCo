@@ -100,6 +100,7 @@ export default function Payment() {
   const [deviceName, setDeviceName] = useState("");
   const [emiNumber, setEmiNumber] = useState("");
   const [price, setPrice] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
   const [date, setDate] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [oneSelling, setOneSelling] = useState([]);
@@ -207,6 +208,11 @@ export default function Payment() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!price || !paymentDate) {
+      alert("Please select a price and payment date.");
+      return;
+    }
+
     const NewPayment = {
       customerName,
       civilID,
@@ -220,6 +226,7 @@ export default function Payment() {
       civilID,
       emiNumber,
       date,
+      paymentDate,
       payment: price,
     };
 
@@ -248,6 +255,7 @@ export default function Payment() {
 
   const handlePriceSelect = (row) => {
     setPrice(row.price);
+    setPaymentDate(row.date);
   }
 
   return (
@@ -597,6 +605,8 @@ export default function Payment() {
                       },
                       fontFamily: "Public Sans, sans-serif",
                       fontWeight: "bold",
+                      // Disable the button if price or paymentDate is not set
+                      disabled: !price || !paymentDate,
                     }}
                   >
                     Submit

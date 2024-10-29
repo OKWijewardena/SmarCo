@@ -179,7 +179,7 @@ exports.getonesellingByIdEminumber = (req, res) => {
 };
 
 exports.updatePaymentHistory = async (req, res) => {
-  const { civilID, emiNumber, date, payment } = req.body;
+  const { civilID, emiNumber, date, paymentDate, payment } = req.body;
 
   try {
     const selling = await Selling.findOne({ civilID, emiNumber });
@@ -196,7 +196,7 @@ exports.updatePaymentHistory = async (req, res) => {
       const itemDate = new Date(customArray[i].date);
       const itemPrice = parseFloat(customArray[i].price);
       let nextPrice = parseFloat(customArray[i].price);
-      
+
       if (customArray[i + 1]) {
         nextPrice = parseFloat(customArray[i + 1].price);
       } else {
@@ -204,7 +204,7 @@ exports.updatePaymentHistory = async (req, res) => {
       }
 
       if (
-        itemDate >= new Date(date) &&
+        itemDate >= new Date(paymentDate) &&
         itemPrice === parseFloat(payment) &&
         customArray[i].status === "unpaid"
       ) {
@@ -216,7 +216,7 @@ exports.updatePaymentHistory = async (req, res) => {
         isPaymentUpdated = true;
         break;
       } else if (
-        itemDate >= new Date(date) &&
+        itemDate >= new Date(paymentDate) &&
         itemPrice > parseFloat(payment) &&
         customArray[i].status === "unpaid"
       ) {
@@ -240,7 +240,7 @@ exports.updatePaymentHistory = async (req, res) => {
         isPaymentUpdated = true;
         break;
       } else if (
-        itemDate >= new Date(date) &&
+        itemDate >= new Date(paymentDate) &&
         itemPrice < parseFloat(payment) &&
         customArray[i].status === "unpaid"
       ) {
