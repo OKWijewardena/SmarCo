@@ -110,14 +110,15 @@ const getCivil_idCustomer =asyncHandler(async(req,res)=>{
     const civil_id=req.params.civil_id; //get email from url parameters
     console.log(`Searching for user with email: ${civil_id}`);
     const customerData = await customerModel.findOne({ civil_id });
+    // res.json(customerData);
     
     
-    console.log(`Found user: ${JSON.stringify(customerData)}`);
+    // console.log(`Found user: ${JSON.stringify(customerData)}`);
     if(!customerData){
         res.status(404);
         throw new Error("Customer email not found");
     } 
-        res.status(200).json(customerData);
+        res.json(customerData);
     });
     
 
@@ -191,8 +192,44 @@ const deleteCustomer=asyncHandler(async(req,res)=>{
     res.status(200).json({ message: "User deleted successfully" });
 });
 
+const getOneCustomer = (req, res) => {
+  customerModel.findOne({ civilID: req.params.civilID })
+    .then((customerRecord) => {
+      res.json(customerRecord);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Error retrieving selling record" });
+    });
+};
+
+const searchCustomers = asyncHandler(async (req, res) => {
+  const searchTerm = req.params.searchTerm; // Get the search term from URL parameters
+  console.log("Searching for user with search term:", searchTerm); // Log the extracted search term
+
+  // Check if searchTerm is a number
+  const isNumeric = !isNaN(searchTerm);
+
+  // Search customers based on civil_id, name, or mobile (if numeric)
+  const queryConditions = [
+      { civil_id: searchTerm }, // Match exact civil ID
+      { name: { $regex: searchTerm, $options: "i" } } // Case-insensitive partial match for name
+  ];
+
+  if (isNumeric) {
+      queryConditions.push({ mobile: searchTerm }); // Match exact mobile number if numeric
+  }
+
+  const customerRecords = await customerModel.find({
+      $or: queryConditions
+  });
+
+  console.log("Found users:", customerRecords); // Log found records
+  res.json(customerRecords); // Return matching customer records as JSON
+});
 
 
-module.exports={registerCustomer,getCustomer,updateCustomer,deleteCustomer,getusers,getCivil_idCustomer};
+
+module.exports={registerCustomer,getCustomer,updateCustomer,deleteCustomer,getusers,getCivil_idCustomer,getOneCustomer,searchCustomers};
 
       

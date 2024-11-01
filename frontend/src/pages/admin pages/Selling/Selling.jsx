@@ -90,6 +90,7 @@ export default function Selling() {
   const [date, setDate] = useState('');
   const [advance, setAdvance] = useState('');
   const [imageName, setImageName] = useState('');
+  const[searchTerm,setSearchTerm]=useState('');
   
   const [devices, setDevices] = useState([]);
   const [searchEmiNumber, setSearchEmiNumber] = useState('');
@@ -153,22 +154,20 @@ sessionStorage.removeItem('token');
 
   let customerArray = [];
 
-  const fetchCustomerDetails = async (civilID) => {
+  const fetchCustomerDetails = async (searchTerm) => {
     try {
-      const response = await axios.get(
-        `https://app.smartco.live/api/customer/civil/${civilID}`
-      );
-      console.log(response.data);
+        const response = await axios.get(
+            `https://app.smartco.live/api/customer/search/${searchTerm}`
+        );
 
-    // Push the new customer data into the array
-    customerArray.push(response.data);
+        console.log(response.data);
 
-    // Set the array of customers (if you have a state setter like React's setState)
-    setCustomer([...customerArray]);
+        // Update customerArray to store the fetched data correctly
+        setCustomer(response.data); // Assuming response.data is an array of customer records
     } catch (error) {
-      console.error("Error fetching customer details:", error);
+        console.error("Error fetching customer details:", error);
     }
-  }
+};
 
     const fetchAllCustomers = async () => {
       try {
@@ -206,7 +205,7 @@ sessionStorage.removeItem('token');
 
   const handleCustomerSearch = (event) => {
     event.preventDefault();
-    fetchCustomerDetails(searchCivilID);
+    fetchCustomerDetails(searchTerm);
   };
 
   const handleAllCustomers = (event) => {
@@ -564,13 +563,13 @@ sessionStorage.removeItem('token');
                   Search Customer Details
                 </Typography>
                 <Box component="form" sx={{ mt: 1 }}>
-                  <TextField
+                <TextField
                     margin="normal"
                     fullWidth
-                    label="Search by Emi Number"
-                    name="searchCivilID"
-                    value={searchCivilID}
-                    onChange={(e) => setSearchCivilID(e.target.value)}
+                    label="Search by Civil ID, Name, or Mobile "
+                    name="searchTerm"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                   <Button
                     type="submit"

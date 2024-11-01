@@ -1135,7 +1135,7 @@ const UpcommingPayment = () => {
                               }}
                             >
                               <Typography variant="h5" component="p">
-                                ${totalAmountForMonth}
+                                KD {totalAmountForMonth}
                               </Typography>
                               <Typography variant="body2" component="p">
                                 {totalTransactions} transactions
@@ -1188,7 +1188,7 @@ const UpcommingPayment = () => {
                               }}
                             >
                               <Typography variant="h5" component="p">
-                                ${totalPaid}
+                                KD {totalPaid}
                               </Typography>
                               <Typography variant="body2" component="p">
                                 {totalPaidTransactions} transactions
@@ -1241,7 +1241,7 @@ const UpcommingPayment = () => {
                               }}
                             >
                               <Typography variant="h5" component="p">
-                                ${totalUnpaid}
+                                KD {totalUnpaid}
                               </Typography>
                               <Typography variant="body2" component="p">
                                 {totalUnpaidTransactions} transactions
@@ -1294,7 +1294,7 @@ const UpcommingPayment = () => {
                               }}
                             >
                               <Typography variant="h5" component="p">
-                                ${totalDueToday}
+                                KD {totalDueToday}
                               </Typography>
                               <Typography variant="body2" component="p">
                                 {totalDueTodayTransactions} transactions
@@ -1347,7 +1347,7 @@ const UpcommingPayment = () => {
                               }}
                             >
                               <Typography variant="h5" component="p">
-                                ${totalPaidToday}
+                                KD {totalPaidToday}
                               </Typography>
                               <Typography variant="body2" component="p">
                                 {totalPaidTodayTransactions} transactions
@@ -1401,7 +1401,7 @@ const UpcommingPayment = () => {
                               }}
                             >
                               <Typography variant="h5" component="p">
-                                ${totalOverdue}
+                                KD {totalOverdue}
                               </Typography>
                               <Typography variant="body2" component="p">
                                 {totalOverdueTransactions} transactions

@@ -176,7 +176,7 @@ export default function CustomerProfile() {
         </Button>
         
       </Box>
-      <Box sx={{ textAlign: 'center', mt: 2, marginTop: '20px' }}>
+      {/* <Box sx={{ textAlign: 'center', mt: 2, marginTop: '20px' }}>
       <Button
           variant="contained"
           sx={{
@@ -189,7 +189,7 @@ export default function CustomerProfile() {
         >
           Update Profile
         </Button>
-      </Box>
+      </Box> */}
     </Container>
   );
 }

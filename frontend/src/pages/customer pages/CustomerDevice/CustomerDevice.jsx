@@ -103,7 +103,7 @@ export default function CustomerDevice() {
       <Typography variant="body1" align="center" sx={{ mb: 2 }}>
         If you want to buy any device contact us
         <br />
-        our mobile number: 071697433
+        our mobile number: 69966882
       </Typography>
       <Grid container spacing={2}>
         {devices.map((device, index) => (
