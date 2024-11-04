@@ -75,34 +75,76 @@ exports.getAllSelling = (req, res) => {
 
 // Controller to update a selling record
 exports.updateSelling = async (req, res) => {
-  const {
-    deviceName,
-    customerName,
-    emiNumber,
-    price,
-    months,
-    date,
-    advance,
-    balance
-  } = req.body;
-
-  const updateSellingRecord = {
-    deviceName,
-    customerName,
-    emiNumber,
-    price,
-    months,
-    date,
-    advance,
-    balance
-  };
+  const { deviceName, emiNumber, customerName, civilID, price, months, date, advance, imageName } = req.body;
 
   try {
-    await Selling.findOneAndUpdate({ _id: req.params.id }, updateSellingRecord);
-    res.status(200).send({ status: "Customer device purchase record updated" });
+    // Fetch the selling record by ID
+    const sellingRecord = await Selling.findById(req.params.id);
+    if (!sellingRecord) {
+      return res.status(404).send({ status: "Selling record not found" });
+    }
+
+    // Check if customArray has any entry with status "paid"
+    const hasPaidEntry = sellingRecord.customArray.some(entry => entry.status === "paid");
+    if (hasPaidEntry) {
+      return res.status(400).send({ status: "You already made a payment for this selling, unable to update the record." });
+    }
+
+    // Calculate new balance and installment based on the new data
+    const currentbalance = (parseFloat(price) - parseFloat(advance)).toFixed(2);
+    const installment = (currentbalance / parseFloat(months)).toFixed(2);
+    const balance = String(currentbalance);
+    const updatedCustomArray = [];
+
+    // Generate updated customArray with recalculated installment dates and amounts
+    for (let i = 0; i < months; i++) {
+      const nextMonthDate = new Date(date);
+      nextMonthDate.setMonth(nextMonthDate.getMonth() + (i + 1));
+
+      const formattedNextMonthDate = `${nextMonthDate.getFullYear()}-${String(
+        nextMonthDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(nextMonthDate.getDate()).padStart(2, "0")}`;
+
+      const monthData = {
+        date: formattedNextMonthDate,
+        price: String(installment),
+        status: "unpaid",
+        updateprice: String(installment),
+        defaultdate: formattedNextMonthDate,
+      };
+
+      // Retain the _id if it exists to avoid MongoDB from creating new entries
+      if (sellingRecord.customArray[i]?._id) {
+        monthData._id = sellingRecord.customArray[i]._id;
+      }
+
+      updatedCustomArray.push(monthData);
+    }
+
+    // Prepare the updated selling record
+    const updatedSellingRecord = {
+      deviceName,
+      emiNumber,
+      customerName,
+      civilID,
+      price,
+      months,
+      date,
+      advance,
+      imageName,
+      balance,
+      customArray: updatedCustomArray,  // Use the updated customArray
+    };
+
+    // Update the record with the new values
+    await Selling.findOneAndUpdate({ _id: req.params.id }, updatedSellingRecord, { new: true });
+    res.status(200).send({ status: "Customer device purchase record updated successfully with recalculated installments." });
   } catch (err) {
-    console.log(err);
-    res.status(500).send({ status: "Error with updating selling record", error: err.message });
+    console.log("Error during selling update:", err);
+    res.status(500).send({
+      status: "Error with updating selling record",
+      error: err.message,
+    });
   }
 };
 
