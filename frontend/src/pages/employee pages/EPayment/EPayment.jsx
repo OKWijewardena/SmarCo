@@ -100,9 +100,12 @@ export default function EPayment() {
   const [deviceName, setDeviceName] = useState("");
   const [emiNumber, setEmiNumber] = useState("");
   const [price, setPrice] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
   const [date, setDate] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [oneSelling, setOneSelling] = useState([]);
+  const [id, setId] = useState("");
+
   const [customer, setCustomer] = useState([]);
 
   useEffect(() => {
@@ -151,8 +154,18 @@ export default function EPayment() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,civilID,emiNumber,price,date) => {
+    const deletePayment = {
+      civilID,
+      emiNumber,
+      date,
+      payment: price,
+    }
     try {
+      await axios.post(
+        "https://app.smartco.live/selling/deletepaymentHistory",
+        deletePayment
+      );
       await axios.delete(`https://app.smartco.live/payment/deletePayment/${id}`);
       alert("Selling record deleted successfully");
       fetchPayments(); // Refresh the selling list after deletion
@@ -195,6 +208,11 @@ export default function EPayment() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!price || !paymentDate) {
+      alert("Please select a price and payment date.");
+      return;
+    }
+
     const NewPayment = {
       customerName,
       civilID,
@@ -208,6 +226,7 @@ export default function EPayment() {
       civilID,
       emiNumber,
       date,
+      paymentDate,
       payment: price,
     };
 
@@ -236,6 +255,7 @@ export default function EPayment() {
 
   const handlePriceSelect = (row) => {
     setPrice(row.price);
+    setPaymentDate(row.date);
   }
 
   return (
@@ -387,7 +407,7 @@ export default function EPayment() {
                     </TableHead>
                     <TableBody>
                       {selling.map((row) => (
-                        <TableRow key={row.id}>
+                        <TableRow>
                           <TableCell>{row.customerName}</TableCell>
                           <TableCell>{row.civilID}</TableCell>
                           <TableCell>{row.deviceName}</TableCell>
@@ -426,7 +446,7 @@ export default function EPayment() {
                 </TableContainer>
               )}
 
-              {oneSelling.length > 0 && (
+{oneSelling.length > 0 && (
                 <TableContainer component={Paper} sx={{ mt: 4 }}>
                   <Table>
                     <TableHead>
@@ -473,7 +493,6 @@ export default function EPayment() {
                   </Table>
                 </TableContainer>
                 )}
-
               <Box
                 sx={{
                   display: "flex",
@@ -586,6 +605,8 @@ export default function EPayment() {
                       },
                       fontFamily: "Public Sans, sans-serif",
                       fontWeight: "bold",
+                      // Disable the button if price or paymentDate is not set
+                      disabled: !price || !paymentDate,
                     }}
                   >
                     Submit
@@ -724,12 +745,12 @@ export default function EPayment() {
                               {/* <IconButton color="primary">
                               <EditIcon />
                             </IconButton> */}
-                              {/* <IconButton
+                              <IconButton
                                 color="secondary"
-                                onClick={() => handleDelete(payment._id)}
+                                onClick={() => handleDelete(payment._id,payment.civilID,payment.emiNumber,payment.price,payment.date)}
                               >
                                 <DeleteIcon />
-                              </IconButton> */}
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         ))}
