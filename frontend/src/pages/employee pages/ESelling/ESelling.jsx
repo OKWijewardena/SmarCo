@@ -175,7 +175,7 @@ sessionStorage.removeItem('token');
       console.log("Selected selling ID:", selectedSelling._id);
 
       const response = await axios.put(
-        `http://localhost:8000/selling/updateSelling/${selectedSelling._id}`, 
+        `https://app.smartco.live/selling/updateSelling/${selectedSelling._id}`, 
         selectedSelling
       );
   
@@ -203,7 +203,7 @@ sessionStorage.removeItem('token');
 
   const fetchSellings = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/selling/getSelling');
+      const response = await axios.get('https://app.smartco.live/selling/getSelling');
       setSellings(response.data);
     } catch (error) {
       console.error('Error fetching sellings:', error);
@@ -213,7 +213,7 @@ sessionStorage.removeItem('token');
   const fetchDeviceDetails = async (emiNumber) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/device/getOneDevice/${emiNumber}`
+        `https://app.smartco.live/device/getOneDevice/${emiNumber}`
       );
       setDevices(response.data);
     } catch (error) {
@@ -223,7 +223,7 @@ sessionStorage.removeItem('token');
 
   const fetchAllDevices = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/device/getDevice');
+      const response = await axios.get('https://app.smartco.live/device/getDevice');
       setDevices(response.data);
     } catch (error) {
       console.error('Error fetching devices:', error);
@@ -235,7 +235,7 @@ sessionStorage.removeItem('token');
   const fetchCustomerDetails = async (searchTerm) => {
     try {
         const response = await axios.get(
-            `http://localhost:8000/api/customer/search/${searchTerm}`
+            `https://app.smartco.live/api/customer/search/${searchTerm}`
         );
 
         console.log(response.data);
@@ -250,7 +250,7 @@ sessionStorage.removeItem('token');
 
     const fetchAllCustomers = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/customer/');
+        const response = await axios.get('https://app.smartco.live/api/customer/');
         setCustomer(response.data);
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -259,7 +259,7 @@ sessionStorage.removeItem('token');
 
     // const fetchAllDiscounts = async () => {
     //   try {
-    //     const response = await axios.get('http://localhost:8000/discount/getDiscount');
+    //     const response = await axios.get('https://app.smartco.live/discount/getDiscount');
     //     setDiscount(response.data);
         
     //   } catch (error) {
@@ -297,7 +297,7 @@ sessionStorage.removeItem('token');
 
   const fetchDeviceImage = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/device/getOneDevice/${emiNumber}`);
+      const response = await axios.get(`https://app.smartco.live/device/getOneDevice/${emiNumber}`);
       // setDevices(response.data);
       if (response.data.length > 0) {
         setImageName(response.data[0].imageName); // Assuming you want to set the first device's imageName by default
@@ -309,7 +309,7 @@ sessionStorage.removeItem('token');
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/selling/deleteSelling/${id}`);
+      await axios.delete(`https://app.smartco.live/selling/deleteSelling/${id}`);
       alert("Selling record deleted successfully");
       fetchSellings(); // Refresh the selling list after deletion
     } catch (error) {
@@ -351,8 +351,8 @@ sessionStorage.removeItem('token');
       };
 
       try {
-        await axios.post('http://localhost:8000/dealend/addDealend', DealendPurchase);
-        await axios.delete(`http://localhost:8000/selling/deleteSelling/${id}`);
+        await axios.post('https://app.smartco.live/dealend/addDealend', DealendPurchase);
+        await axios.delete(`https://app.smartco.live/selling/deleteSelling/${id}`);
         alert("Deal ended successfully");
         fetchSellings();
         
@@ -384,8 +384,8 @@ sessionStorage.removeItem('token');
     };
 
     try {
-      await axios.post('http://localhost:8000/selling/addSelling', NewPurchase);
-      await axios.delete(`http://localhost:8000/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
+      await axios.post('https://app.smartco.live/selling/addSelling', NewPurchase);
+      await axios.delete(`https://app.smartco.live/device/deleteDeviceemi/${NewPurchase.emiNumber}`);
       alert("New customer device purchased");
       fetchSellings(); // Refresh the selling list after submission
       handleDialogClose();
