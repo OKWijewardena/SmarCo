@@ -54,7 +54,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
      // Check if the email is SuperAdmin
- if(email.toLowerCase() === "superadmin@gmail.com"&& password==="123") {
+ if(email.toLowerCase() === "superadmin@gmail.com"&& password==="SmartCoSuperAdmin@456") {
     return res.status(200).json({message: "SuperAdmin page", user: {role: "superadmin", userInfo: "superadmin"}});
 }
 
