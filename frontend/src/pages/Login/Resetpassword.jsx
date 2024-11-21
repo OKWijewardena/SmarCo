@@ -69,7 +69,7 @@ export default function Resetpassword() {
     }
 
     try {
-      const res = await axios.put(`http://app.smartco.live/api/users/${user.email}`, { password: newPassword });
+      const res = await axios.put(`https://app.smartco.live/api/users/${user.email}`, { password: newPassword });
       if (res.status === 200) {
         alert("Update successful");
         navigate("/");

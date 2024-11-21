@@ -100,7 +100,7 @@ export default function EUpdateCustomer() {
 
   function fetchCustomer() {
     let mounted = true;
-    fetch(`http://app.smartco.live/api/customer/${id}`)
+    fetch(`https://app.smartco.live/api/customer/${id}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -139,7 +139,7 @@ export default function EUpdateCustomer() {
 
     try {
       await axios.put(
-        `http://app.smartco.live/api/customer/${customerEmail}`,
+        `https://app.smartco.live/api/customer/${customerEmail}`,
         UpdatedCustomer
       );
       alert("Customer updated successfully");

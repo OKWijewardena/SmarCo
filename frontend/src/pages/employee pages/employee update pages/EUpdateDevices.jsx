@@ -116,7 +116,7 @@ export default function EUpdateDevices() {
 
   function fetchDevices() {
     let mounted = true;
-    fetch(`http://app.smartco.live/device/getOneDevice/${id}`)
+    fetch(`https://app.smartco.live/device/getOneDevice/${id}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -161,7 +161,7 @@ export default function EUpdateDevices() {
 
     axios
       .put(
-        `http://app.smartco.live/device/updateDevice/${deviceID}`,
+        `https://app.smartco.live/device/updateDevice/${deviceID}`,
         UpdatedDevice
       )
       .then(() => {

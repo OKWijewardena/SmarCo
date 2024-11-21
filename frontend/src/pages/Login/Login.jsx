@@ -54,7 +54,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://app.smartco.live/api/users/login', { email, password });
+            const res = await axios.post('https://app.smartco.live/api/users/login', { email, password });
             sessionStorage.setItem('user', JSON.stringify(res.data.user));
             sessionStorage.setItem('token', res.data.token);
             switch (res.data.user.role) {

@@ -135,7 +135,7 @@ const DealendList = () => {
     const fetchDealendData = async () => {
       try {
         const dealendResponse = await fetch(
-          "http://app.smartco.live/dealend/getDealend",
+          "https://app.smartco.live/dealend/getDealend",
           {
             method: "GET",
           }
@@ -148,7 +148,7 @@ const DealendList = () => {
         console.log("Request body:", dealendData);
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "http://app.smartco.live/inventory/getInventory",
+          "https://app.smartco.live/inventory/getInventory",
           {
             method: "GET",
           }
@@ -222,7 +222,7 @@ sessionStorage.removeItem('token');
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
     console.log(updatedData);
-    fetch("http://app.smartco.live/api/dealendpdf/convertdealendPDF", {
+    fetch("https://app.smartco.live/api/dealendpdf/convertdealendPDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -269,7 +269,7 @@ sessionStorage.removeItem('token');
       return { ...rest, totalPaid: totalPaid.toFixed(2) };
     });
 
-    fetch("http://app.smartco.live/api/dealendexcel/dealendExcel", {
+    fetch("https://app.smartco.live/api/dealendexcel/dealendExcel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -303,7 +303,7 @@ sessionStorage.removeItem('token');
   const handleBackToInstallment = async (item) => {
     try {
       // Save to selling collection
-      const sellingResponse = await fetch('http://app.smartco.live/dealendReversion/addSelling', {
+      const sellingResponse = await fetch('https://app.smartco.live/dealendReversion/addSelling', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -326,7 +326,7 @@ sessionStorage.removeItem('token');
       }
   
       // Delete from dealend collection
-      const deleteResponse = await fetch(`http://app.smartco.live/dealend/deleteDealend/${item._id}`, {
+      const deleteResponse = await fetch(`https://app.smartco.live/dealend/deleteDealend/${item._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ sessionStorage.removeItem('token');
       try {
         // Fetch dealend data
         const dealendResponse = await fetch(
-          "http://app.smartco.live/dealend/getDealend",
+          "https://app.smartco.live/dealend/getDealend",
           { method: "GET" }
         );
         if (!dealendResponse.ok) {
@@ -362,7 +362,7 @@ sessionStorage.removeItem('token');
 
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "http://app.smartco.live/inventory/getInventory",
+          "https://app.smartco.live/inventory/getInventory",
           { method: "GET" }
         );
         if (!inventoryResponse.ok) {

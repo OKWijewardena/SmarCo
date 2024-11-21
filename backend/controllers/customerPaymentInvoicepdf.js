@@ -28,7 +28,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
     for (let item of data) {
       try {
         const response = await axios.get(
-          `http://app.smartco.live/api/customer/civil/${item.civilID}`
+          `https://app.smartco.live/api/customer/civil/${item.civilID}`
         );
         item.customerData = response.data;
       } catch (err) {
@@ -41,7 +41,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
     for (let item of data) {
       try {
         const response = await axios.get(
-          `http://app.smartco.live/selling/getOneSellingID/${item.id}`
+          `https://app.smartco.live/selling/getOneSellingID/${item.id}`
         );
         item.sellingData = response.data;
       } catch (err) {
@@ -54,7 +54,7 @@ const convertToPaymentInvoicePDF = async (req, res) => {
     for (let item of data) {
       try {
         const response = await axios.get(
-          `http://app.smartco.live/selling/getbyCIDEMI/${item.civilID}/${item.emiNumber}`
+          `https://app.smartco.live/selling/getbyCIDEMI/${item.civilID}/${item.emiNumber}`
         );
         item.sellingData = response.data;
       } catch (err) {

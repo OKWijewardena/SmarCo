@@ -136,7 +136,7 @@ export default function Payment() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get("http://app.smartco.live/api/customer/");
+      const response = await axios.get("https://app.smartco.live/api/customer/");
       setCustomer(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -146,7 +146,7 @@ export default function Payment() {
   const fetchPayments = async () => {
     try {
       const response = await axios.get(
-        "http://app.smartco.live/payment/getPayment"
+        "https://app.smartco.live/payment/getPayment"
       );
       setPayments(response.data);
     } catch (error) {
@@ -163,10 +163,10 @@ export default function Payment() {
     }
     try {
       await axios.post(
-        "http://app.smartco.live/selling/deletepaymentHistory",
+        "https://app.smartco.live/selling/deletepaymentHistory",
         deletePayment
       );
-      await axios.delete(`http://app.smartco.live/payment/deletePayment/${id}`);
+      await axios.delete(`https://app.smartco.live/payment/deletePayment/${id}`);
       alert("Selling record deleted successfully");
       fetchPayments(); // Refresh the selling list after deletion
     } catch (error) {
@@ -178,7 +178,7 @@ export default function Payment() {
   const fetchSellingDetails = async (civilID) => {
     try {
       const response = await axios.get(
-        `http://app.smartco.live/selling/getOneSelling/${civilID}`
+        `https://app.smartco.live/selling/getOneSelling/${civilID}`
       );
       setSelling(response.data);
     } catch (error) {
@@ -190,7 +190,7 @@ export default function Payment() {
   const fetchOneSellingDetails = async (civilID,emiNumber) => {
     try {
       const response = await axios.get(
-        `http://app.smartco.live/selling/getbyCIDEMI/${civilID}/${emiNumber}`
+        `https://app.smartco.live/selling/getbyCIDEMI/${civilID}/${emiNumber}`
       );
       sellingArray.push(response.data.customArray);
       setOneSelling(response.data.customArray);
@@ -232,10 +232,10 @@ export default function Payment() {
 
     try {
       await axios.post(
-        "http://app.smartco.live/selling/paymentHistory",
+        "https://app.smartco.live/selling/paymentHistory",
         UpdatePayment
       );
-      await axios.post("http://app.smartco.live/payment/addPayment", NewPayment);
+      await axios.post("https://app.smartco.live/payment/addPayment", NewPayment);
       handleCloseDialog();
       alert("New payment added successfully");
       fetchPayments();

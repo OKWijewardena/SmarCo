@@ -48,7 +48,7 @@ export default function CustomerPassword() {
 
   const fetchCustomer = async () => {
     try {
-      const res = await axios.get(`http://app.smartco.live/api/users/${user.email}`);
+      const res = await axios.get(`https://app.smartco.live/api/users/${user.email}`);
       setCustomer(res.data);
       setName(res.data.name);
       setEmail(res.data.email);
@@ -82,7 +82,7 @@ export default function CustomerPassword() {
     };
 
     try {
-      await axios.put(`http://app.smartco.live/api/users/${email}`, UpdatedUser);
+      await axios.put(`https://app.smartco.live/api/users/${email}`, UpdatedUser);
       alert("New Password updated successfully");
       navigate('/customerprofile');
     } catch (error) {
