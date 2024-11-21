@@ -106,8 +106,8 @@ export default function Employee() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://app.smartco.live/api/employee&admin/${id}`);
-      await axios.delete(`https://app.smartco.live/api/users/${id}`)
+      await axios.delete(`http://app.smartco.live/api/employee&admin/${id}`);
+      await axios.delete(`http://app.smartco.live/api/users/${id}`)
       alert("Employee record deleted successfully");
       fetchEmployees();// Refresh the employee list after deletion
     } catch (error) {
@@ -134,7 +134,7 @@ sessionStorage.removeItem('token');
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('https://app.smartco.live/api/employee&admin/');
+      const response = await axios.get('http://app.smartco.live/api/employee&admin/');
       setEmployees(response.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -161,8 +161,8 @@ sessionStorage.removeItem('token');
     }
 
     try {
-      await axios.post('https://app.smartco.live/api/employee&admin/register', NewEmployee);
-      await axios.post('https://app.smartco.live/api/users/register', NewUser);
+      await axios.post('http://app.smartco.live/api/employee&admin/register', NewEmployee);
+      await axios.post('http://app.smartco.live/api/users/register', NewUser);
       alert("New Employee added successfully");
     } catch (error) {
       console.error('Error adding employee:', error);

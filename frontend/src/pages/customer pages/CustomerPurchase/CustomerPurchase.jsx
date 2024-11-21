@@ -58,7 +58,7 @@ export default function CustomerPurchase() {
   const fetchSellings = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://app.smartco.live/selling/getOneSellingID/${id}`
+        `http://app.smartco.live/selling/getOneSellingID/${id}`
       );
       console.log(id);
       setSellings(response.data);
@@ -72,7 +72,7 @@ export default function CustomerPurchase() {
       const Newpayments = { civilID: CivilID, emiNumber: EmiNumber };
 
       const res = await axios.post(
-        "https://app.smartco.live/payment/getOnePayment",
+        "http://app.smartco.live/payment/getOnePayment",
         Newpayments
       );
       setData(res.data);
@@ -89,7 +89,7 @@ export default function CustomerPurchase() {
 
   const downloadPDF = (rowData) => {
     // Modify the function to accept rowData
-    fetch("https://app.smartco.live/convertToCustomerPaymentInvoicePDF", {
+    fetch("http://app.smartco.live/convertToCustomerPaymentInvoicePDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export default function CustomerPurchase() {
   const downloadOverallPDF = () => {
     console.log(id, user.civil_id);
 
-    fetch("https://app.smartco.live/convertToOverAllPaymentInvoicePDF", {
+    fetch("http://app.smartco.live/convertToOverAllPaymentInvoicePDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

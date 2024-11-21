@@ -108,7 +108,7 @@ sessionStorage.removeItem('token');
 
   function fetchEmployees() {
     let mounted = true;
-    fetch(`https://app.smartco.live/api/employee&admin/${id}`)
+    fetch(`http://app.smartco.live/api/employee&admin/${id}`)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
@@ -138,7 +138,7 @@ sessionStorage.removeItem('token');
     };
 
     try {
-      await axios.put(`https://app.smartco.live/api/employee&admin/${email}`, UpdatedEmployee);
+      await axios.put(`http://app.smartco.live/api/employee&admin/${email}`, UpdatedEmployee);
       alert("Employee updated successfully");
       navigate('/employee');
     } catch (error) {

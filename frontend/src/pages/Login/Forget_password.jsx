@@ -62,7 +62,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   console.log(`Email: ${email}`);
   try {
-    const res = await axios.get(`https://app.smartco.live/api/users/${email}`);
+    const res = await axios.get(`http://app.smartco.live/api/users/${email}`);
     if (res.data) {
       sessionStorage.setItem('user', JSON.stringify(res.data));
       console.log(res.data);

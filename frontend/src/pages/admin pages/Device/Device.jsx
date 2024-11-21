@@ -112,8 +112,8 @@ export default function Device(){
 
     const handleDelete = async (id,emiNumber) => {
         try {
-          await axios.delete(`https://app.smartco.live/device/deleteDevice/${id}`);
-          await axios.delete(`https://app.smartco.live/inventory/deleteInventoryemi/${emiNumber}`);
+          await axios.delete(`http://app.smartco.live/device/deleteDevice/${id}`);
+          await axios.delete(`http://app.smartco.live/inventory/deleteInventoryemi/${emiNumber}`);
           alert("Dervice record deleted successfully");
           fetchDevices();// Refresh the selling list after deletion
         } catch (error) {
@@ -140,7 +140,7 @@ export default function Device(){
 
     const fetchDevices = async () => {
         try {
-            const response = await axios.get('https://app.smartco.live/device/getDevice');
+            const response = await axios.get('http://app.smartco.live/device/getDevice');
             setDevices(response.data);
         } catch (error) {
             console.error('Error fetching devices:', error);
@@ -165,7 +165,7 @@ export default function Device(){
   
       try {
           // Check if EMI number is available in the selling table
-          const sellingResponse = await axios.get(`https://app.smartco.live/selling/getbyEmi/${emiNumber}`);
+          const sellingResponse = await axios.get(`http://app.smartco.live/selling/getbyEmi/${emiNumber}`);
   
           if (sellingResponse.data.message !== "data not available") {
               alert("This EMI number is already taken in the selling table.");
@@ -180,7 +180,7 @@ export default function Device(){
   
       try {
           // Check if EMI number is available in the device table
-          const deviceResponse = await axios.get(`https://app.smartco.live/device/getOneDevicebyemi/${emiNumber}`);
+          const deviceResponse = await axios.get(`http://app.smartco.live/device/getOneDevicebyemi/${emiNumber}`);
   
           if (deviceResponse.data.message !== "data not available") {
               alert("This EMI number is already taken in the device table.");
@@ -201,7 +201,7 @@ export default function Device(){
   
       try {
           // Add device to device table
-          await axios.post('https://app.smartco.live/device/addDevice', formData, {
+          await axios.post('http://app.smartco.live/device/addDevice', formData, {
               headers: {
                   'Content-Type': 'multipart/form-data'
               }
@@ -222,7 +222,7 @@ export default function Device(){
               purchaseDate: form.purchaseDate,
           };
   
-          await axios.post('https://app.smartco.live/inventory/addInventory', inventoryData, {
+          await axios.post('http://app.smartco.live/inventory/addInventory', inventoryData, {
               headers: {
                   'Content-Type': 'application/json'
               }

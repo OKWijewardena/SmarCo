@@ -148,7 +148,7 @@ const EUpcommingPayment = () => {
       try {
         // Fetch selling data
         const sellingResponse = await fetch(
-          "https://app.smartco.live/selling/getSelling",
+          "http://app.smartco.live/selling/getSelling",
           { method: "GET" }
         );
         if (!sellingResponse.ok) {
@@ -159,7 +159,7 @@ const EUpcommingPayment = () => {
 
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "https://app.smartco.live/inventory/getInventory",
+          "http://app.smartco.live/inventory/getInventory",
           { method: "GET" }
         );
         if (!inventoryResponse.ok) {
@@ -170,7 +170,7 @@ const EUpcommingPayment = () => {
 
         // Fetch customer data
         const customerResponse = await fetch(
-          "https://app.smartco.live/api/customer/",
+          "http://app.smartco.live/api/customer/",
           { method: "GET" }
         );
         if (!customerResponse.ok) {
@@ -456,7 +456,7 @@ const EUpcommingPayment = () => {
     console.log(payload);
 
     fetch(
-      "https://app.smartco.live/api/convertToupcomingPaymentPDF/convertToupcomingPaymentPDF",
+      "http://app.smartco.live/api/convertToupcomingPaymentPDF/convertToupcomingPaymentPDF",
       {
         method: "POST",
         headers: {
@@ -524,7 +524,7 @@ const EUpcommingPayment = () => {
 
     console.log(payload);
     fetch(
-      "https://app.smartco.live/api/upcomingPaymentExcel/upcomingPaymentExcel",
+      "http://app.smartco.live/api/upcomingPaymentExcel/upcomingPaymentExcel",
       {
         method: "POST",
         headers: {
@@ -563,7 +563,7 @@ const EUpcommingPayment = () => {
       try {
         // Fetch selling data
         const sellingResponse = await fetch(
-          "https://app.smartco.live/selling/getSelling",
+          "http://app.smartco.live/selling/getSelling",
           { method: "GET" }
         );
         if (!sellingResponse.ok) {
@@ -573,7 +573,7 @@ const EUpcommingPayment = () => {
 
         // Fetch inventory data
         const inventoryResponse = await fetch(
-          "https://app.smartco.live/inventory/getInventory",
+          "http://app.smartco.live/inventory/getInventory",
           { method: "GET" }
         );
         if (!inventoryResponse.ok) {
@@ -583,7 +583,7 @@ const EUpcommingPayment = () => {
 
         // Fetch customer data
         const customerResponse = await fetch(
-          "https://app.smartco.live/api/customer/",
+          "http://app.smartco.live/api/customer/",
           { method: "GET" }
         );
         if (!customerResponse.ok) {

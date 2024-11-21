@@ -105,7 +105,7 @@ const EDeviceList = () => {
     const [expiryDate, setExpiryDate] = useState(null);
    
     useEffect(() => {
-        fetch('https://app.smartco.live/api/device/getDevice', {
+        fetch('http://app.smartco.live/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
@@ -130,7 +130,7 @@ sessionStorage.removeItem('token');
       navigate('/');
     };
     const downloadPDF = () => {
-      fetch('https://app.smartco.live/api/devicepdf/convertdevicePDF', {
+      fetch('http://app.smartco.live/api/devicepdf/convertdevicePDF', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ sessionStorage.removeItem('token');
       .catch(error => alert(error));
   };
   const downloadExcel = () => {
-    fetch('https://app.smartco.live/api/excel/add', {
+    fetch('http://app.smartco.live/api/excel/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ sessionStorage.removeItem('token');
 
     const resetTable = () => {
       
-        fetch('https://app.smartco.live/api/device/getDevice', {
+        fetch('http://app.smartco.live/api/device/getDevice', {
             method: 'GET'
         })
         .then(response => {
